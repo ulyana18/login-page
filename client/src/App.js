@@ -113,33 +113,6 @@ class App extends Component {
           </form>
         </div>}
 
-      {this.state.method === 'Sign Up' && 
-      <div className="login-container">
-        <form className="login-form" noValidate autoComplete="off">
-            <TextField required
-              id="standard-required" 
-              label="Email" 
-              onChange={this.emailChange} 
-            />
-            <TextField required
-              id="standard-password-input"
-              label="Password"
-              type="password"
-              autoComplete="current-password"
-              onChange={this.passwordChange}
-            />
-            <Box m={2}>
-              <Button 
-                onClick={this.logIn} // the same function for onKeyDown.Enter
-                className="logInBtn" 
-                variant="contained"
-              >
-                Log In
-              </Button>
-            </Box>
-          </form>
-
-      </div>}
       <Box m={3}>
         <Button
           onClick={this.methodChange}
