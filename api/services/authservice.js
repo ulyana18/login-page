@@ -41,7 +41,7 @@ class AuthService {
                 const isResultNotEmpty = result.rows.length !== 0;
                 const passwordHashed = this.hashPassword(password);
                 const isPasswordNotRight = result.rows[0].password !== passwordHashed;
-                
+
                 if (isResultNotEmpty || isPasswordNotRight) {
                     throw new Error;
                 }
