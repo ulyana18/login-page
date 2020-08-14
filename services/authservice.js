@@ -1,11 +1,10 @@
 const crypto = require('crypto');
 const pool = require('../db/queries');
 const jwt = require('jsonwebtoken');
-const config = require('../config');
 
 class AuthService {
     constructor() {
-        this.accessTokenSecret = config.accessToken;
+        this.accessTokenSecret = process.env.ACCESS_TOKEN;
     }
 
     async SignUp(name, email, password) {
