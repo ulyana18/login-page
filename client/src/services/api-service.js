@@ -1,9 +1,8 @@
 module.exports = (route, email, password, name = '') => {
-    fetch(`http://localhost:9000/api/user/${route}`, {
+  let isLogin = (route === 'login'); 
+    fetch(`/api/user/${route}`, {
       method: 'POST',
-      headers: {
-          'Content-Type': 'application/json'
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
           user: {
             name,
@@ -17,6 +16,6 @@ module.exports = (route, email, password, name = '') => {
         window.localStorage.setItem('token', res.token);
       })
       .catch(err => {
-        route === 'login' ? alert('Incorrect login or password') : alert('This email is already in use!');
+        isLogin ? alert('Incorrect login or password') : alert('This email is already in use!');
       });
   }

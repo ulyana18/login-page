@@ -14,7 +14,7 @@ class SignUpPage extends Component {
     }
   
   
-    signUp = () => callApi('signup', this.emailRef.current.value, this.passwordRef.current.value); 
+    signUp = () => callApi('signup', this.emailRef.current.value, this.passwordRef.current.value, this.nameRef.current.value); 
   
     render() {
   
