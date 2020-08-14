@@ -13,7 +13,7 @@ const config = {
   database: getValue('NAME_DB'),
   password: getValue('PASSWORD_DB'),
   port: getValue('PORT_DB'),
-  accessToken: getValue("ACCESS_TOKEN"),
+  accessToken: getValue('ACCESS_TOKEN'),
 };
 
 module.exports = config;
