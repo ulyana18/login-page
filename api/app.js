@@ -1,13 +1,17 @@
-var bodyParser = require('body-parser');
-const ROUTES = require('/Users/ulyana/Documents/login-page/login-page/api/routes/index');
-var cors = require('cors');
-var express = require('express');
-var app = express();
+const bodyParser = require('body-parser');
+require('dotenv').config();
+const routes = require('../api/routes/index');
+const cors = require('cors');
+const express = require('express');
+const app = express();
+const path = {
+  api: '/api',
+}
 
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use('/api', ROUTES);
+app.use(path.api, routes);
 
 const port = process.env.PORT || 9000;
 app.listen(port);

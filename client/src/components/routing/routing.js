@@ -12,7 +12,7 @@ import SignUpPage from '../signup-page/signup-page';
 
 
 class Routing extends Component {
-    
+
   render() {
 
     return (

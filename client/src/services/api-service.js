@@ -18,4 +18,4 @@ module.exports = (route, email, password, name = '') => {
       .catch(err => {
         isLogin ? alert('Incorrect login or password') : alert('This email is already in use!');
       });
-  }
+}

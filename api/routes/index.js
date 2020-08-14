@@ -1,8 +1,16 @@
-var express = require('express');
-var users = require('./users');
+const express = require('express');
+const login = require('./login');
+const signup = require('./signup');
 
-const app = express();
+const router = express.Router();
 
-users(app);
+const path = {
+    signup: '/user/signup',
+    login: '/user/login'
+};
 
-module.exports = app;
+router.post(path.signup, signup);
+router.post(path.login, login);
+
+
+module.exports = router;
