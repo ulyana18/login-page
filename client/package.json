@@ -19,6 +19,7 @@
     "eject": "react-scripts eject"
   },
   "proxy": "http://localhost:9000",
+  "homepage": ".",
   "eslintConfig": {
     "extends": "react-app"
   },
@@ -33,5 +34,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "engines": {
+    "npm": "6.13.4"
   }
 }
