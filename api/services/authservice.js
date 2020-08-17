@@ -2,19 +2,20 @@ const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 const path = require('path');
 
-const config = path.resolve('../config');
-const pool = path.resolve('../db/queries');
-const status = path.resolve('/additional-data/user-messages');
+const config = path.resolve('config');
+const pool = path.resolve('db/queries');
+const { SUCCESSFULL, ERROR } = path.resolve('additional-data/app-status');
+const { LOGINERROR, SIGNUPERROR } = path.resolve('additional-data/user-messages');
 
 class AuthService {
     constructor() {
         this.accessTokenSecret = config.accessToken;
     }
 
-    SignUp(name, email, password) {
+    signUp(name, email, password) {
         const passwordHashed = this.hashPassword(password);
 
-        pool.query('SELECT * FROM users WHERE email = $1', [email])
+        pool.query('SELECT * FROM users WHERE email = $1', [email])  // async await
             .then(result =>{ 
                 const isResultNotEmpty = result.rows.length !== 0;
 
@@ -26,7 +27,7 @@ class AuthService {
                 );
             })
             .catch(function(err) {
-                return new Error(status.signupError);
+                return new Error(SIGNUPERROR);
             });
 
         const accessToken = jwt.sign({ name, email }, this.accessTokenSecret);
@@ -37,7 +38,7 @@ class AuthService {
         };
     }
 
-    LogIn(email, password) {
+    logIn(email, password) {
         let name;
         pool.query('SELECT * FROM users WHERE email = $1', [email])
             .then(result => {
@@ -51,7 +52,7 @@ class AuthService {
                 ({ name } = result.rows[0]);
             })
             .catch(function(err) {
-                return new Error(status.loginError);
+                return new Error(LOGINERROR);
             });
 
         const accessToken = jwt.sign({ user: name, email }, this.accessTokenSecret);

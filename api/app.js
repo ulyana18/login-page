@@ -5,10 +5,8 @@ const cors = require('cors');
 const express = require('express');
 const app = express();
 
-const routes = path.resolve('/routes');
-// const routes = require('../api/routes/index');
-const paths = path.resolve('/routes/paths');
-// const paths = require('./routes/paths');
+const routes = require(__dirname + '/routes');
+const paths = require(__dirname + '/routes/paths');
 
 app.use(cors());
 app.use(express.static(path.join(__dirname, 'build')));
