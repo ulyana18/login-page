@@ -1,5 +1,6 @@
 const Pool = require('pg').Pool;
-const config = require('../config');
+const path = require('path')
+const config = path.resolve('config');
 const { user, host, database, password, port } = config;
 
 const pool = new Pool({

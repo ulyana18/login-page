@@ -1,6 +1,7 @@
-const AuthService = require('../services/authservice');
-const successfull = 200;
-const error = 401;
+const path = require('path')
+const AuthService = path.resolve('/services/authservice');
+const status = path.resolve('/additional-data/user-messages');
+
 
 async function login(req, res) {
     const { email, password } = req.body.user;
@@ -8,9 +9,9 @@ async function login(req, res) {
       const authServiceInstance = new AuthService();
       const { user, token } = await authServiceInstance.LogIn(email, password); 
 
-      return res.send({ user, token }).status(successfull).end();
+      return res.send({ user, token }).status(status.successfull).end();
     } catch(e) {
-      return res.send('error').status(error).end();
+      return res.send(status.loginError).status(status.error).end();
     }
 }
 

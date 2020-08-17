@@ -1,13 +1,14 @@
+const path = require('path');
 const bodyParser = require('body-parser');
 require('dotenv').config();
-const routes = require('../api/routes/index');
-const path = require('path')
 const cors = require('cors');
 const express = require('express');
 const app = express();
-const paths = {
-  api: '/api',
-}
+
+const routes = path.resolve('/routes');
+// const routes = require('../api/routes/index');
+const paths = path.resolve('/routes/paths');
+// const paths = require('./routes/paths');
 
 app.use(cors());
 app.use(express.static(path.join(__dirname, 'build')));

@@ -1,17 +1,20 @@
 const crypto = require('crypto');
-const pool = require('../db/queries');
 const jwt = require('jsonwebtoken');
-const config = require('../config');
+const path = require('path');
+
+const config = path.resolve('../config');
+const pool = path.resolve('../db/queries');
+const status = path.resolve('/additional-data/user-messages');
 
 class AuthService {
     constructor() {
         this.accessTokenSecret = config.accessToken;
     }
 
-    async SignUp(name, email, password) {
+    SignUp(name, email, password) {
         const passwordHashed = this.hashPassword(password);
 
-        await pool.query('SELECT * FROM users WHERE email = $1', [email])
+        pool.query('SELECT * FROM users WHERE email = $1', [email])
             .then(result =>{ 
                 const isResultNotEmpty = result.rows.length !== 0;
 
@@ -23,7 +26,7 @@ class AuthService {
                 );
             })
             .catch(function(err) {
-                return new Error('This email is already in use!');
+                return new Error(status.signupError);
             });
 
         const accessToken = jwt.sign({ name, email }, this.accessTokenSecret);
@@ -34,9 +37,9 @@ class AuthService {
         };
     }
 
-    async LogIn(email, password) {
+    LogIn(email, password) {
         let name;
-        await pool.query('SELECT * FROM users WHERE email = $1', [email])
+        pool.query('SELECT * FROM users WHERE email = $1', [email])
             .then(result => {
                 const isResultNotEmpty = result.rows.length !== 0;
                 const passwordHashed = this.hashPassword(password);
@@ -48,7 +51,7 @@ class AuthService {
                 ({ name } = result.rows[0]);
             })
             .catch(function(err) {
-                return new Error('Incorrect login or password!');
+                return new Error(status.loginError);
             });
 
         const accessToken = jwt.sign({ user: name, email }, this.accessTokenSecret);
