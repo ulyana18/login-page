@@ -4,7 +4,6 @@ const path = require('path');
 
 const config = path.resolve('config');
 const pool = path.resolve('db/queries');
-const { SUCCESSFULL, ERROR } = path.resolve('additional-data/app-status');
 const { LOGINERROR, SIGNUPERROR } = path.resolve('additional-data/user-messages');
 
 class AuthService {
