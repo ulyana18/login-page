@@ -4,7 +4,7 @@ const path = require('path');
 
 const config = path.resolve('config');
 const pool = path.resolve('db/queries');
-const { LOGINERROR, SIGNUPERROR } = path.resolve('additional-data/user-messages');
+const { LOGIN_ERROR, SIGNUP_ERROR } = path.resolve('additional-data/user-messages');
 
 class AuthService {
     constructor() {
@@ -25,7 +25,7 @@ class AuthService {
                 [email, passwordHashed, name]
             );
         } catch(err) {
-            return new Error(SIGNUPERROR);
+            return new Error(SIGNUP_ERROR);
         }
 
         const accessToken = jwt.sign({ name, email }, this.accessTokenSecret);
@@ -51,7 +51,7 @@ class AuthService {
             ({ name } = result.rows[0]);
 
         } catch(err) {
-            return new Error(LOGINERROR);
+            return new Error(LOGIN_ERROR);
         }
 
         const accessToken = jwt.sign({ user: name, email }, this.accessTokenSecret);

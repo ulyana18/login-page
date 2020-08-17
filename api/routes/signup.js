@@ -1,7 +1,7 @@
 const path = require('path')
 const AuthService = path.resolve('services/authservice');
 const { SUCCESSFULL, ERROR } = path.resolve('additional-data/app-status');
-const { SIGNUPERROR } = path.resolve('additional-data/user-messages');
+const { SIGNUP_ERROR } = path.resolve('additional-data/user-messages');
 
 
 async function signup(req, res) {
@@ -13,7 +13,7 @@ async function signup(req, res) {
 
         return res.send({ user, token }).status(SUCCESSFULL);
     } catch(e) {
-        return res.send(ERROR).status(SIGNUPERROR);
+        return res.send(ERROR).status(SIGNUP_ERROR);
     }
 }
 
