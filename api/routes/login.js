@@ -1,6 +1,5 @@
 const path = require('path')
 const AuthService = path.resolve('services/authservice');
-const status = path.resolve('additional-data/user-messages');
 const { SUCCESSFULL, ERROR } = path.resolve('additional-data/app-status');
 const { LOGINERROR } = path.resolve('additional-data/user-messages');
 

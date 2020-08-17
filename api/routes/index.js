@@ -1,9 +1,9 @@
 const express = require('express');
 const path = require('path');
 
-const login = require(__dirname + '/login');
-const signup = require(__dirname + '/signup');
-const paths = require(__dirname + '/paths');
+const login = path.resolve('login');
+const signup = path.resolve('signup');
+const paths = path.resolve('paths');
 
 const router = express.Router();
 
