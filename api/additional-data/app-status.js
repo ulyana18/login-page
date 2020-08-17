@@ -4,4 +4,4 @@ const error = 401;
 module.exports = {
     successfull,
     error,
-}
+};
