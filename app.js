@@ -5,10 +5,10 @@ const path = require('path')
 const cors = require('cors');
 const express = require('express');
 const app = express();
+const config = require('./config');
 const paths = {
   api: '/api',
 }
-
 
 app.use(cors());
 app.use(express.static(path.join(__dirname, 'build')));
@@ -20,7 +20,7 @@ app.get('/*', (req, res) => {
   res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
 
-const port = process.env.PORT || 9000;
+const port = config.port || 9000;
 app.listen(port);
 
 module.exports = app;

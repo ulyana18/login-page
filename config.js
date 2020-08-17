@@ -23,6 +23,7 @@ const config = {
   password: process.env.PASSWORD_DB,
   port: process.env.PORT_DB,
   accessToken: process.env.ACCESS_TOKEN,
+  databaseUrl: process.env.DATABASE_URL,
 };
 
 
