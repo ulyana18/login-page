@@ -1,16 +1,15 @@
-const Pool = require('pg').Pool;
+const { Pool } = require('pg');
 const config = require('../config');
-const { user, host, database, password, port } = config;
+// const { user, host, database, password, port } = config;
 
 const pool = new Pool({
-  user,
-  host,
-  database,
-  password,
-  port,
-},{
-  connectionString: process.env.DATABASE_URL,
-  ssl: process.env.DATABASE_URL ? true : false
+  connectionString: process.env.DATABASE_URL, 
+  ssl: true,
+  // user,
+  // host,
+  // database,
+  // password,
+  // port,
 });
 
 // const pool = new Pool({
