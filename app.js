@@ -9,6 +9,7 @@ const paths = {
   api: '/api',
 }
 
+
 app.use(cors());
 app.use(express.static(path.join(__dirname, 'build')));
 app.use(bodyParser.urlencoded({ extended: false }));

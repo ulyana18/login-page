@@ -8,6 +8,9 @@ const pool = new Pool({
   database,
   password,
   port,
+},{
+  connectionString: process.env.DATABASE_URL,
+  ssl: process.env.DATABASE_URL ? true : false
 });
 
 // const pool = new Pool({

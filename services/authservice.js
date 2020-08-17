@@ -3,6 +3,7 @@ const pool = require('../db/queries');
 const jwt = require('jsonwebtoken');
 const config = require('../config');
 
+
 class AuthService {
     constructor() {
         // this.accessTokenSecret = process.env.ACCESS_TOKEN;
@@ -24,6 +25,7 @@ class AuthService {
                 );
             })
             .catch(function(err) {
+                console.log('error is here');
                 return new Error('This email is already in use!');
             });
 
