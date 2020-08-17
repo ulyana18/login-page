@@ -1,16 +1,26 @@
-const { Pool } = require('pg');
-const config = require('../config');
+// const { Pool } = require('pg');
+// const config = require('../config');
 // const { user, host, database, password, port } = config;
 
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL, 
-  ssl: true,
-  // user,
-  // host,
-  // database,
-  // password,
-  // port,
+const { Client } = require('pg');
+
+const client = new Client({
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false
+  }
 });
+
+client.connect();
+// const pool = new Pool({
+//   connectionString: process.env.DATABASE_URL, 
+//   ssl: true,
+//   // user,
+//   // host,
+//   // database,
+//   // password,
+//   // port,
+// });
 
 // const pool = new Pool({
 //   user = process.env.USER_DB,
@@ -20,4 +30,4 @@ const pool = new Pool({
 //   port = process.env.PORT_DB,
 // });
 
-module.exports = pool;
+module.exports = client;
