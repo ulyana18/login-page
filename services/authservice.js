@@ -14,7 +14,7 @@ class AuthService {
         const passwordHashed = this.hashPassword(password);
 
         await pool.query('SELECT * FROM users WHERE email = $1', [email])
-            .then(result =>{ 
+            .then(result => {
                 const isResultNotEmpty = result.rows.length !== 0;
 
                 if (isResultNotEmpty) {
@@ -25,7 +25,8 @@ class AuthService {
                 );
             })
             .catch(function(err) {
-                return new Error('This email is already in use!');
+                throw new Error;
+                // return new Error('This email is already in use!');
             });
 
         const accessToken = jwt.sign({ name, email }, this.accessTokenSecret);
@@ -40,23 +41,23 @@ class AuthService {
         let name;
         await pool.query('SELECT * FROM users WHERE email = $1', [email])
             .then(result => {
-                const isResultNotEmpty = result.rows.length !== 0;
+                const isResultEmpty = result.rows.length === 0;
                 const passwordHashed = this.hashPassword(password);
                 const isPasswordNotRight = result.rows[0].password !== passwordHashed;
 
-                if (isResultNotEmpty || isPasswordNotRight) {
+                if (isResultEmpty || isPasswordNotRight) {
                     throw new Error;
                 }
                 ({ name } = result.rows[0]);
             })
             .catch(function(err) {
-                return new Error('Incorrect login or password!');
+                throw new Error('Incorrect login or password!');
             });
 
-        const accessToken = jwt.sign({ user: name, email }, this.accessTokenSecret);
+        const accessToken = jwt.sign({ name, email }, this.accessTokenSecret);
 
         return {
-            user: user.name,
+            user: name,
             token: accessToken
         };
     }
