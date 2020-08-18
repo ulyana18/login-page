@@ -7,7 +7,7 @@ const app = express();
 
 const routes = require(__dirname + '/routes');
 const paths = require(__dirname + '/routes/paths');
-const config = require(__dirname + 'config');
+const config = require(__dirname + '/config');
 
 
 app.use(cors());

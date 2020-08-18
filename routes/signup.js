@@ -1,8 +1,8 @@
 const path = require('path');
 
-const AuthService = path.resolve('services/authservice');
-const { SUCCESSFULL, ERROR } = path.resolve('additional-data/app-status');
-const { SIGNUP_ERROR } = path.resolve('additional-data/user-messages');
+const AuthService = require('../services/authservice');
+const { SUCCESSFULL, ERROR } = require('../additional-data/app-status');
+const { SIGNUP_ERROR } = require('../additional-data/user-messages');
 
 
 async function signup(req, res) {
