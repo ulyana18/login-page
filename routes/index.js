@@ -1,16 +1,17 @@
 const express = require('express');
-const login = require('./login');
-const signup = require('./signup');
+const path = require('path');
+
+const login = path.resolve('login');
+const signup = path.resolve('signup');
+const paths = path.resolve('paths');
+const tokenChecker = path.resolve('middleware/tokenChecker');
 
 const router = express.Router();
 
-const path = {
-    signup: '/user/signup',
-    login: '/user/login'
-};
 
-router.post(path.signup, signup);
-router.post(path.login, login);
+router.post(paths.signup, signup);
+router.post(paths.login, login);
+router.use(tokenChecker);
 
 
 module.exports = router;

@@ -1,65 +1,81 @@
+const path = require('path');
 const crypto = require('crypto');
-const pool = require('../db/queries');
 const jwt = require('jsonwebtoken');
-// const config = require('../config');
+
+const pool = path.resolve('db/queries');
+const config = path.resolve('config');
+const { LOGIN_ERROR, SIGNUP_ERROR } = path.resolve('additional-data/user-messages');
 
 
 class AuthService {
     constructor() {
-        this.accessTokenSecret = process.env.ACCESS_TOKEN;
-        // this.accessToken = config.accessToken;
+        this.tokenList = {};
+        this.accessTokenSecret = config.accessToken;
+        this.refreshTokenSecret = config.refreshToken;
     }
 
-    async SignUp(name, email, password) {
+    async signUp(name, email, password) {
         const passwordHashed = this.hashPassword(password);
 
-        await pool.query('SELECT * FROM users WHERE email = $1', [email])
-            .then(result => {
-                const isResultNotEmpty = result.rows.length !== 0;
+        try {
+            const result = await pool.query('SELECT * FROM users WHERE email = $1', [email])
+            const isResultNotEmpty = result.rows.length !== 0;
 
-                if (isResultNotEmpty) {
-                    throw new Error;
-                }
-                pool.query('INSERT INTO users (email, password, name) VALUES ($1, $2, $3)',
-                    [email, passwordHashed, name]
-                );
-            })
-            .catch(function(err) {
+            if (isResultNotEmpty) {
                 throw new Error;
-                // return new Error('This email is already in use!');
-            });
+            }
+            pool.query('INSERT INTO users (email, password, name) VALUES ($1, $2, $3)',
+                [email, passwordHashed, name]
+            );
 
-        const accessToken = jwt.sign({ name, email }, this.accessTokenSecret);
+        } catch(err) {
+            throw new Error(SIGNUP_ERROR);
+            // return new Error('This email is already in use!');
+        }
 
-        return {
+        const accessToken = jwt.sign({ name, email }, this.accessTokenSecret, { expiresIn: 3600});
+        const refreshToken = jwt.sign({ name, email }, this.refreshTokenSecret);
+
+        const response = {
             user: name,
-            token: accessToken
-        };
+            token: accessToken,
+            refreshToken,
+        }
+
+        tokenList[refreshToken] = response;
+
+        return response;
+ 
     }
 
-    async LogIn(email, password) {
+    async logIn(email, password) {
         let name;
-        await pool.query('SELECT * FROM users WHERE email = $1', [email])
-            .then(result => {
-                const isResultEmpty = result.rows.length === 0;
-                const passwordHashed = this.hashPassword(password);
-                const isPasswordNotRight = result.rows[0].password !== passwordHashed;
+        try {
+            const result = await pool.query('SELECT * FROM users WHERE email = $1', [email])
+            const isResultEmpty = result.rows.length === 0;
+            const passwordHashed = this.hashPassword(password);
+            const isPasswordNotRight = result.rows[0].password !== passwordHashed;
 
-                if (isResultEmpty || isPasswordNotRight) {
-                    throw new Error;
-                }
-                ({ name } = result.rows[0]);
-            })
-            .catch(function(err) {
-                throw new Error('Incorrect login or password!');
-            });
+            if (isResultEmpty || isPasswordNotRight) {
+                throw new Error;
+            }
+            ({ name } = result.rows[0]);
+        } catch(err) {
+            throw new Error(LOGIN_ERROR);
+        }
 
-        const accessToken = jwt.sign({ name, email }, this.accessTokenSecret);
+        const accessToken = jwt.sign({ name, email }, this.accessTokenSecret, { expiresIn: 3600});
+        const refreshToken = jwt.sign({ name, email }, this.refreshTokenSecret);
 
-        return {
-            user: name,
-            token: accessToken
-        };
+        const response = {
+           user: name,
+           token: accessToken,
+           refreshToken,
+        }
+
+        tokenList[refreshToken] = response;
+
+        return response;
     }
 
     hashPassword(password) {

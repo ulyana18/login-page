@@ -1,6 +1,9 @@
-const AuthService = require('../services/authservice');
-const successfull = 200;
-const error = 401;
+const path = require('path');
+
+const AuthService = path.resolve('services/authservice');
+const { SUCCESSFULL, ERROR } = path.resolve('additional-data/app-status');
+const { SIGNUP_ERROR } = path.resolve('additional-data/user-messages');
+
 
 async function signup(req, res) {
     const { name, email, password } = req.body.user;
@@ -9,9 +12,9 @@ async function signup(req, res) {
         const authServiceInstance = new AuthService();
         const { user, token } = await authServiceInstance.SignUp(name, email, password); 
 
-        return res.send({ user, token }).status(successfull).end();
+        return res.send({ user, token }).status(SUCCESSFULL).end();
     } catch(e) {
-        return res.send('error').status(error).end();
+        return res.send(SIGNUP_ERROR).status(ERROR).end();
     }
 }
 
