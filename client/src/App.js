@@ -5,6 +5,7 @@ import Routing from './components/routing/routing';
 
 class App extends Component {
   constructor() {
+    super();
     console.log('hi');
   }
   render() {
