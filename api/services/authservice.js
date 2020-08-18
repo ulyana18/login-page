@@ -2,9 +2,13 @@ const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 const path = require('path');
 
-const config = path.resolve('config');
-const pool = path.resolve('db/queries');
-const { LOGIN_ERROR, SIGNUP_ERROR } = path.resolve('additional-data/user-messages');
+// const config = path.resolve('config');
+// const pool = path.resolve('db/queries');
+// const { LOGIN_ERROR, SIGNUP_ERROR } = path.resolve('additional-data/user-messages');
+const config = require('../config');
+const pool = require('../db/queries');
+const { LOGIN_ERROR, SIGNUP_ERROR } = require('../additional-data/user-messages');
+
 
 class AuthService {
     constructor() {
@@ -21,22 +25,25 @@ class AuthService {
             if (isResultNotEmpty) {
                 throw new Error;
             }
-            pool.query('INSERT INTO users (email, password, name) VALUES ($1, $2, $3)',
+            
+            await pool.query('INSERT INTO users (email, password, name) VALUES ($1, $2, $3)',
                 [email, passwordHashed, name]
             );
+            console.log('here');
         } catch(err) {
             return new Error(SIGNUP_ERROR);
         }
 
         const accessToken = jwt.sign({ name, email }, this.accessTokenSecret);
 
+        
         return {
             user: name,
             token: accessToken
         };
     }
 
-    logIn(email, password) {
+    async logIn(email, password) {
         let name;
         try {
             const result = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
