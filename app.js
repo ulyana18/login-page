@@ -8,6 +8,7 @@ const app = express();
 const routes = require('./routes/index');
 const paths = require('./routes/paths');
 const config = require('./config');
+const pool = require('./db/queries');
 
 
 app.use(cors());
@@ -20,7 +21,7 @@ app.get('/*', (req, res) => {
   res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
 
-const port = process.env.PORT || 9000;
+const port = 9000;
 app.listen(port);
 
 module.exports = app;

@@ -2,9 +2,9 @@ const path = require('path');
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 
-const pool = path.resolve('db/queries');
-const config = path.resolve('config');
-const { LOGIN_ERROR, SIGNUP_ERROR } = path.resolve('additional-data/user-messages');
+const pool = require('../db/queries');
+const config = require('../config');
+const { LOGIN_ERROR, SIGNUP_ERROR } = require('../additional-data/user-messages');
 
 
 class AuthService {
@@ -18,7 +18,7 @@ class AuthService {
         const passwordHashed = this.hashPassword(password);
 
         try {
-            const result = await pool.query('SELECT * FROM users WHERE email = $1', [email])
+            const result = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
             const isResultNotEmpty = result.rows.length !== 0;
 
             if (isResultNotEmpty) {
@@ -42,7 +42,7 @@ class AuthService {
             refreshToken,
         }
 
-        tokenList[refreshToken] = response;
+        this.tokenList[refreshToken] = response;
 
         return response;
  
@@ -73,7 +73,7 @@ class AuthService {
            refreshToken,
         }
 
-        tokenList[refreshToken] = response;
+        this.tokenList[refreshToken] = response;
 
         return response;
     }
