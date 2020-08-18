@@ -12,6 +12,7 @@ module.exports = (route, email, password, name = '') => {
       }),})
       .then(res => res.json())
       .then(res => {
+        console.log(res.refreshToken);
         window.localStorage.setItem('userName', res.user);
         window.localStorage.setItem('token', res.token);
         window.localStorage.setItem('refreshToken', res.refreshToken);
