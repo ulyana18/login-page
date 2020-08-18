@@ -5,9 +5,9 @@ const cors = require('cors');
 const express = require('express');
 const app = express();
 
-const routes = require(__dirname + '/routes');
-const paths = require(__dirname + '/routes/paths');
-const config = require(__dirname + '/config');
+const routes = require('./routes/index');
+const paths = require('./routes/paths');
+const config = require('./config');
 
 
 app.use(cors());
