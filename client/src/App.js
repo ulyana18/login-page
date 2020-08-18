@@ -4,6 +4,9 @@ import Routing from './components/routing/routing';
 
 
 class App extends Component {
+  constructor() {
+    console.log('hi');
+  }
   render() {
 
     return (
