@@ -20,7 +20,7 @@ app.get('/*', (req, res) => {
   res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
 
-const port = config.port || 9000;
+const port = process.env.PORT || 9000;
 app.listen(port);
 
 module.exports = app;
