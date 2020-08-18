@@ -10,9 +10,9 @@ async function signup(req, res) {
 
     try {
         const authServiceInstance = new AuthService();
-        const { user, token } = await authServiceInstance.SignUp(name, email, password); 
+        const { user, token, refreshToken } = await authServiceInstance.signUp(name, email, password); 
 
-        return res.send({ user, token }).status(SUCCESSFULL).end();
+        return res.send({ user, token, refreshToken }).status(SUCCESSFULL).end();
     } catch(e) {
         return res.send(SIGNUP_ERROR).status(ERROR).end();
     }
