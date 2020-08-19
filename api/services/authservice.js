@@ -57,6 +57,7 @@ class AuthService {
             const result = await pool.query('SELECT * FROM users WHERE email = $1', [email])
             const isResultEmpty = result.rows.length === 0;
             const passwordHashed = this.hashPassword(password);
+            console.log(result);
             const isPasswordNotRight = result.rows[0].password !== passwordHashed;
 
             if (isResultEmpty || isPasswordNotRight) {
@@ -64,6 +65,7 @@ class AuthService {
             }
             ({ name } = result.rows[0]);
         } catch(err) {
+            console.log(err);
             throw new Error(LOGIN_ERROR);
         }
 

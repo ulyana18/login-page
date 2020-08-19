@@ -12,7 +12,6 @@ class LogInPage extends Component {
       this.passwordRef = React.createRef();
     }
   
-  
     logIn = () => callApi('login', this.emailRef.current.value, this.passwordRef.current.value); 
   
     render() {

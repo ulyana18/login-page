@@ -15,7 +15,6 @@ async function signup(req, res) {
         return res.send({ user, token, refreshToken }).status(SUCCESSFULL).end();
 
     } catch(e) {
-        console.log(e);
         return res.send(ERROR).status(SIGNUP_ERROR);
     }
 }

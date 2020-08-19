@@ -14,8 +14,11 @@ class SignUpPage extends Component {
     }
   
   
-    signUp = () => callApi('signup', this.emailRef.current.value, this.passwordRef.current.value, this.nameRef.current.value); 
-  
+    signUp = () => {
+      const result = callApi('signup', this.emailRef.current.value, this.passwordRef.current.value, this.nameRef.current.value);
+      console.log(result);
+    }
+    
     render() {
   
       return (
@@ -41,7 +44,8 @@ class SignUpPage extends Component {
               />
               <Box m={2}>
                 <Button 
-                  onClick={this.signUp} // the same function for onKeyDown.Enter
+                  // onClick={this.signUp} // the same function for onKeyDown.Enter
+                  onClick={this.signUp}
                   className="signUpBtn" 
                   variant="contained"
                 >

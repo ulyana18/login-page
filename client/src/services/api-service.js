@@ -1,6 +1,8 @@
-module.exports = (route, email, password, name = '') => {
-  let isLogin = (route === 'login'); 
-    fetch(`/api/user/${route}`, {
+module.exports = async (route, email, password, name = '') => {
+  let isLogin = (route === 'login');
+  let user;
+  try {
+    const response = await fetch(`/api/user/${route}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -9,14 +11,29 @@ module.exports = (route, email, password, name = '') => {
             email,
             password,
           }
-      }),})
-      .then(res => res.json())
-      .then(res => {
-        window.localStorage.setItem('userName', res.user);
-        window.localStorage.setItem('token', res.token);
-        window.localStorage.setItem('refreshToken', res.refreshToken);
-      })
-      .catch(err => {
-        isLogin ? alert('Incorrect login or password') : alert('This email is already in use!');
-      });
+      }),});
+    const resultObj = await response.json();
+    
+    window.localStorage.setItem('userName', resultObj.user);
+    window.localStorage.setItem('token', resultObj.token);
+    window.localStorage.setItem('refreshToken', resultObj.refreshToken);
+    ({ user } = resultObj);
+
+  } catch(err) {
+    isLogin ? alert('Incorrect login or password') : alert('This email is already in use!');
+  }
+    // .then(res => res.json())
+    // .then(res => {
+    //   window.localStorage.setItem('userName', res.user);
+    //   window.localStorage.setItem('token', res.token);
+    //   window.localStorage.setItem('refreshToken', res.refreshToken);
+    //   console.log(res);
+    //   ({ user } = res);
+    //   console.log(user);
+    // })
+    // .catch(err => {
+    //   isLogin ? alert('Incorrect login or password') : alert('This email is already in use!');
+    // });
+  console.log(user);
+  return user;
 }
