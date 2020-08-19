@@ -8,6 +8,7 @@ const config = {
   password: process.env.PASSWORD_DB,
   port: process.env.PORT_DB,
   accessToken: process.env.ACCESS_TOKEN,
+  refreshToken: process.env.REFRESH_TOKEN,
 };
 
 module.exports = config;

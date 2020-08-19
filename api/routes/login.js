@@ -8,9 +8,9 @@ async function login(req, res) {
     const { email, password } = req.body.user;
     try {
       const authServiceInstance = new AuthService();
-      const { user, token } = await authServiceInstance.logIn(email, password); 
+      const { user, token, refreshToken } = await authServiceInstance.logIn(email, password); 
 
-      return res.send({ user, token }).status(SUCCESSFULL);
+      return res.send({ user, token, rToken: refreshToken }).status(SUCCESSFULL).end();
     } catch(e) {
       return res.send(LOGIN_ERROR).status(ERROR);
     }

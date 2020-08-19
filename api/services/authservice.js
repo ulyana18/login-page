@@ -13,6 +13,8 @@ const { LOGIN_ERROR, SIGNUP_ERROR } = require('../additional-data/user-messages'
 class AuthService {
     constructor() {
         this.accessTokenSecret = config.accessToken;
+        this.refreshTokenSecret = config.refreshToken;
+        this.tokenList = {};
     }
 
     async signUp(name, email, password) {
@@ -25,48 +27,58 @@ class AuthService {
             if (isResultNotEmpty) {
                 throw new Error;
             }
-            
-            await pool.query('INSERT INTO users (email, password, name) VALUES ($1, $2, $3)',
+            pool.query('INSERT INTO users (email, password, name) VALUES ($1, $2, $3)',
                 [email, passwordHashed, name]
             );
-            console.log('here');
+
         } catch(err) {
-            return new Error(SIGNUP_ERROR);
+            throw new Error(SIGNUP_ERROR);
+            // return new Error('This email is already in use!');
         }
 
-        const accessToken = jwt.sign({ name, email }, this.accessTokenSecret);
+        const accessToken = jwt.sign({ name, email }, "" + this.accessTokenSecret, { expiresIn: 3600});
+        const refreshToken = jwt.sign({ name, email }, "" + this.refreshTokenSecret);
 
-        
-        return {
+        const response = {
             user: name,
-            token: accessToken
-        };
+            token: accessToken,
+            refreshToken,
+        }
+
+        this.tokenList[refreshToken] = response;
+
+        return response;
+ 
     }
 
     async logIn(email, password) {
         let name;
         try {
-            const result = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
-
-            const isResultNotEmpty = result.rows.length !== 0;
+            const result = await pool.query('SELECT * FROM users WHERE email = $1', [email])
+            const isResultEmpty = result.rows.length === 0;
             const passwordHashed = this.hashPassword(password);
             const isPasswordNotRight = result.rows[0].password !== passwordHashed;
 
-            if (isResultNotEmpty || isPasswordNotRight) {
+            if (isResultEmpty || isPasswordNotRight) {
                 throw new Error;
             }
             ({ name } = result.rows[0]);
-
         } catch(err) {
-            return new Error(LOGIN_ERROR);
+            throw new Error(LOGIN_ERROR);
         }
 
-        const accessToken = jwt.sign({ user: name, email }, this.accessTokenSecret);
+        const accessToken = jwt.sign({ name, email }, this.accessTokenSecret, { expiresIn: 3600});
+        const refreshToken = jwt.sign({ name, email }, this.refreshTokenSecret);
 
-        return {
-            user: user.name,
-            token: accessToken
-        };
+        const response = {
+           user: name,
+           token: accessToken,
+           refreshToken,
+        }
+
+        this.tokenList[refreshToken] = response;
+
+        return response;
     }
 
     hashPassword(password) {
