@@ -14,7 +14,7 @@ describe('post /api/user/signup', () => {
       .send({
             user: {
               name: 'Nastya',
-              email: 'nastya12@gmail.com',
+              email: 'nastya123@gmail.com',
               password: '1234',
             },
        })
@@ -75,7 +75,7 @@ describe('post /api/user/login', () => {
        })
       .end((err, res) => {
             expect(res.status).to.equal(401);
-            done()
+            done();
         })
     });
 });

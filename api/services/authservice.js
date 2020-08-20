@@ -6,7 +6,7 @@ const path = require('path');
 // const pool = require(path.resolve('db/queries.js'));
 // const { LOGIN_ERROR, SIGNUP_ERROR } = require(path.resolve('additional-data/user-messages.js'));
 
-const config = require('../config');
+const config = require('../config');  // for tests
 const pool = require('../db/queries');
 const { LOGIN_ERROR, SIGNUP_ERROR } = require('../additional-data/user-messages');
 

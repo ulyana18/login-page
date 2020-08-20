@@ -1,5 +1,6 @@
 const path = require('path');
 const jwt = require('jsonwebtoken');
+
 const config = require(path.resolve('config.js'));
 const TOKEN_ERROR = require(path.resolve('additional-data/user-messages.js'));
 const ERROR = require(path.resolve('additional-data/app-status.js'));

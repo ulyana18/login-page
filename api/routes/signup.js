@@ -1,4 +1,5 @@
 const path = require('path')
+
 const AuthService = require(path.resolve('services/authservice.js'));
 const { SUCCESSFULL, ERROR } = require(path.resolve('additional-data/app-status.js'));
 const { SIGNUP_ERROR } = require(path.resolve('additional-data/user-messages.js'));
