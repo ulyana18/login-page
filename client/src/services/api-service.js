@@ -1,4 +1,4 @@
-module.exports = async (route, email, password, name = '') => {
+async function callApi(route, email, password, name = '') {
   let isLogin = (route === 'login');
   let user;
   try {
@@ -37,3 +37,5 @@ module.exports = async (route, email, password, name = '') => {
   console.log(user);
   return user;
 }
+
+export default callApi;
