@@ -1,7 +1,11 @@
 const path = require('path');
+
 const AuthService = require(path.resolve('services/authservice.js'));
 const { SUCCESSFULL, ERROR } = require(path.resolve('additional-data/app-status.js'));
 const { LOGIN_ERROR } = require(path.resolve('additional-data/user-messages.js'));
+
+// const AuthService = require('../services/authservice');   // for tests
+// const { SUCCESSFULL, ERROR } = require(('../additional-data/app-status'));
 
 
 async function login(req, res) {
@@ -16,7 +20,7 @@ async function login(req, res) {
         refreshToken
       }).status(SUCCESSFULL);
 
-      // return res.status(200).json({  // for tests
+      // return res.status(SUCCESSFULL).json({  // for tests
       //   user,
       //   token,
       //   refreshToken
@@ -24,7 +28,7 @@ async function login(req, res) {
       
     } catch(e) {
       return res.send(LOGIN_ERROR).status(ERROR);
-      // return res.status(400).json({error: e});  // for tests
+      // return res.status(ERROR).json({error: e});  // for tests
     }
 }
 

@@ -2,9 +2,13 @@ const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 const path = require('path');
 
-const config = require(path.resolve('config.js'));
-const pool = require(path.resolve('db/queries.js'));
-const { LOGIN_ERROR, SIGNUP_ERROR } = require(path.resolve('additional-data/user-messages.js'));
+// const config = require(path.resolve('config.js'));
+// const pool = require(path.resolve('db/queries.js'));
+// const { LOGIN_ERROR, SIGNUP_ERROR } = require(path.resolve('additional-data/user-messages.js'));
+
+const config = require('../config');
+const pool = require('../db/queries');
+const { LOGIN_ERROR, SIGNUP_ERROR } = require('../additional-data/user-messages');
 
 
 class AuthService {

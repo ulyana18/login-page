@@ -1,7 +1,7 @@
-const successfull = 200;
-const error = 401;
+const SUCCESSFULL = 200;
+const ERROR = 401;
 
 module.exports = {
-    successfull,
-    error,
+    SUCCESSFULL,
+    ERROR,
 };

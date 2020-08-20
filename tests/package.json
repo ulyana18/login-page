@@ -4,8 +4,7 @@
   "description": "",
   "main": "test.js",
   "scripts": {
-    "test": "mocha --require @babel/register --recursive --exit",
-    "nyctest": "nyc npm run test"
+    "test": "mocha"
   },
   "author": "",
   "license": "ISC",
