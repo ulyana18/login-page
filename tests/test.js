@@ -6,24 +6,24 @@ const request = require('supertest');
 const expect = chai.expect;
 
 
-describe('post /api/user/signup', () => {
-    it('should sign up Nastya', (done) => {
-      request(app)
-      .post('/api/user/signup')
-      .set('Content-Type', 'application/json')
-      .send({
-            user: {
-              name: 'Nastya',
-              email: 'nastya1@gmail.com',
-              password: '1234',
-            },
-       })
-      .end((err, res) => {
-            expect(res.body.user).to.equal('Nastya');
-            done()
-        })
-    });
-});
+// describe('post /api/user/signup', () => {
+//     it('should sign up Nastya', (done) => {
+//       request(app)
+//       .post('/api/user/signup')
+//       .set('Content-Type', 'application/json')
+//       .send({
+//             user: {
+//               name: 'Nastya',
+//               email: 'nastya1@gmail.com',
+//               password: '1234',
+//             },
+//        })
+//       .end((err, res) => {
+//             expect(res.body.user).to.equal('Nastya');
+//             done()
+//         })
+//     });
+// });
 
 describe('post /api/user/signup', () => {
     it('should not sign up Alexander, because this email is already in use', (done) => {

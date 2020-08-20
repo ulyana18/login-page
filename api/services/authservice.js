@@ -2,12 +2,9 @@ const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 const path = require('path');
 
-// const config = path.resolve('config');
-// const pool = path.resolve('db/queries');
-// const { LOGIN_ERROR, SIGNUP_ERROR } = path.resolve('additional-data/user-messages');
-const config = require('../config');
-const pool = require('../db/queries');
-const { LOGIN_ERROR, SIGNUP_ERROR } = require('../additional-data/user-messages');
+const config = require(path.resolve('config.js'));
+const pool = require(path.resolve('db/queries.js'));
+const { LOGIN_ERROR, SIGNUP_ERROR } = require(path.resolve('additional-data/user-messages.js'));
 
 
 class AuthService {
@@ -37,7 +34,6 @@ class AuthService {
 
         } catch(err) {
             throw new Error(SIGNUP_ERROR);
-            // return new Error('This email is already in use!');
         }
 
         const accessToken = jwt.sign({ name, email }, "" + this.accessTokenSecret, { expiresIn: 3600});
