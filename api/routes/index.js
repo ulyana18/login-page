@@ -8,6 +8,7 @@ const tokenChecker = require('../middleware/tokenChecker');
 
 const router = express.Router();
 
+// router.post(paths.signup, signup);
 router.post(paths.signup, signup);
 router.post(paths.login, login);
 router.use(tokenChecker);

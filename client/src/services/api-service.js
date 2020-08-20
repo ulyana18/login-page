@@ -18,7 +18,7 @@ module.exports = async (route, email, password, name = '') => {
     window.localStorage.setItem('token', resultObj.token);
     window.localStorage.setItem('refreshToken', resultObj.refreshToken);
     ({ user } = resultObj);
-
+    console.log(user);
   } catch(err) {
     isLogin ? alert('Incorrect login or password') : alert('This email is already in use!');
   }

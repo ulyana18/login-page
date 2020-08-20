@@ -20,16 +20,20 @@ class AuthService {
     async signUp(name, email, password) {
         const passwordHashed = this.hashPassword(password);
 
+
         try {
+
             const result = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
             const isResultNotEmpty = result.rows.length !== 0;
 
             if (isResultNotEmpty) {
                 throw new Error;
             }
+
             pool.query('INSERT INTO users (email, password, name) VALUES ($1, $2, $3)',
                 [email, passwordHashed, name]
             );
+
 
         } catch(err) {
             throw new Error(SIGNUP_ERROR);
@@ -46,7 +50,6 @@ class AuthService {
         }
 
         this.tokenList[refreshToken] = response;
-
         return response;
  
     }
@@ -57,7 +60,6 @@ class AuthService {
             const result = await pool.query('SELECT * FROM users WHERE email = $1', [email])
             const isResultEmpty = result.rows.length === 0;
             const passwordHashed = this.hashPassword(password);
-            console.log(result);
             const isPasswordNotRight = result.rows[0].password !== passwordHashed;
 
             if (isResultEmpty || isPasswordNotRight) {
@@ -65,7 +67,6 @@ class AuthService {
             }
             ({ name } = result.rows[0]);
         } catch(err) {
-            console.log(err);
             throw new Error(LOGIN_ERROR);
         }
 

@@ -1,6 +1,7 @@
 const path = require('path');
 const bodyParser = require('body-parser');
-require('dotenv').config();
+const envPath = __dirname + '/.env';
+require('dotenv').config({path: envPath});
 const cors = require('cors');
 const express = require('express');
 const app = express();
@@ -14,11 +15,11 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(paths.api, routes);
 
-// app.get('/*', (req, res) => {
-//   res.sendFile(path.join(__dirname, 'build', 'index.html'));
-// });
-console.log(process.env);
-const port = 9000; // process.env.PORT ||
+app.get('/*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'build', 'index.html'));
+});
+
+const port = process.env.PORT || 9000; // process.env.PORT ||
 app.listen(port);
 
 module.exports = app;
