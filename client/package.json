@@ -19,6 +19,7 @@
     "eject": "react-scripts eject"
   },
   "proxy": "http://localhost:9000",
+  "homepage": "https://login-page-ulyana18.herokuapp.com/",
   "eslintConfig": {
     "extends": "react-app"
   },
