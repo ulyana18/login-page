@@ -1,25 +1,33 @@
 import React, { Component } from 'react';
-import { TextField } from "@material-ui/core";
+import { TextField } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
-import callApi from '../../services/api-service';
+
+import callApi from 'services/apiService';
 
 
-class LogInPage extends Component {
+class SignUpPage extends Component {
     constructor(props) {
       super(props);
       this.emailRef = React.createRef();
       this.passwordRef = React.createRef();
+      this.nameRef = React.createRef();
     }
   
-    logIn = () => callApi('login', this.emailRef.current.value, this.passwordRef.current.value); 
   
+    signUp = () => callApi('signup', this.emailRef.current.value, this.passwordRef.current.value, this.nameRef.current.value);
+    
     render() {
   
       return (
-        <div className="App">  
-          <div className="login-container">
-            <form className="login-form" noValidate autoComplete="off">
+        <div className="App">
+          <div className="signup-container">
+            <form className="signup-form" noValidate autoComplete="off">
+              <TextField required
+                id="standard-required" 
+                label="Name"
+                inputRef={this.nameRef}
+              />
               <TextField required
                 id="standard-required" 
                 label="Email"
@@ -34,18 +42,18 @@ class LogInPage extends Component {
               />
               <Box m={2}>
                 <Button 
-                  onClick={this.logIn} // the same function for onKeyDown.Enter
-                  className="logInBtn" 
+                  onClick={this.signUp}
+                  className="signUpBtn" 
                   variant="contained"
                 >
-                  Log In
+                  Sign Up
                 </Button>
               </Box>
             </form>
-          </div>
         </div>
+      </div>
       );
     }
 }
   
-export default LogInPage;
+export default SignUpPage;

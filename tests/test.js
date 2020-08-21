@@ -1,8 +1,8 @@
 const assert = require('assert');
 const chai = require('chai');
-const ApiService = require('../client/src/services/api-service');
 const app = require('../api/app');
 const request = require('supertest');
+
 const expect = chai.expect;
 
 
@@ -14,7 +14,7 @@ describe('post /api/user/signup', () => {
       .send({
             user: {
               name: 'Nastya',
-              email: 'nastya123@gmail.com',
+              email: 'nastya12345@gmail.com',
               password: '1234',
             },
        })
@@ -27,6 +27,7 @@ describe('post /api/user/signup', () => {
 
 describe('post /api/user/signup', () => {
     it('should not sign up Alexander, because this email is already in use', (done) => {
+        require('../api/routes/index');
       request(app)
       .post('/api/user/signup')
       .set('Content-Type', 'application/json')
@@ -46,6 +47,7 @@ describe('post /api/user/signup', () => {
 
 describe('post /api/user/login', () => {
     it('should log in Julia', (done) => {
+        require('../api/routes/index');
       request(app)
       .post('/api/user/login')
       .set('Content-Type', 'application/json')

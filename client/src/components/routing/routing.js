@@ -2,13 +2,13 @@ import React, { Component } from 'react';
 import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
 import {
-  HashRouter as Router,  // BrowserRouter
+  HashRouter as Router,
   Switch,
   Route,
   Link
-} from "react-router-dom";
-import LogInPage from '../login-page/login-page';
-import SignUpPage from '../signup-page/signup-page';
+} from 'react-router-dom';
+import LogInPage from 'components/loginPage/loginPage';
+import SignUpPage from 'components/signupPage/signupPage';
 
 
 class Routing extends Component {

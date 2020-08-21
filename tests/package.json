@@ -4,19 +4,27 @@
   "description": "",
   "main": "test.js",
   "scripts": {
-    "test": "mocha",
-    "testCov": "./node_modules/.bin/istanbul cover ./node_modules/.bin/_mocha -- --require @babel/register --exit"
+    "test": "set NODE_ENV=production mocha --exit",
+    "cover": "set NODE_ENV=production istanbul cover _mocha -- --report lcov --recursive test --exit"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@babel/core": "^7.11.1",
     "@babel/register": "^7.10.5",
+    "@cypress/code-coverage": "^3.8.1",
     "babel": "^6.23.0",
+    "babel-plugin-istanbul": "^6.0.0",
     "chai": "^4.2.0",
     "istanbul": "^0.4.5",
     "mocha": "^8.1.1",
     "nyc": "^15.1.0",
     "supertest": "^4.0.2"
+  },
+  "dependencies": {
+    "babel-istanbul": "^0.12.2",
+    "chai-http": "^4.3.0",
+    "cross-env": "^7.0.2",
+    "request": "^2.88.2"
   }
 }

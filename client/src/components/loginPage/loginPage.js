@@ -1,35 +1,25 @@
 import React, { Component } from 'react';
-import { TextField } from "@material-ui/core";
+import { TextField } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
-import callApi from '../../services/api-service';
+import callApi from 'services/apiService';
 
 
-class SignUpPage extends Component {
+class LogInPage extends Component {
     constructor(props) {
       super(props);
       this.emailRef = React.createRef();
       this.passwordRef = React.createRef();
-      this.nameRef = React.createRef();
     }
   
+    logIn = () => callApi('login', this.emailRef.current.value, this.passwordRef.current.value); 
   
-    signUp = () => {
-      const result = callApi('signup', this.emailRef.current.value, this.passwordRef.current.value, this.nameRef.current.value);
-      console.log(result);
-    }
-    
     render() {
   
       return (
-        <div className="App">
-          <div className="signup-container">
-            <form className="signup-form" noValidate autoComplete="off">
-              <TextField required
-                id="standard-required" 
-                label="Name"
-                inputRef={this.nameRef}
-              />
+        <div className="App">  
+          <div className="login-container">
+            <form className="login-form" noValidate autoComplete="off">
               <TextField required
                 id="standard-required" 
                 label="Email"
@@ -44,19 +34,18 @@ class SignUpPage extends Component {
               />
               <Box m={2}>
                 <Button 
-                  // onClick={this.signUp} // the same function for onKeyDown.Enter
-                  onClick={this.signUp}
-                  className="signUpBtn" 
+                  onClick={this.logIn}
+                  className="logInBtn" 
                   variant="contained"
                 >
-                  Sign Up
+                  Log In
                 </Button>
               </Box>
             </form>
+          </div>
         </div>
-      </div>
       );
     }
 }
   
-export default SignUpPage;
+export default LogInPage;

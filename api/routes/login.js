@@ -1,11 +1,8 @@
 const path = require('path');
 
 const AuthService = require(path.resolve('services/authservice.js'));
-const { SUCCESSFULL, ERROR } = require(path.resolve('additional-data/app-status.js'));
-const { LOGIN_ERROR } = require(path.resolve('additional-data/user-messages.js'));
-
-// const AuthService = require('../services/authservice');   // for tests
-// const { SUCCESSFULL, ERROR } = require(('../additional-data/app-status'));
+const { SUCCESSFULL, ERROR } = require(path.resolve('messages/consts.js'));
+const { LOGIN_ERROR } = require(path.resolve('messages/user-messages.js'));
 
 
 async function login(req, res) {
@@ -14,21 +11,15 @@ async function login(req, res) {
       const authServiceInstance = new AuthService();
       const { user, token, refreshToken } = await authServiceInstance.logIn(email, password); 
 
-      return res.send({
+
+      return res.status(SUCCESSFULL).send({
         user,
         token,
         refreshToken
-      }).status(SUCCESSFULL);
-
-      // return res.status(SUCCESSFULL).json({  // for tests
-      //   user,
-      //   token,
-      //   refreshToken
-      // });
+      });
       
     } catch(e) {
-      return res.send(LOGIN_ERROR).status(ERROR);
-      // return res.status(ERROR).json({error: e});  // for tests
+      return res.status(ERROR).send({error: LOGIN_ERROR});
     }
 }
 

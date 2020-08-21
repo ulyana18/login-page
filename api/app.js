@@ -1,12 +1,19 @@
+require('dotenv').config();
 const path = require('path');
 const bodyParser = require('body-parser');
-require('dotenv').config();
 const cors = require('cors');
 const express = require('express');
 const app = express();
 
-const routes = require(__dirname + '/routes');
-const paths = require(__dirname + '/routes/paths');
+if (process.env.NODE_ENV === 'test') {
+  const process = require('process');
+  process.chdir(process.env.NODE_PATH);
+}
+
+
+const routes = require(path.resolve('routes/index.js'));
+const paths = require(path.resolve('routes/paths.js'));
+
 
 app.use(cors());
 app.use(express.static(path.join(__dirname, 'build')));

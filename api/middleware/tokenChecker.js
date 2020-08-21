@@ -2,12 +2,9 @@ const path = require('path');
 const jwt = require('jsonwebtoken');
 
 const config = require(path.resolve('config.js'));
-const TOKEN_ERROR = require(path.resolve('additional-data/user-messages.js'));
-const ERROR = require(path.resolve('additional-data/app-status.js'));
+const TOKEN_ERROR = require(path.resolve('messages/user-messages.js'));
+const ERROR = require(path.resolve('messages/consts.js'));
 
-// const config = require('../config');  // for tests
-// const TOKEN_ERROR = require('../additional-data/user-messages');
-// const ERROR = require('../additional-data/app-status');
 
 module.exports = (req,res,next) => {
   const token = req.body.token || req.query.token || req.headers['x-access-token']
