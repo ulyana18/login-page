@@ -2,7 +2,7 @@ const path = require('path');
 
 const AuthService = require(path.resolve('services/authservice.js'));
 const { SUCCESSFULL, ERROR } = require(path.resolve('messages/consts.js'));
-const { LOGIN_ERROR } = require(path.resolve('messages/user-messages.js'));
+const { LOGIN_ERROR } = require(path.resolve('messages/userMessages.js'));
 
 
 async function login(req, res) {

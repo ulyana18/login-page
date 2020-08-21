@@ -2,7 +2,7 @@ const path = require('path');
 const jwt = require('jsonwebtoken');
 
 const config = require(path.resolve('config.js'));
-const TOKEN_ERROR = require(path.resolve('messages/user-messages.js'));
+const TOKEN_ERROR = require(path.resolve('messages/userMessages.js'));
 const ERROR = require(path.resolve('messages/consts.js'));
 
 

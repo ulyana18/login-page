@@ -4,7 +4,7 @@ const path = require('path');
 
 const config = require(path.resolve('config.js'));
 const pool = require(path.resolve('db/queries.js'));
-const { LOGIN_ERROR, SIGNUP_ERROR } = require(path.resolve('messages/user-messages.js'));
+const { LOGIN_ERROR, SIGNUP_ERROR } = require(path.resolve('messages/userMessages.js'));
 
 
 class AuthService {
