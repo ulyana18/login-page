@@ -4,8 +4,8 @@
   "description": "",
   "main": "test.js",
   "scripts": {
-    "test": "set NODE_ENV=test mocha --exit",
-    "cover": "set NODE_ENV=test istanbul cover _mocha -- --report lcov --recursive test --exit"
+    "test": "NODE_ENV=testmocha --exit",
+    "cover": "NODE_ENV=test istanbul cover _mocha -- --report lcov --recursive test --exit"
   },
   "author": "",
   "license": "ISC",
