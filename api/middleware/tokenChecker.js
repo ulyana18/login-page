@@ -1,13 +1,13 @@
 const path = require('path');
 const jwt = require('jsonwebtoken');
 
-const config = require(path.resolve('config.js'));
-const TOKEN_ERROR = require(path.resolve('messages/userMessages.js'));
-const ERROR = require(path.resolve('messages/consts.js'));
+const config = require('config');
+const TOKEN_ERROR = require('messages/userMessages');
+const ERROR = require('messages/consts');
 
 
 module.exports = (req,res,next) => {
-  const token = req.body.token || req.query.token || req.headers['x-access-token']
+  const token = req.body.user.accessToken || req.query.token || req.headers['x-access-token'];
   
   if (token) {
 

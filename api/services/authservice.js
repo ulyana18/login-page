@@ -5,6 +5,7 @@ const path = require('path');
 const config = require(path.resolve('config.js'));
 const pool = require(path.resolve('db/queries.js'));
 const { LOGIN_ERROR, SIGNUP_ERROR } = require(path.resolve('messages/userMessages.js'));
+const { TOKEN_TIME } = require('../messages/consts');
 
 
 class AuthService {
@@ -36,11 +37,12 @@ class AuthService {
             throw new Error(SIGNUP_ERROR);
         }
 
-        const accessToken = jwt.sign({ name, email }, "" + this.accessTokenSecret, { expiresIn: 3600});
+        const accessToken = jwt.sign({ name, email }, "" + this.accessTokenSecret, { expiresIn: TOKEN_TIME});
         const refreshToken = jwt.sign({ name, email }, "" + this.refreshTokenSecret);
 
         const response = {
             user: name,
+            email,
             token: accessToken,
             refreshToken,
         }
@@ -66,11 +68,12 @@ class AuthService {
             throw new Error(LOGIN_ERROR);
         }
 
-        const accessToken = jwt.sign({ name, email }, this.accessTokenSecret, { expiresIn: 3600});
+        const accessToken = jwt.sign({ name, email }, this.accessTokenSecret, { expiresIn: TOKEN_TIME});
         const refreshToken = jwt.sign({ name, email }, this.refreshTokenSecret);
 
         const response = {
            user: name,
+           email,
            token: accessToken,
            refreshToken,
         }
@@ -78,6 +81,26 @@ class AuthService {
         this.tokenList[refreshToken] = response;
 
         return response;
+    }
+
+    checkToken(token, name, email) {
+        if (!token) {
+            throw new Error(TOKEN_ERROR);
+        }
+    
+        if (!this.tokenList.includes(token)) {
+            throw new Error(TOKEN_ERROR);        
+        }
+    
+        jwt.verify(token, this.refreshTokenSecret, (err, user) => {
+            if (err) {
+                throw new Error(TOKEN_ERROR);
+            }
+    
+            const accessToken = jwt.sign({ name, email }, this.accessTokenSecret, { expiresIn: TOKEN_TIME});
+    
+            return accessToken;
+        });
     }
 
     hashPassword(password) {

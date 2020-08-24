@@ -3,7 +3,7 @@ import { TextField } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
 
-import callApi from 'services/apiService';
+import { callApi } from 'services/apiService';
 
 
 class SignUpPage extends Component {
@@ -20,31 +20,31 @@ class SignUpPage extends Component {
     render() {
   
       return (
-        <div className="App">
-          <div className="signup-container">
-            <form className="signup-form" noValidate autoComplete="off">
+        <div className='App'>
+          <div className='signup-container'>
+            <form className='signup-form' noValidate autoComplete='off'>
               <TextField required
-                id="standard-required" 
-                label="Name"
+                id='standard-required' 
+                label='Name'
                 inputRef={this.nameRef}
               />
               <TextField required
-                id="standard-required" 
-                label="Email"
+                id='standard-required' 
+                label='Email'
                 inputRef={this.emailRef}
               />
               <TextField required
-                id="standard-password-input"
-                label="Password"
-                type="password"
-                autoComplete="current-password"
+                id='standard-password-input'
+                label='Password'
+                type='password'
+                autoComplete='current-password'
                 inputRef={this.passwordRef}
               />
               <Box m={2}>
                 <Button 
                   onClick={this.signUp}
-                  className="signUpBtn" 
-                  variant="contained"
+                  className='signUpBtn' 
+                  variant='contained'
                 >
                   Sign Up
                 </Button>

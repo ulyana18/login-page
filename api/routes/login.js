@@ -1,26 +1,27 @@
 const path = require('path');
 
-const AuthService = require(path.resolve('services/authservice.js'));
-const { SUCCESSFULL, ERROR } = require(path.resolve('messages/consts.js'));
-const { LOGIN_ERROR } = require(path.resolve('messages/userMessages.js'));
+const AuthService = require('services/authService');
+const { SUCCESSFULL, ERROR } = require('messages/consts');
+const { LOGIN_ERROR } = require('messages/userMessages');
 
 
 async function login(req, res) {
-    const { email, password } = req.body.user;
-    try {
-      const authServiceInstance = new AuthService();
-      const { user, token, refreshToken } = await authServiceInstance.logIn(email, password); 
+  const { email, password } = req.body.user;
+  try {
+    const authServiceInstance = new AuthService();
+    const { user, token, refreshToken } = await authServiceInstance.logIn(email, password); 
 
 
-      return res.status(SUCCESSFULL).send({
-        user,
-        token,
-        refreshToken
-      });
-      
-    } catch(e) {
-      return res.status(ERROR).send({error: LOGIN_ERROR});
-    }
+    return res.status(SUCCESSFULL).send({
+      user,
+      email,
+      token,
+      refreshToken
+    });
+    
+  } catch(e) {
+    return res.send({error: LOGIN_ERROR}).status(ERROR);
+  }
 }
 
 module.exports = login;

@@ -1,8 +1,8 @@
 const path = require('path');
 
-const AuthService = require(path.resolve('services/authservice.js'));
-const { SUCCESSFULL, ERROR } = require(path.resolve('messages/consts.js'));
-const { SIGNUP_ERROR } = require(path.resolve('messages/userMessages.js'));
+const AuthService = require('services/authService');
+const { SUCCESSFULL, ERROR } = require('messages/consts');
+const { SIGNUP_ERROR } = require('messages/userMessages');
 
 
 async function signup(req, res) {
@@ -14,6 +14,7 @@ async function signup(req, res) {
 
         return res.status(SUCCESSFULL).send({
             user,
+            email,
             token,
             refreshToken
         });

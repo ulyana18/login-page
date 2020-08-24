@@ -5,14 +5,15 @@ const cors = require('cors');
 const express = require('express');
 const app = express();
 
+
 if (process.env.NODE_ENV === 'test') {
   const process = require('process');
   process.chdir(process.env.NODE_PATH);
 }
 
 
-const routes = require(path.resolve('routes/index.js'));
-const paths = require(path.resolve('routes/paths.js'));
+const routes = require('routes/index');
+const paths = require('routes/paths');
 
 
 app.use(cors());

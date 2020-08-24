@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { TextField } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
-import callApi from 'services/apiService';
+
+import { callApi } from 'services/apiService';
 
 
 class LogInPage extends Component {
@@ -13,30 +14,31 @@ class LogInPage extends Component {
     }
   
     logIn = () => callApi('login', this.emailRef.current.value, this.passwordRef.current.value); 
+
   
     render() {
   
       return (
-        <div className="App">  
-          <div className="login-container">
-            <form className="login-form" noValidate autoComplete="off">
+        <div className='App'>  
+          <div className='login-container'>
+            <form className='login-form' noValidate autoComplete='off'>
               <TextField required
-                id="standard-required" 
-                label="Email"
+                id='standard-required' 
+                label='Email'
                 inputRef={this.emailRef}
               />
               <TextField required
-                id="standard-password-input"
-                label="Password"
-                type="password"
-                autoComplete="current-password"
+                id='standard-password-input'
+                label='Password'
+                type='password'
+                autoComplete='current-password'
                 inputRef={this.passwordRef}
               />
               <Box m={2}>
                 <Button 
                   onClick={this.logIn}
-                  className="logInBtn" 
-                  variant="contained"
+                  className='logInBtn' 
+                  variant='contained'
                 >
                   Log In
                 </Button>
