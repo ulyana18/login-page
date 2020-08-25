@@ -7,15 +7,14 @@ import {
   Route,
   Link
 } from 'react-router-dom';
-import LogInPage from 'components/loginPage/loginPage';
-import SignUpPage from 'components/signupPage/signupPage';
-import { callApiCheckToken, callApiUpdateToken } from 'services/apiService';
+import LogInPage from '../../components/loginPage/loginPage';
+import SignUpPage from '../../components/signupPage/signupPage';
+import callApiCheckToken from '../../services/apiService';
 
 
 class Routing extends Component {
 
   checkToken = () => callApiCheckToken();
-  updateToken = () => callApiUpdateToken();
 
   render() {
 

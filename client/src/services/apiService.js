@@ -1,4 +1,4 @@
-async function callApi(route, email, password, name = '') {
+async function callApi (route, email, password, name = '') {
   let isLogin = (route === 'login');
   try {
     const response = await fetch(`/api/user/${route}`, {
@@ -23,29 +23,7 @@ async function callApi(route, email, password, name = '') {
   }
 }
 
-async function callApiUpdateToken() {
-  try {
-    const response = await fetch(`/api/user/token`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-          user: {
-            name: window.localStorage.getItem('userName'),
-            email: window.localStorage.getItem('userEmail'),
-            refreshToken: window.localStorage.getItem('refreshToken'),
-          }
-      }),});
-    const resultObj = await response.json();
-    
-    window.localStorage.setItem('token', resultObj.accessToken);
-
-  } catch(err) {
-    alert(err);
-  }
-
-}
-
-async function callApiCheckToken() {
+async function callApiCheckToken () {
   try {
     const response = await fetch(`/api/user/check`, {
       method: 'POST',
@@ -67,8 +45,18 @@ async function callApiCheckToken() {
 
 }
 
-module.exports = {
+const ApiService = {
   callApi,
   callApiCheckToken,
-  callApiUpdateToken,
 };
+
+export default ApiService;
+// export default {
+//   callApi,
+//   callApiCheckToken,
+// };
+// export default callApi;
+// module.exports = {
+//   callApi,
+//   callApiCheckToken,
+// };
