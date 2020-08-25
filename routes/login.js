@@ -16,7 +16,7 @@ async function login(req, res) {
       email,
       token,
       refreshToken
-    });
+    }); 
     
   } catch(e) {
     return res.send({error: LOGIN_ERROR}).status(ERROR);
