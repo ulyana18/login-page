@@ -9,7 +9,7 @@ import {
 } from 'react-router-dom';
 import LogInPage from '../../components/loginPage/loginPage';
 import SignUpPage from '../../components/signupPage/signupPage';
-import callApiCheckToken from '../../services/apiService';
+import { callApiCheckToken } from '../../services/apiService';
 
 
 class Routing extends Component {

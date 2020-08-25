@@ -3,7 +3,7 @@ import { TextField } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
 
-import callApi from '../../services/apiService';
+import { callApi } from '../../services/apiService';
 
 
 class LogInPage extends Component {

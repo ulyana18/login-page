@@ -1,4 +1,4 @@
-async function callApi (route, email, password, name = '') {
+export async function callApi (route, email, password, name = '') {
   let isLogin = (route === 'login');
   try {
     const response = await fetch(`/api/user/${route}`, {
@@ -23,7 +23,7 @@ async function callApi (route, email, password, name = '') {
   }
 }
 
-async function callApiCheckToken () {
+export async function callApiCheckToken () {
   try {
     const response = await fetch(`/api/user/check`, {
       method: 'POST',
@@ -45,12 +45,12 @@ async function callApiCheckToken () {
 
 }
 
-const ApiService = {
-  callApi,
-  callApiCheckToken,
-};
+// const ApiService = {
+//   callApi,
+//   callApiCheckToken,
+// };
 
-export default ApiService;
+// module.exports = ApiService;
 // export default {
 //   callApi,
 //   callApiCheckToken,
@@ -60,3 +60,8 @@ export default ApiService;
 //   callApi,
 //   callApiCheckToken,
 // };
+// export default {
+//   callApi,
+//   callApiCheckToken,
+// };
+  
