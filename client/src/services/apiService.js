@@ -13,10 +13,12 @@ export async function callApi (route, email, password, name = '') {
       }),});
     const resultObj = await response.json();
     
-    window.localStorage.setItem('userName', resultObj.user);
-    window.localStorage.setItem('userEmail', resultObj.email);
-    window.localStorage.setItem('token', resultObj.token);
-    window.localStorage.setItem('refreshToken', resultObj.refreshToken);
+    if(resultObj.token !== undefined) {
+      window.localStorage.setItem('userName', resultObj.user);
+      window.localStorage.setItem('userEmail', resultObj.email);
+      window.localStorage.setItem('token', resultObj.token);
+      window.localStorage.setItem('refreshToken', resultObj.refreshToken);
+    } else throw new Error('error');
 
   } catch(err) {
     isLogin ? alert('Incorrect login or password') : alert('This email is already in use!');
@@ -40,7 +42,7 @@ export async function callApiCheckToken () {
     window.localStorage.setItem('token', resultObj.accessToken);
 
   } catch(err) {
-    alert(err);
+    alert('acces token died');
   }
 
 }
