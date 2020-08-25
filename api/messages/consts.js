@@ -1,9 +1,9 @@
 const SUCCESSFULL = 200;
 const ERROR = 401;
-const TOKEN_TIME = 3600;
+const TOKEN_LIFE_TIME = 30;
 
 module.exports = {
     SUCCESSFULL,
     ERROR,
-    TOKEN_TIME,
+    TOKEN_LIFE_TIME,
 };

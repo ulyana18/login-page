@@ -23,24 +23,7 @@ async function callApi(route, email, password, name = '') {
   }
 }
 
-async function callApiCheckToken() {
-  try {
-    const response = await fetch(`/api/user/check`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        user: {
-          accessToken: window.localStorage.getItem('token'),
-        }
-      }),});
-
-  } catch(err) {
-    alert(err);
-  }
-
-}
-
-async function callApiToken() {
+async function callApiUpdateToken() {
   try {
     const response = await fetch(`/api/user/token`, {
       method: 'POST',
@@ -62,8 +45,30 @@ async function callApiToken() {
 
 }
 
+async function callApiCheckToken() {
+  try {
+    const response = await fetch(`/api/user/check`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        user: {
+          accessToken: window.localStorage.getItem('token'),
+          name: window.localStorage.getItem('userName'),
+          email: window.localStorage.getItem('userEmail'),
+          refreshToken: window.localStorage.getItem('refreshToken'),
+        }
+    }),});
+    const resultObj = await response.json();
+    window.localStorage.setItem('token', resultObj.accessToken);
+
+  } catch(err) {
+    alert(err);
+  }
+
+}
+
 module.exports = {
   callApi,
-  callApiToken,
   callApiCheckToken,
+  callApiUpdateToken,
 };

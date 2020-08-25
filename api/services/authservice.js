@@ -2,10 +2,10 @@ const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 const path = require('path');
 
-const config = require(path.resolve('config.js'));
-const pool = require(path.resolve('db/queries.js'));
-const { LOGIN_ERROR, SIGNUP_ERROR } = require(path.resolve('messages/userMessages.js'));
-const { TOKEN_TIME } = require('../messages/consts');
+const config = require('config');
+const pool = require('db/queries');
+const { LOGIN_ERROR, SIGNUP_ERROR, TOKEN_ERROR } = require('messages/userMessages');
+const { TOKEN_LIFE_TIME } = require('messages/consts');
 
 
 class AuthService {
@@ -37,7 +37,7 @@ class AuthService {
             throw new Error(SIGNUP_ERROR);
         }
 
-        const accessToken = jwt.sign({ name, email }, "" + this.accessTokenSecret, { expiresIn: TOKEN_TIME});
+        const accessToken = jwt.sign({ name, email }, "" + this.accessTokenSecret, { expiresIn: TOKEN_LIFE_TIME});
         const refreshToken = jwt.sign({ name, email }, "" + this.refreshTokenSecret);
 
         const response = {
@@ -68,7 +68,7 @@ class AuthService {
             throw new Error(LOGIN_ERROR);
         }
 
-        const accessToken = jwt.sign({ name, email }, this.accessTokenSecret, { expiresIn: TOKEN_TIME});
+        const accessToken = jwt.sign({ name, email }, this.accessTokenSecret, { expiresIn: TOKEN_LIFE_TIME});
         const refreshToken = jwt.sign({ name, email }, this.refreshTokenSecret);
 
         const response = {
@@ -83,24 +83,25 @@ class AuthService {
         return response;
     }
 
-    checkToken(token, name, email) {
-        if (!token) {
+    checkToken(refreshToken, name, email) {
+        let accessToken;
+
+        if (!refreshToken) {
             throw new Error(TOKEN_ERROR);
         }
     
-        if (!this.tokenList.includes(token)) {
+        if (!this.tokenList.hasOwnProperty(refreshToken)) {
             throw new Error(TOKEN_ERROR);        
         }
-    
-        jwt.verify(token, this.refreshTokenSecret, (err, user) => {
+
+        jwt.verify(refreshToken, this.refreshTokenSecret, (err, user) => {
             if (err) {
                 throw new Error(TOKEN_ERROR);
             }
-    
-            const accessToken = jwt.sign({ name, email }, this.accessTokenSecret, { expiresIn: TOKEN_TIME});
-    
-            return accessToken;
+
+            accessToken = jwt.sign({ name, email }, this.accessTokenSecret, { expiresIn: TOKEN_LIFE_TIME});
         });
+        return accessToken;
     }
 
     hashPassword(password) {
@@ -111,4 +112,4 @@ class AuthService {
     }
 }
 
-module.exports = AuthService;
+module.exports = new AuthService();

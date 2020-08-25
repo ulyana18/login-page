@@ -9,12 +9,13 @@ import {
 } from 'react-router-dom';
 import LogInPage from 'components/loginPage/loginPage';
 import SignUpPage from 'components/signupPage/signupPage';
-import { callApiCheckToken } from 'services/apiService';
+import { callApiCheckToken, callApiUpdateToken } from 'services/apiService';
 
 
 class Routing extends Component {
 
   checkToken = () => callApiCheckToken();
+  updateToken = () => callApiUpdateToken();
 
   render() {
 
@@ -49,6 +50,7 @@ class Routing extends Component {
         </Box>
 
         <button onClick={this.checkToken}>check access token</button>
+        {/* <button onClick={this.updateToken}>update access token</button> */}
       </Router>
     );
   }

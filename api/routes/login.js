@@ -8,8 +8,7 @@ const { LOGIN_ERROR } = require('messages/userMessages');
 async function login(req, res) {
   const { email, password } = req.body.user;
   try {
-    const authServiceInstance = new AuthService();
-    const { user, token, refreshToken } = await authServiceInstance.logIn(email, password); 
+    const { user, token, refreshToken } = await AuthService.logIn(email, password); 
 
 
     return res.status(SUCCESSFULL).send({

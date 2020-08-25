@@ -82,3 +82,43 @@ describe('post /api/user/login', () => {
     });
 });
 
+describe('post /api/user/check', () => {
+  it('should return error, because access token is not in use now', (done) => {
+    request(app)
+    .post('/api/user/check')
+    .set('Content-Type', 'application/json')
+    .send({
+      user: {
+        'accessToken': '',
+        'name': '',
+        'email': '',
+        'refreshToken': ''
+      },
+    })
+    .end((err, res) => {
+      expect(res.body.message).to.equal('No token provided.');
+      done();
+    })
+  });
+});
+
+describe('post /api/user/check', () => {
+  it('should return error, because access token was not send', (done) => {
+    request(app)
+    .post('/api/user/check')
+    .set('Content-Type', 'application/json')
+    .send({
+      user: {
+        'name': '',
+        'email': '',
+        'refreshToken': ''
+      },
+    })
+    .end((err, res) => {
+      console.log(res.body);
+      expect(res.body.error).to.equal(true);
+      done();
+    })
+  });
+});
+
