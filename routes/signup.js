@@ -1,6 +1,6 @@
 const path = require('path');
 
-const AuthService = require('../services/authservice');
+const AuthService = require('../services/authService');
 const { SUCCESSFULL, ERROR } = require('../messages/consts');
 const { SIGNUP_ERROR } = require('../messages/userMessages');
 
