@@ -12,17 +12,15 @@ const pool = require('./db/queries');
 
 
 app.use(cors());
-
+app.use(express.static(path.join(__dirname, 'build')));  // , 'client/build'
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(paths.api, routes);
-app.use(express.static(path.join(__dirname)));  // , 'client/build'
 
-app.get('*', (req, res) => {
+app.get('/*', (req, res) => {
   res.sendFile(path.join(__dirname, '/build', 'index.html'));
 });
 
-// app.use(express.static(__dirname + '/client/build'));
 
 const port = process.env.PORT || 9000;  
 app.listen(port);
