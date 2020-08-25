@@ -11,7 +11,11 @@ const router = express.Router();
 
 router.post(paths.signup, signup);
 router.post(paths.login, login);
+
 router.use(tokenChecker);
 
+router.post(paths.tokenCheck, (req, res) => {
+    console.log('access token is in use now');
+});
 
 module.exports = router;

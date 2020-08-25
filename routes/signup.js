@@ -1,20 +1,25 @@
 const path = require('path');
 
 const AuthService = require('../services/authservice');
-const { SUCCESSFULL, ERROR } = require('../additional-data/app-status');
-const { SIGNUP_ERROR } = require('../additional-data/user-messages');
+const { SUCCESSFULL, ERROR } = require('../messages/consts');
+const { SIGNUP_ERROR } = require('../messages/userMessages');
 
 
 async function signup(req, res) {
     const { name, email, password } = req.body.user;
 
     try {
-        const authServiceInstance = new AuthService();
-        const { user, token, refreshToken } = await authServiceInstance.signUp(name, email, password);
-        return res.send({ user, token, rToken: refreshToken }).status(SUCCESSFULL).end();
+        const { user, token, refreshToken } = await AuthService.signUp(name, email, password);
+
+        return res.status(SUCCESSFULL).send({
+            user,
+            email,
+            token,
+            refreshToken
+        });
+
     } catch(e) {
-        return res.send(SIGNUP_ERROR).status(ERROR).end();
+        return res.status(ERROR).json({error: SIGNUP_ERROR});
     }
 }
-
 module.exports = signup;

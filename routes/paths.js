@@ -1,7 +1,8 @@
 const paths = {
     api: '/api',
     signup: '/user/signup',
-    login: '/user/login'
+    login: '/user/login',
+    tokenCheck: '/user/check'
 }
 
 module.exports = paths;
