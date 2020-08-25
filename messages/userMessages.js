@@ -6,4 +6,4 @@ module.exports = {
     LOGIN_ERROR,
     SIGNUP_ERROR,
     TOKEN_ERROR,
-};
+}; 

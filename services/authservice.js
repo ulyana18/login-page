@@ -71,7 +71,7 @@ class AuthService {
         const accessToken = jwt.sign({ name, email }, this.accessTokenSecret, { expiresIn: TOKEN_LIFE_TIME});
         const refreshToken = jwt.sign({ name, email }, this.refreshTokenSecret);
 
-        const response = {
+        const response = { 
            user: name,
            email,
            token: accessToken,
