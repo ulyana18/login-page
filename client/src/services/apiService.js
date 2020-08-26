@@ -12,13 +12,17 @@ export async function callApi (route, email, password, name = '') {
           }
       }),});
     const resultObj = await response.json();
-    
-    if(resultObj.token !== undefined) {
+    if(response.status === 401) {
+      window.localStorage.clear();
+      return false;
+    }
+    // if(resultObj.token !== undefined) {
       window.localStorage.setItem('userName', resultObj.user);
       window.localStorage.setItem('userEmail', resultObj.email);
       window.localStorage.setItem('token', resultObj.token);
       window.localStorage.setItem('refreshToken', resultObj.refreshToken);
-    } else throw new Error('error');
+    // } else throw new Error('error');
+    return true;
 
   } catch(err) {
     isLogin ? alert('Incorrect login or password') : alert('This email is already in use!');

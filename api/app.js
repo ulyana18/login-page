@@ -12,8 +12,8 @@ if (process.env.NODE_ENV === 'test') {
 }
 
 
-const routes = require('routes/index');
-const paths = require('routes/paths');
+const routes = require(path.resolve('routes/index.js'));
+const paths = require(path.resolve('routes/paths.js'));
 
 
 app.use(cors());
