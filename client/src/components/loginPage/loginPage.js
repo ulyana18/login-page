@@ -61,13 +61,13 @@ class LogInPage extends Component {
     render() {
   
       return (
-        <form className='login-form' noValidate autoComplete='off'>
+        <form className='login-form' noValidate autoComplete='on'>
           <Snackbar open={this.state.isLoggedIn}
             autoHideDuration={3000}
             onClose={() => this.setState({ isLoggedIn: null })}
             anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
           >
-            <Alert variant="outlined" severity="success">
+            <Alert severity="success">
               You are logged in!
             </Alert>
           </Snackbar>
@@ -77,19 +77,19 @@ class LogInPage extends Component {
             onClose={() => this.setState({ isLoggedIn: null })}
             anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
           >
-            <Alert variant="outlined" severity="error">
+            <Alert severity="error">
               Incorrect login or password!
             </Alert>
           </Snackbar>
 
           <TextField required
-            id='standard-required' 
+            id='email' 
             label='Email'
             type='email'
             onChange={this.emailCheck}
           />
           <TextField required
-            id='standard-password-input'
+            id='password'
             label='Password'
             type='password'
             autoComplete='current-password'

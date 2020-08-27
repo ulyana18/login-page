@@ -135,12 +135,12 @@ class SignUpPage extends Component {
     render() {
   
       return (
-        <form className='signup-form' noValidate autoComplete='off'>
+        <form className='signup-form' noValidate autoComplete='on'>
           <Snackbar open={this.state.isSignedUp}
             autoHideDuration={3000}
             onClose={() => this.setState({ isSignedUp: null })}
             anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
-            <Alert variant="outlined" severity="success">
+            <Alert severity="success">
               You are signed up!
             </Alert>
           </Snackbar>
@@ -149,20 +149,20 @@ class SignUpPage extends Component {
             autoHideDuration={3000}
             onClose={() => this.setState({ isSignedUp: null })}
             anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
-            <Alert variant="outlined" severity="error">
+            <Alert severity="error">
               This email is already in use!
             </Alert>
           </Snackbar>
           <TextField required
             error={this.state.isNotCorrectName && !this.state.isFirstTime}
-            id='standard-required' 
+            id='name' 
             label='Name'
             onChange={this.nameCheck}
             helperText={ this.state.isNotCorrectName && !this.state.isFirstTime ? 'Use only alphabet characters' : false }
           />
           <TextField required
             error={this.state.isNotCorrectEmail && !this.state.isFirstTime }
-            id='standard-required' 
+            id='email' 
             label='Email'
             type='email'
             onChange={this.emailCheck}
@@ -170,7 +170,7 @@ class SignUpPage extends Component {
           />
           <TextField required
             error={this.state.isNotCorrectPassword && !this.state.isFirstTime}
-            id='standard-password-input'
+            id='password'
             label='Password'
             type='password'
             autoComplete='current-password'
@@ -184,10 +184,9 @@ class SignUpPage extends Component {
           />
           <TextField required
             error={this.state.isNotCorrectConfirmPassword && !this.state.isFirstTime}
-            id='standard-password-input'
+            id='standard-password'
             label='Confirm password'
             type='password'
-            autoComplete='current-password'
             InputProps={{ 
               endAdornment: <InputAdornment position="end">
                               <Tooltip title='Password and confirm password must match'><HelpOutlineIcon/></Tooltip>
