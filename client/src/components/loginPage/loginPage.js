@@ -3,8 +3,9 @@ import { TextField, Snackbar } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
 import { Alert } from '@material-ui/lab';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
-import { callApi } from '../../services/apiService';
+import { callApi } from 'services/apiService';
 
 
 class LogInPage extends Component {
@@ -19,18 +20,18 @@ class LogInPage extends Component {
         isEmailEmpty: null,
         isDisabled: true,
         isLoggedIn: null,
+        isSpinning: false,
       }
       this.logIn = this.logIn.bind(this);
     }
   
-    // async componentDidMount() {
-    //   const isSuccessful = await callApi('login', this.emailInput, this.passwordInput);
-    //   console.log(isSuccessful);
-    // }
     async logIn() {
+      this.setState({ isSpinning: true});
       const isSuccessful = await callApi('login', this.emailInput, this.passwordInput);
 
-      this.setState({ isLoggedIn: isSuccessful });
+      setTimeout(() => {
+        this.setState({ isLoggedIn: isSuccessful, isSpinning: false });
+      }, 500);
     }
 
     passwordCheck = (event) => {
@@ -101,7 +102,8 @@ class LogInPage extends Component {
               className='logInBtn' 
               variant='contained'
             >
-              Log In
+              { this.state.isSpinning && <CircularProgress size={20} /> }
+              { !this.state.isSpinning && <span>Log In</span> }
             </Button>
           </Box>
         </form>

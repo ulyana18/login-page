@@ -1,8 +1,8 @@
 const path = require('path');
 
-const AuthService = require(path.resolve('services/authService.js'));
-const { SUCCESSFULL, ERROR } = require(path.resolve('messages/consts.js'));
-const { LOGIN_ERROR } = require(path.resolve('messages/userMessages.js'));
+const AuthService = require('services/authService');
+const { SUCCESSFULL, ERROR } = require('messages/consts');
+const { LOGIN_ERROR } = require('messages/userMessages');
 
 
 async function login(req, res) {

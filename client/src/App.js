@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import './App.css';
-import Routing from './components/routing/routing';
+import 'App.css';
 import { TabContext, TabList, TabPanel } from '@material-ui/lab';
-import { Tab, AppBar, Snackbar } from '@material-ui/core';
+import { Tab, AppBar, Button } from '@material-ui/core';
 
-import LogInPage from './components/loginPage/loginPage';
-import SignUpPage from './components/signupPage/signupPage';
+
+import LogInPage from 'components/loginPage/loginPage';
+import SignUpPage from 'components/signupPage/signupPage';
+import { callApiCheckToken } from 'services/apiService';
 
 
 class App extends Component {
@@ -16,6 +17,8 @@ class App extends Component {
     }
   }
 
+  checkToken = () => callApiCheckToken();
+
   handleChange(event, newValue) {
     this.setState({value: newValue});
   }
@@ -24,8 +27,13 @@ class App extends Component {
 
     return (
       <div className='App'>
-        {/* <Routing/> */}
-
+        <Button
+          className='checkTokenBtn' 
+          variant='contained'
+          onClick={this.checkToken}
+        >
+          Refresh Access Token
+          </Button>
         <div className='tabWrapper'>
           <TabContext style='backgroundColor: #cbecec' value={this.state.value}>
             <AppBar position='static'>

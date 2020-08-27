@@ -16,12 +16,10 @@ export async function callApi (route, email, password, name = '') {
       window.localStorage.clear();
       return false;
     }
-    // if(resultObj.token !== undefined) {
-      window.localStorage.setItem('userName', resultObj.user);
-      window.localStorage.setItem('userEmail', resultObj.email);
-      window.localStorage.setItem('token', resultObj.token);
-      window.localStorage.setItem('refreshToken', resultObj.refreshToken);
-    // } else throw new Error('error');
+    window.localStorage.setItem('userName', resultObj.user);
+    window.localStorage.setItem('userEmail', resultObj.email);
+    window.localStorage.setItem('token', resultObj.token);
+    window.localStorage.setItem('refreshToken', resultObj.refreshToken);
     return true;
 
   } catch(err) {
@@ -43,31 +41,13 @@ export async function callApiCheckToken () {
         }
     }),});
     const resultObj = await response.json();
-    window.localStorage.setItem('token', resultObj.accessToken);
+    if(response.status !== 401) {
+      window.localStorage.setItem('token', resultObj.accessToken);
+    }
 
   } catch(err) {
-    alert('acces token died');
+    console.log('acces token died');
   }
 
 }
-
-// const ApiService = {
-//   callApi,
-//   callApiCheckToken,
-// };
-
-// module.exports = ApiService;
-// export default {
-//   callApi,
-//   callApiCheckToken,
-// };
-// export default callApi;
-// module.exports = {
-//   callApi,
-//   callApiCheckToken,
-// };
-// export default {
-//   callApi,
-//   callApiCheckToken,
-// };
   

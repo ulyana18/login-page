@@ -1,10 +1,10 @@
 const path = require('path');
 const jwt = require('jsonwebtoken');
 
-const config = require(path.resolve('config.js'));
-const { TOKEN_ERROR } = require(path.resolve('messages/userMessages.js'));
-const AuthService = require(path.resolve('services/authService.js'));
-const { SUCCESSFULL, ERROR } = require(path.resolve('messages/consts.js'));
+const config = require('config');
+const { TOKEN_ERROR } = require('messages/userMessages');
+const AuthService = require('services/authService');
+const { SUCCESSFULL, ERROR } = require('messages/consts');
 
 
 function tokenChecker(req,res,next) {
@@ -12,23 +12,22 @@ function tokenChecker(req,res,next) {
   const { name, email, refreshToken } = req.body.user;
   
   if (token) {
-
     jwt.verify(token, config.accessToken, async function(err, decoded) {
       if (err) {
         try {
           const accessToken = await AuthService.checkToken(refreshToken, name, email);
             
-          return res.status(SUCCESSFULL).json({ "accessToken": accessToken });
+          return res.status(SUCCESSFULL).send({ "accessToken": accessToken });
 
         } catch(err) {
-          return res.status(ERROR).json({"error": true, "message": 'Unauthorized access.' });
+          return res.status(ERROR).send({"error": true, "message": 'Unauthorized access.' });
         }
       }
       req.decoded = decoded;
       next();
     });
   } else {
-    return res.status(ERROR).json({
+    return res.status(ERROR).send({
       "error": true,
       "message": TOKEN_ERROR,
     });
