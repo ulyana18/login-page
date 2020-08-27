@@ -5,7 +5,7 @@ import Box from '@material-ui/core/Box';
 import { Alert } from '@material-ui/lab';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
-import { callApi } from 'services/apiService';
+import { callApi } from '../../services/apiService';
 
 
 class LogInPage extends Component {
@@ -100,7 +100,9 @@ class LogInPage extends Component {
               disabled={this.state.isDisabled}
               onClick={this.logIn}
               className='logInBtn' 
-              variant='contained'
+              // variant='contained'
+              variant='outlined'
+
             >
               { this.state.isSpinning && <CircularProgress size={20} /> }
               { !this.state.isSpinning && <span>Log In</span> }

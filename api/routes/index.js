@@ -1,10 +1,10 @@
 const express = require('express');
 const path = require('path');
 
-const login = require('routes/login');
-const signup = require('routes/signup');
-const paths = require('routes/paths');
-const tokenChecker = require('middleware/tokenChecker');
+const login = require(path.resolve('routes/login'));
+const signup = require(path.resolve('routes/signup'));
+const paths = require(path.resolve('routes/paths'));
+const tokenChecker = require(path.resolve('middleware/tokenChecker'));
 
 const router = express.Router();
 

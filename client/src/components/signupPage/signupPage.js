@@ -1,20 +1,22 @@
 import React, { Component } from 'react';
-import { TextField, Snackbar } from '@material-ui/core';
+import { TextField, Snackbar, InputAdornment, Tooltip } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
 import { Alert } from '@material-ui/lab';
 import CircularProgress from '@material-ui/core/CircularProgress';
-
-import { callApi } from 'services/apiService';
+import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
+import { callApi } from '../../services/apiService';
 
 
 class SignUpPage extends Component {
     constructor(props) {
       super(props);
 
+      this.regexpFirst = /^(?!\s*$).+/;
       this.nameInput = '';
       this.passwordInput = '';
       this.emailInput = '';
+      this.confirmPasswordInput = '';
 
       this.state = {
         isNotCorrectName: null,
@@ -23,55 +25,102 @@ class SignUpPage extends Component {
         isNotCorrectConfirmPassword: null,
         isDisabled: true,
         isSignedUp: null,
-        isSpinning: false
+        isSpinning: false,
+        isFirstTime: true,
       }
       this.signUp = this.signUp.bind(this);
     }
   
     async signUp() {
-      this.setState({ isSpinning: true });
-      const isSuccessful = await callApi('signup', this.emailInput, this.passwordInput, this.nameInput);
+      await this.nameValidate();
+      await this.emailValidate();
+      await this.passwordValidate();
+      await this.confirmPasswordValidate();
+      const isCorrect = await this.checkSubmitDisable();
 
-      setTimeout(() => {
-        this.setState({ isSignedUp: isSuccessful, isSpinning: false });
-      }, 500);
+      if(isCorrect) {
+        this.setState({ isSpinning: true, isFirstTime: true, });
+        const isSuccessful = await callApi('signup', this.emailInput, this.passwordInput, this.nameInput);
+
+        setTimeout(() => {
+          this.setState({ isSignedUp: isSuccessful, isSpinning: false });
+        }, 500);
+      } else {
+        this.setState({ isFirstTime: false, });
+      }
+      console.log(this.state);
     }
 
-    nameValidate = (event) => {
-      const regexp = /^[a-zA-Z]+$/;
-      const isCorrect = regexp.test(event.target.value);
+    nameCheck = (event) => {
       this.nameInput = event.target.value;
+      if(this.state.isFirstTime) {
+        const isEmpty = !this.regexpFirst.test(event.target.value);
+        this.setState({ isNotCorrectName: isEmpty }, function() {
+          this.checkSubmitDisable();
+        });
+      } else this.nameValidate();
+    }
+    emailCheck = (event) => {
+      this.emailInput = event.target.value;
+      if(this.state.isFirstTime) {
+        const isEmpty = !this.regexpFirst.test(event.target.value);
+        this.setState({ isNotCorrectEmail: isEmpty }, function() {
+          this.checkSubmitDisable();
+        });
+      } else this.emailValidate();
+    }
+    passwordCheck = (event) => {
+      this.passwordInput = event.target.value;
+      if(this.state.isFirstTime) {
+        const isEmpty = !this.regexpFirst.test(event.target.value);
+        this.setState({ isNotCorrectPassword: isEmpty }, function() {
+          this.checkSubmitDisable();
+        });
+      } else this.passwordValidate();
+    }
+    confirmPasswordCheck = (event) => {
+      this.confirmPasswordInput = event.target.value;
+      if(this.state.isFirstTime) {
+        const isEmpty = !this.regexpFirst.test(event.target.value);
+        this.setState({ isNotCorrectConfirmPassword: isEmpty }, function() {
+          this.checkSubmitDisable();
+        });
+      } else this.confirmPasswordValidate();
+    }
+
+
+    nameValidate = () => {
+      const regexp = /^[a-zA-Z]+$/;
+      const isCorrect = regexp.test(this.nameInput);
 
       this.setState({ isNotCorrectName: !isCorrect }, function() {
         this.checkSubmitDisable();
       });
     }
 
-    emailValidate = (event) => {
+    emailValidate = () => {
       const regexp = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-      const isCorrect = regexp.test(event.target.value);
-      this.emailInput = event.target.value;
+      const isCorrect = regexp.test(this.emailInput);
 
       this.setState({ isNotCorrectEmail: !isCorrect }, function() {
         this.checkSubmitDisable();
       });
     }
 
-    passwordValidate = (event) => {
+    passwordValidate = () => {
       const regexp = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
-      const isCorrect = regexp.test(event.target.value);
-      this.passwordInput = event.target.value;
+      const isCorrect = regexp.test(this.passwordInput);
 
       this.setState({ isNotCorrectPassword: !isCorrect}, function() {
         this.checkSubmitDisable();
       });
     }
 
-    checkConfirmPassword = (event) => {
-      const isCorrect = event.target.value === this.passwordInput;
+    confirmPasswordValidate = (event) => {
+      const isCorrect = this.confirmPasswordInput === this.passwordInput;
       this.setState({ isNotCorrectConfirmPassword: !isCorrect }, function() {
         this.checkSubmitDisable();
-      })
+      });
     }
 
     checkSubmitDisable = () => {
@@ -80,6 +129,7 @@ class SignUpPage extends Component {
         this.state.isNotCorrectPassword === false &&
         this.state.isNotCorrectConfirmPassword === false) ? true : false;
       this.setState({ isDisabled: !isCorrect});
+      return isCorrect;
     }
     
     render() {
@@ -104,44 +154,55 @@ class SignUpPage extends Component {
             </Alert>
           </Snackbar>
           <TextField required
-            error={this.state.isNotCorrectName}
+            error={this.state.isNotCorrectName && !this.state.isFirstTime}
             id='standard-required' 
             label='Name'
-            onChange={this.nameValidate}
-            helperText={ this.state.isNotCorrectName ? 'Use only alphabet characters' : false }
+            onChange={this.nameCheck}
+            helperText={ this.state.isNotCorrectName && !this.state.isFirstTime ? 'Use only alphabet characters' : false }
           />
           <TextField required
-            error={this.state.isNotCorrectEmail}
+            error={this.state.isNotCorrectEmail && !this.state.isFirstTime }
             id='standard-required' 
             label='Email'
             type='email'
-            onChange={this.emailValidate}
-            helperText={ this.state.isNotCorrectEmail ? 'Incorrect email' : false }
+            onChange={this.emailCheck}
+            helperText={ this.state.isNotCorrectEmail && !this.state.isFirstTime ? 'Incorrect email' : false }
           />
           <TextField required
-            error={this.state.isNotCorrectPassword}
+            error={this.state.isNotCorrectPassword && !this.state.isFirstTime}
             id='standard-password-input'
             label='Password'
             type='password'
             autoComplete='current-password'
-            onChange={this.passwordValidate}
-            helperText={ this.state.isNotCorrectPassword ? 'Password must contain minimum eight characters, at least one letter and one number' : false }
+            InputProps={{ 
+              endAdornment: <InputAdornment position="end">
+                              <Tooltip title='Password must contain minimum 8 characters, at least 1 letter and 1 number'><HelpOutlineIcon/></Tooltip>
+                            </InputAdornment>
+                        }}
+            onChange={this.passwordCheck}
+            helperText={ this.state.isNotCorrectPassword && !this.state.isFirstTime ? 'Password must contain minimum 8 characters, at least 1 letter and 1 number' : false }
           />
           <TextField required
-            error={this.state.isNotCorrectConfirmPassword}
+            error={this.state.isNotCorrectConfirmPassword && !this.state.isFirstTime}
             id='standard-password-input'
             label='Confirm password'
             type='password'
             autoComplete='current-password'
-            onChange={this.checkConfirmPassword}
-            helperText={ this.state.isNotCorrectConfirmPassword ? `Password and confirm password don't match!` : false }
+            InputProps={{ 
+              endAdornment: <InputAdornment position="end">
+                              <Tooltip title='Password and confirm password must match'><HelpOutlineIcon/></Tooltip>
+                            </InputAdornment>
+                        }}
+            onChange={this.confirmPasswordCheck}
+            helperText={ this.state.isNotCorrectConfirmPassword && !this.state.isFirstTime ? `Password and confirm password don't match!` : false }
           />
           <Box m={2}>
             <Button
               disabled={this.state.isDisabled}
               onClick={this.signUp}
               className='signUpBtn' 
-              variant='contained'
+              // variant='contained'
+              variant='outlined'
             >
               { this.state.isSpinning && <CircularProgress size={20} /> }
               { !this.state.isSpinning && <span>Sign Up</span> }

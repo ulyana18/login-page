@@ -1,6 +1,6 @@
 .App {
   height: 100vh;
-  background-color: rgb(223, 236, 236);
+  /* background-color: #929D9E; */
 }
 .checkTokenBtn {
   position: absolute;
@@ -19,22 +19,25 @@ form {
   margin-top: 20px;
 }
 .tabWrapper {
-  width: 40%;
+  width: 38%;
   position: relative;
   top: 20vh;
   margin: 0 auto;
 
   border-radius: 10px;
-  background-color: #ecf7f8;
+  background-color: #E1E2E2 !important;
+
 }
 
 .MuiTabs-flexContainer {
   justify-content: center;
-  background-color: rgb(172, 219, 231);
+  /* background-color: rgb(39, 122, 177); */
+  background-color: #1F3044;
   border-radius: 10px 10px 0 0;
 }
 .PrivateTabIndicator-colorSecondary-3 {
-  background-color: rgb(255, 255, 255) !important;
+  /* background-color: #fff !important; */
+  background-color: #FB9039 !important;
 }
 
 .MuiTabPanel-root {
@@ -50,27 +53,56 @@ form {
 .signup-form {
   padding-bottom: 10px;
 }
+
 .login-form {
   position: relative;
   top: 15%;
 }
+
 .MuiFormControl-root {
   width: 50%;
   margin-top: 6px !important;
 }
+
 .MuiFormLabel-root {
-  color: rgb(152, 170, 179) !important;
+  color: rgb(41, 40, 37) !important;
+
+}
+.MuiInputBase-input {
+  color: #916440 !important;
 }
 .MuiInput-underline:after {
-  border-bottom: 2px solid #aad2e4 !important;
+  border-bottom: 2px solid #be9e62 !important;
 }
+
 .MuiInput-root {
   margin-top: 20px !important;
 }
+
 .MuiButton-contained {
-  color: #929598 !important;
-  background-color: rgb(211, 232, 238) !important;
+  color: rgb(255, 255, 255) !important;
+  background-color: #fb9039af !important;
 }
+
+.MuiButton-outlined {
+  /* background-color: rgb(70, 122, 156) !important; */
+  background-color: #FB9039 !important;
+  transition: background-color 0.5s !important;
+}
+
+.MuiButton-outlined.Mui-disabled {
+  background-color: rgba(255, 255, 255, 0.226) !important;
+  color: rgba(0, 0, 0, 0.473) !important;
+}
+
+.MuiButton-outlined:hover {
+  background-color: #fb903988 !important;
+}
+
+.MuiButton-root {
+  color: #000 !important;
+}
+
 .MuiBox-root {
   margin-top: 30px !important;
 }

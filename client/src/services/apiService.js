@@ -13,7 +13,10 @@ export async function callApi (route, email, password, name = '') {
       }),});
     const resultObj = await response.json();
     if(response.status === 401) {
-      window.localStorage.clear();
+      window.localStorage.removeItem('userName');
+      window.localStorage.removeItem('userEmail');
+      window.localStorage.removeItem('token');
+      window.localStorage.removeItem('refreshToken');
       return false;
     }
     window.localStorage.setItem('userName', resultObj.user);
