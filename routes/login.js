@@ -19,7 +19,7 @@ async function login(req, res) {
     }); 
     
   } catch(e) {
-    return res.send({error: LOGIN_ERROR}).status(ERROR);
+    return res.status(ERROR).send({error: LOGIN_ERROR});
   }
 }
 module.exports = login;

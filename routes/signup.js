@@ -19,7 +19,7 @@ async function signup(req, res) {
         });
 
     } catch(e) {
-        return res.status(ERROR).json({error: SIGNUP_ERROR});
+        return res.status(ERROR).send({error: SIGNUP_ERROR});
     }
 }
 module.exports = signup;

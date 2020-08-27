@@ -17,20 +17,20 @@ function tokenChecker(req,res,next) {
         try {
           const accessToken = await AuthService.checkToken(refreshToken, name, email);
             
-          return res.json({ "accessToken": accessToken }).status(SUCCESSFULL);
+          return res.status(SUCCESSFULL).send({ "accessToken": accessToken });
 
         } catch(err) {
-          return res.json({"error": true, "message": 'Unauthorized access.' }).status(ERROR);
+          return res.status(ERROR).send({"error": true, "message": 'Unauthorized access.' });
         }
       }
       req.decoded = decoded;
       next();
     });
   } else {
-    return res.send({
+    return res.status(ERROR).send({
       "error": true,
       "message": TOKEN_ERROR,
-    }).status(ERROR);
+    });
   }
 }
 
