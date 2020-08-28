@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import './App.css';
+import 'App.css';
 import { TabContext, TabList, TabPanel } from '@material-ui/lab';
 import { Tab, AppBar, Button } from '@material-ui/core';
 
 
-import LogInPage from './components/loginPage/loginPage';
-import SignUpPage from './components/signupPage/signupPage';
-import { callApiCheckToken } from './services/apiService';
+import LogInPage from 'components/loginPage/loginPage';
+import SignUpPage from 'components/signupPage/signupPage';
+import { callApiCheckToken } from 'services/apiService';
 
 
 class App extends Component {

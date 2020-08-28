@@ -5,7 +5,7 @@ import Box from '@material-ui/core/Box';
 import { Alert } from '@material-ui/lab';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
-import { callApi } from '../../services/apiService';
+import { callApi } from 'services/apiService';
 
 
 class SignUpPage extends Component {
@@ -34,6 +34,7 @@ class SignUpPage extends Component {
     async signUp() {
       await this.nameValidate();
       await this.emailValidate();
+
       await this.passwordValidate();
       await this.confirmPasswordValidate();
       const isCorrect = await this.checkSubmitDisable();
@@ -48,7 +49,7 @@ class SignUpPage extends Component {
       } else {
         this.setState({ isFirstTime: false, });
       }
-      console.log(this.state);
+      // console.log(this.state);
     }
 
     nameCheck = (event) => {
@@ -101,7 +102,7 @@ class SignUpPage extends Component {
     emailValidate = () => {
       const regexp = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
       const isCorrect = regexp.test(this.emailInput);
-
+      
       this.setState({ isNotCorrectEmail: !isCorrect }, function() {
         this.checkSubmitDisable();
       });
@@ -136,6 +137,7 @@ class SignUpPage extends Component {
   
       return (
         <form className='signup-form' noValidate autoComplete='on'>
+
           <Snackbar open={this.state.isSignedUp}
             autoHideDuration={3000}
             onClose={() => this.setState({ isSignedUp: null })}
@@ -199,9 +201,10 @@ class SignUpPage extends Component {
             <Button
               disabled={this.state.isDisabled}
               onClick={this.signUp}
-              className='signUpBtn' 
-              // variant='contained'
+              className='signUpBtn'
+              // data-testid='signUpButton'
               variant='outlined'
+              id='signUpButton'
             >
               { this.state.isSpinning && <CircularProgress size={20} /> }
               { !this.state.isSpinning && <span>Sign Up</span> }

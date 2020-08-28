@@ -11,6 +11,7 @@
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
     "babel-plugin-source-map-support": "^2.1.2",
+    "chai": "^4.2.0",
     "react": "^16.7.0",
     "react-dom": "^16.7.0",
     "react-router-dom": "^5.2.0",
@@ -43,6 +44,8 @@
     "npm": "6.13.4"
   },
   "devDependencies": {
-    "@babel/plugin-transform-runtime": "^7.11.0"
+    "@babel/plugin-transform-runtime": "^7.11.0",
+    "enzyme": "^3.11.0",
+    "enzyme-adapter-react-16": "^1.15.3"
   }
 }
