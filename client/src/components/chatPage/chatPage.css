@@ -1,0 +1,101 @@
+.chatWrapper {
+    height: calc(100vh - 84px);
+    background-color: rgb(241, 235, 235);
+}
+
+.chat {
+    width: 60%;
+    height: 100%;
+    margin: 0 auto;
+    border: 1px solid #000;
+    /* overflow-y: scroll; */
+}
+
+.chatHeader {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 15px;
+
+    font-size: 1.2rem;
+    background-color: beige;
+}
+
+.messagesAreaWrapper {
+    height: calc(100% - 139px);
+    overflow-y: auto;
+}
+
+.messagesArea {
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-end;
+    width: calc(100% - 10px);
+    min-height: 100%;
+    padding: 5px;
+}
+
+.messageWrapper {
+    display: flex;
+    align-items: flex-start;
+}
+
+.messageWrapper-otherMessage {
+    flex-direction: row-reverse;
+}
+
+.messageWrapper-myMessage {
+    align-self: flex-end;
+}
+
+.message {
+    margin: 0 10px;
+    margin-bottom: 20px;
+    padding: 10px;
+    background-color: bisque;
+    font-size: 1.1rem;
+}
+
+.myMessage {
+    align-self: flex-end;
+}
+
+.messageAvatar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+}
+
+.messageWrapper-myMessage .messageAvatar {
+    background-color: rgb(224, 231, 119);
+}
+
+.messageWrapper-otherMessage .messageAvatar {
+    background-color: rgb(101, 189, 201);
+}
+
+.inputArea {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(199, 186, 186);
+}
+
+.MuiFormControl-root {
+    width: 75% !important;
+    margin: 15px 0 !important;
+    margin-right: 3% !important;
+}
+/* .MuiFilledInput-underline.Mui-focused {
+    border: none !important;
+    color: #fff !important;
+    background-color: #fff !important;
+} */
+.MuiOutlinedInput-root.Mui-focused {
+    color: #fff !important;
+}

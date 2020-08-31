@@ -4,6 +4,8 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const express = require('express');
 const app = express();
+const server = require('http').Server(app);
+const io = require('socket.io')(server);
 
 if (process.env.NODE_ENV === 'test') {
   const process = require('process');
@@ -25,6 +27,16 @@ app.get('/*', (req, res) => {
 });
 
 const port = process.env.PORT || 9000;
-app.listen(port);
+
+io.on('connection', socket => {
+  const { id } = socket.client;
+  console.log(`User connected: ${id}`);
+  socket.on("chat message", (msg, name, email) => {
+    console.log(`${email}: ${msg}`);
+    io.emit("chat message", { msg, name, email });
+  });
+});
+
+server.listen(port);
 
 module.exports = app;
