@@ -2,10 +2,11 @@
   height: 100vh;
   /* background-color: #929D9E; */
 }
-.checkTokenBtn {
-  position: absolute;
-  top: 10px;
-  left: 10px;
+
+.MuiToolbar-root {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 form {
