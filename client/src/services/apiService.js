@@ -1,3 +1,5 @@
+import AuthPage from '../components/authPage/authPage';
+
 export async function callApi (route, email, password, name = '') {
   let isLogin = (route === 'login');
   try {

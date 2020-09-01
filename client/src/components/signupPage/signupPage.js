@@ -6,7 +6,7 @@ import { Alert } from '@material-ui/lab';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
 
-import { callApi } from 'services/apiService';
+import { callApi } from '../../services/apiService';
 
 
 class SignUpPage extends Component {
@@ -46,6 +46,8 @@ class SignUpPage extends Component {
 
         setTimeout(() => {
           this.setState({ isSignedUp: isSuccessful, isSpinning: false });
+          window.location.assign('http://localhost:3000/signup/chat');
+
         }, 500);
       } else {
         this.setState({ isFirstTime: false, });

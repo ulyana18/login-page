@@ -51,15 +51,29 @@
 }
 
 .message {
+    display: flex;
+    flex-direction: column;
     margin: 0 10px;
     margin-bottom: 20px;
     padding: 10px;
+
+    border-radius: 10px;
     background-color: bisque;
     font-size: 1.1rem;
 }
 
 .myMessage {
     align-self: flex-end;
+}
+
+.myMessage .userName {
+    display: none;
+}
+
+.userName {
+    font-size: 0.8rem;
+    color: rgba(58, 56, 56, 0.815);
+    margin-bottom: 3px;
 }
 
 .messageAvatar {

@@ -12,8 +12,9 @@ if (process.env.NODE_ENV === 'test') {
   process.chdir(process.env.NODE_PATH);
 }
 
-const routes = require('routes/index');
-const paths = require('routes/paths');
+const routes = require('./routes/index');
+const paths = require('./routes/paths');
+const pool = require('./db/queries');
 
 
 app.use(cors());
@@ -28,12 +29,23 @@ app.get('/*', (req, res) => {
 
 const port = process.env.PORT || 9000;
 
-io.on('connection', socket => {
+io.on('connection', async socket => {
   const { id } = socket.client;
   console.log(`User connected: ${id}`);
-  socket.on("chat message", (msg, name, email) => {
-    console.log(`${email}: ${msg}`);
-    io.emit("chat message", { msg, name, email });
+
+  socket.on('chat message', async (message, name, email) => {
+    console.log(`${email}: ${message}`);
+
+    await pool.query('INSERT INTO chat (message, name, email) VALUES ($1, $2, $3)',
+      [message, name, email]
+    );
+
+    io.emit('chat message', { message, name, email });
+  });
+  
+  socket.on('get database', async () => {
+    const result = await pool.query('SELECT * FROM chat');
+    io.emit('get database', result.rows);
   });
 });
 

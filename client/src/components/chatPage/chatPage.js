@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import 'chatPage.css';
+import './chatPage.css';
 import { TextField, IconButton } from '@material-ui/core';
 import { Send, Person } from '@material-ui/icons';
 import io from 'socket.io-client';
@@ -8,38 +8,48 @@ const socket = io.connect('http://localhost:9000');
 
 
 
-
 class ChatPage extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            msg: '',
+            message: '',
             chat: [],
         }
         this.chatInput = React.createRef();
     }
 
     componentDidMount() {
-        socket.on('chat message', ({ msg, name, email }) => {
+        
+        socket.on('chat message', ({ message, name, email }) => {
           this.setState({
-            chat: [...this.state.chat, { msg, name, email }]
+            chat: [...this.state.chat, { message, name, email }]
           }, function() {
               console.log(this.state);
           });
         });
+        socket.on('get database', (database) => {
+            this.setState({
+                chat: database
+            }, function() {
+                console.log(this.state);
+            });
+        });
+        socket.emit('get database');
     }
 
     onMessageSubmit = () => {
         socket.emit('chat message', this.chatInput.current.value, window.localStorage.getItem('userName'), window.localStorage.getItem('userEmail'));
-        this.setState({ msg: '' });
+        this.setState({ message: '' });
     };
+
 
     renderChat() {
         const { chat } = this.state;
-        return chat.map(({ msg, name, email }, idx) => (
+        return chat.map(({ message, name, email }, idx) => (
             <div className={ email === window.localStorage.getItem('userEmail') ? 'messageWrapper messageWrapper-myMessage' : 'messageWrapper messageWrapper-otherMessage' }>
                 <div className= { email === window.localStorage.getItem('userEmail') ? 'myMessage message' : 'otherMessage message' }>
-                    <span>{msg}</span>
+                    <span className='userName'>{name}</span>
+                    <span className='userEmail'>{message}</span>
                 </div>
                 <div className='messageAvatar'>
                     <Person />
@@ -49,8 +59,13 @@ class ChatPage extends Component {
         ));
     };
 
+    getDataFromDB = () => {
+        socket.emit('get database');
+    }
+
+
     render() {
-  
+        // this.getDataFromDB();
         return (
             <div className='chatWrapper'>
                 <div className='chat'>

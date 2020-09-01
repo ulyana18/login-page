@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { TabContext, TabList, TabPanel } from '@material-ui/lab';
 import { Tab, AppBar, Button, Toolbar } from '@material-ui/core';
 
-import LogInPage from 'loginPage/loginPage';
-import SignUpPage from 'signupPage/signupPage';
+import LogInPage from '../loginPage/loginPage';
+import SignUpPage from '../signupPage/signupPage';
 
 
 
@@ -12,12 +12,19 @@ class AuthPage extends Component {
         super(props);
         this.state = {
           value: localStorage.getItem('page') ? localStorage.getItem('page') : '1',
+          isAuthenticated: false,
         }
     }
 
     handleChange(event, newValue) {
         this.setState({value: newValue});
         window.localStorage.setItem('page', newValue);
+    }
+
+    setAppState = async (state) => {
+        const { isAuth } = state;
+        this.setState({ isAuthenticated: isAuth });
+        this.props.updateState({ isAuth: isAuth });
     }
     
     render() {
@@ -35,7 +42,7 @@ class AuthPage extends Component {
                     <SignUpPage />
                 </TabPanel>
                 <TabPanel value='2'>
-                    <LogInPage />
+                    <LogInPage updateState = {this.setAppState} />
                 </TabPanel>
                 </TabContext>
           </div>
