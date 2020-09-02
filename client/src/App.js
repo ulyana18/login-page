@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import './App.css';
+import 'App.css';
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 import { AppBar, Button, Toolbar } from '@material-ui/core';
-import AuthPage from './components/authPage/authPage';
-import ChatPage from './components/chatPage/chatPage';
-import { callApiCheckToken } from './services/apiService';
+import AuthPage from 'components/authPage/authPage';
+import ChatPage from 'components/chatPage/chatPage';
+import { callApiCheckToken } from 'services/apiService';
 
 
 
@@ -24,11 +24,15 @@ class App extends Component {
     this.setState({ isAuth: isAuth });
   }
 
-  render() {
+  logOut = () => {
+    window.localStorage.removeItem('userName');
+      window.localStorage.removeItem('userEmail');
+      window.localStorage.removeItem('token');
+      window.localStorage.removeItem('refreshToken');
+    this.setState({ isAuth: false });
+  }
 
-    // if (this.state.isAuth) {
-    //   return <Redirect to='/signup/chat' />
-    // }
+  render() {
 
     return (
         <div className='App'>
@@ -41,7 +45,7 @@ class App extends Component {
               >
                 Refresh Access Token
               </Button>
-              <Button color='inherit'>Log out</Button>
+              { this.state.isAuth ? <Button color='inherit' onClick={ this.logOut }>Log out</Button> : false }
             </Toolbar>
           </AppBar>
           <BrowserRouter>
@@ -49,9 +53,7 @@ class App extends Component {
             <Switch>
               <Route exact path='/signup' component={() => <AuthPage updateState = {this.setAppState} />} />
               <Route exact path='/signup/chat' component={() => {
-                console.log(this.state.isAuth);
                 return this.state.isAuth ?  <ChatPage /> : <AuthPage updateState = {this.setAppState} />;
-                // return <ChatPage />;
               }} />
             </Switch>
           </BrowserRouter>

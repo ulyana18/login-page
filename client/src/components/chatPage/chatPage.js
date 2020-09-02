@@ -4,7 +4,7 @@ import { TextField, IconButton } from '@material-ui/core';
 import { Send, Person } from '@material-ui/icons';
 import io from 'socket.io-client';
 
-const socket = io.connect('http://localhost:9000');
+const socket = io.connect('https://login-page-ulyana18.herokuapp.com/');
 
 
 
@@ -40,6 +40,7 @@ class ChatPage extends Component {
     onMessageSubmit = () => {
         socket.emit('chat message', this.chatInput.current.value, window.localStorage.getItem('userName'), window.localStorage.getItem('userEmail'));
         this.setState({ message: '' });
+        this.chatInput.current.value = '';
     };
 
 
@@ -65,7 +66,6 @@ class ChatPage extends Component {
 
 
     render() {
-        // this.getDataFromDB();
         return (
             <div className='chatWrapper'>
                 <div className='chat'>
@@ -75,55 +75,12 @@ class ChatPage extends Component {
                     <div className='messagesAreaWrapper'>
                         <div className='messagesArea'>
                             {this.renderChat()}
-                            {/* <div className='messageWrapper messageWrapper-otherMessage'>
-                                <div className='otherMessage message'>
-                                    <span>jdwwdq</span>
-                                </div>
-                                <div className='messageAvatar'>
-                                    <Person />
-                                </div>
-                            </div>
-                            <div className='messageWrapper messageWrapper-otherMessage'>
-                                <div className='otherMessage message'>
-                                    <span>jdwwdq</span>
-                                </div>
-                                <div className='messageAvatar'>
-                                    <Person />
-                                </div>
-                            </div>
-                            <div className='messageWrapper messageWrapper-otherMessage'>
-                                <div className='otherMessage message'>
-                                    <span>jdwwdq</span>
-                                </div>
-                                <div className='messageAvatar'>
-                                    <Person />
-                                </div>
-                            </div>
-                            <div className='messageWrapper messageWrapper-otherMessage'>
-                                <div className='otherMessage message'>
-                                    <span>jdwwdq</span>
-                                </div>
-                                <div className='messageAvatar'>
-                                    <Person />
-                                </div>
-                            </div>
-
-                            <div className='messageWrapper messageWrapper-myMessage'>
-                                <div className='myMessage message'>
-                                    <span>wdwdfeqdqwdbkdbkwdhbcwhobwhos</span>
-                                </div>
-                                <div className='messageAvatar'>
-                                    <Person />
-                                </div>
-                            </div> */}
                         </div>
                     </div>
                     <div className='inputArea'>
                         <TextField
                             id="standard-full-width"
-                            // style={{ margin: 8 }}
                             placeholder="Placeholder"
-                            // fullWidth
                             margin="normal"
                             variant="outlined"
                             InputLabelProps={{
@@ -131,7 +88,6 @@ class ChatPage extends Component {
                             }}
                             inputRef={this.chatInput}
                         />
-                        {/* <input placeholder='Enter message' /> */}
                         <IconButton aria-label="send" 
                             onClick={this.onMessageSubmit}
                         >

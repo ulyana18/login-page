@@ -9,6 +9,19 @@
   align-items: center;
 }
 
+.MuiAppBar-colorPrimary.MuiPaper-elevation4 {
+  border-radius: 0 !important;
+  background-color: #1F3044;
+}
+
+.MuiButton-colorInherit {
+  background-color: #fb9039af !important;
+}
+
+.MuiButton-colorInherit:hover {
+  background-color: #f3984d8f !important;
+}
+
 form {
   display: flex;
   flex-direction: column;
@@ -72,6 +85,10 @@ form {
 .MuiInputBase-input {
   color: #916440 !important;
 }
+#email, #password, #name, #standard-password {
+  background: none !important;
+  color: #916440 !important;
+}
 .MuiInput-underline:after {
   border-bottom: 2px solid #be9e62 !important;
 }
@@ -84,6 +101,10 @@ form {
   color: rgb(255, 255, 255) !important;
   background-color: #fb9039af !important;
 }
+.MuiButton-contained:hover {
+  background-color: #f3984d8f !important;
+}
+
 
 .MuiButton-outlined {
   /* background-color: rgb(70, 122, 156) !important; */

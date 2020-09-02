@@ -5,7 +5,7 @@ import Box from '@material-ui/core/Box';
 import { Alert } from '@material-ui/lab';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
-import { callApi } from '../../services/apiService';
+import { callApi } from 'services/apiService';
 
 
 class LogInPage extends Component {
@@ -34,8 +34,6 @@ class LogInPage extends Component {
       }, 500);
       setTimeout(() => {
         this.props.updateState({ isAuth: isSuccessful });
-        // if(isSuccessful) window.location.assign('http://localhost:3000/signup/chat');
-
       }, 1200)
 
     }
@@ -106,7 +104,6 @@ class LogInPage extends Component {
               disabled={this.state.isDisabled}
               onClick={this.logIn}
               className='logInBtn' 
-              // variant='contained'
               variant='outlined'
 
             >

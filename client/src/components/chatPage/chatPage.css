@@ -1,13 +1,14 @@
 .chatWrapper {
     height: calc(100vh - 84px);
-    background-color: rgb(241, 235, 235);
+    /* background-color: rgb(241, 235, 235); */
 }
 
 .chat {
     width: 60%;
-    height: 100%;
-    margin: 0 auto;
-    border: 1px solid #000;
+    height: 95%;
+    margin: 20px auto;
+    background-color: #e9f0f7;
+    border: 1px solid rgb(165, 186, 201);
     /* overflow-y: scroll; */
 }
 
@@ -17,13 +18,15 @@
     align-items: center;
     padding: 15px;
 
-    font-size: 1.2rem;
-    background-color: beige;
+    font-size: 1.3rem;
+    background-color: #81a4c7;
+    color: #fff;
 }
 
 .messagesAreaWrapper {
     height: calc(100% - 139px);
     overflow-y: auto;
+    padding: 0 15px;
 }
 
 .messagesArea {
@@ -35,6 +38,7 @@
     width: calc(100% - 10px);
     min-height: 100%;
     padding: 5px;
+    scroll-padding-bottom: 300px;
 }
 
 .messageWrapper {
@@ -97,7 +101,12 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: rgb(199, 186, 186);
+    background-color: #cbd8e6;
+}
+
+.MuiInputBase-input {
+    background-color: #d9e3eb !important;
+    color: #000 !important;
 }
 
 .MuiFormControl-root {
