@@ -5,6 +5,7 @@ import { AppBar, Button, Toolbar } from '@material-ui/core';
 import AuthPage from './components/authPage/authPage';
 import ChatPage from './components/chatPage/chatPage';
 import { callApiCheckToken } from './services/apiService';
+import { Chat } from '@material-ui/icons';
 
 
 
@@ -58,12 +59,16 @@ class App extends Component {
           <BrowserRouter>
           { this.state.isAuth === 'true' || this.state.isAuth === true ? <Redirect to='/chat' /> : <Redirect to='/signup' /> }
             <Switch>
-              <Route exact path='/signup' component={() => <AuthPage updateState = {this.setAppState} />} />
+              <Route exact path='/signup' component={() => <AuthPage updateState = {this.setAppState} />} >
+                <Route path='/' component={ () => <AuthPage updateState = {this.setAppState} /> } />
+              </Route>
               <Route exact path='/chat' component={() => {
                 console.log(this.state.isAuth);
                 return this.state.isAuth === 'true' || this.state.isAuth === true ?  <ChatPage /> : <AuthPage updateState = {this.setAppState} />;
                 // return <ChatPage />;
-              }} />
+              }} >
+                <Route path='/' component={ChatPage} />
+              </Route>
               <Route component={() => {
                 return this.state.isAuth === 'true' || this.state.isAuth === true ?  <ChatPage /> : <AuthPage updateState = {this.setAppState} />;
               }} />
