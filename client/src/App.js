@@ -49,7 +49,7 @@ class App extends Component {
             </Toolbar>
           </AppBar>
           <BrowserRouter>
-          { this.state.isAuth ? <Redirect to='/signup/chat' /> : false }
+          { this.state.isAuth ? <Redirect to='/signup/chat' /> : <Redirect to='/signup' /> }
             <Switch>
               <Route exact path='/signup' component={() => <AuthPage updateState = {this.setAppState} />} />
               <Route exact path='/signup/chat' component={() => {

@@ -12,9 +12,9 @@ if (process.env.NODE_ENV === 'test') {
   process.chdir(process.env.NODE_PATH);
 }
 
-const routes = require('routes/index');
-const paths = require('routes/paths');
-const pool = require('db/queries');
+const routes = require('./routes/index');
+const paths = require('./routes/paths');
+const pool = require('./db/queries');
 
 
 app.use(cors());
