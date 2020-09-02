@@ -59,16 +59,16 @@ class App extends Component {
           <BrowserRouter>
           { this.state.isAuth === 'true' || this.state.isAuth === true ? <Redirect to='/chat' /> : <Redirect to='/signup' /> }
             <Switch>
-              <Route exact path='/signup' component={() => <AuthPage updateState = {this.setAppState} />} />
-              <Route exact path='/signup/*' component={() => {
+              <Route path='/signup' component={() => <AuthPage updateState = {this.setAppState} />} />
+              {/* <Route exact path='/signup/*' component={() => {
+                return this.state.isAuth === 'true' || this.state.isAuth === true ?  <ChatPage /> : <AuthPage updateState = {this.setAppState} />;
+                }} /> */}
+              <Route path='/chat' component={() => {
                 return this.state.isAuth === 'true' || this.state.isAuth === true ?  <ChatPage /> : <AuthPage updateState = {this.setAppState} />;
                 }} />
-              <Route exact path='/chat' component={() => {
+              {/* <Route exact path='/chat/check' component={() => {
                 return this.state.isAuth === 'true' || this.state.isAuth === true ?  <ChatPage /> : <AuthPage updateState = {this.setAppState} />;
-                }} />
-              <Route exact path='/chat/*' component={() => {
-                return this.state.isAuth === 'true' || this.state.isAuth === true ?  <ChatPage /> : <AuthPage updateState = {this.setAppState} />;
-                }} />
+                }} /> */}
 
               <Route component={() => {
                 return this.state.isAuth === 'true' || this.state.isAuth === true ?  <ChatPage /> : <AuthPage updateState = {this.setAppState} />;
