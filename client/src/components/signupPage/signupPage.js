@@ -6,7 +6,7 @@ import { Alert } from '@material-ui/lab';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
 
-import { callApi } from 'services/apiService';
+import { callApi } from '../../services/apiService';
 
 
 class SignUpPage extends Component {
