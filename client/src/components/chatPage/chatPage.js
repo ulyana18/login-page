@@ -4,7 +4,7 @@ import { TextField, IconButton } from '@material-ui/core';
 import { Send, Person } from '@material-ui/icons';
 import io from 'socket.io-client';
 
-const socket = io.connect('https://login-page-ulyana18.herokuapp.com/');
+const socket = io.connect('http://localhost:3000');
 
 
 
@@ -65,6 +65,11 @@ class ChatPage extends Component {
         socket.emit('get database');
     }
 
+    handleKeyDown = (event) => {
+        if (event.key === 'Enter') {
+            this.onMessageSubmit();
+        }
+    }
 
     render() {
         return (
@@ -88,6 +93,7 @@ class ChatPage extends Component {
                                 shrink: true,
                             }}
                             inputRef={this.chatInput}
+                            onKeyDown={ this.handleKeyDown }
                         />
                         <IconButton aria-label="send" 
                             onClick={this.onMessageSubmit}

@@ -19,18 +19,19 @@ class App extends Component {
   checkToken = () => callApiCheckToken();
 
   setAppState = async (state) => {
-    console.log('here');
     const { isAuth } = state;
-    console.log('in func it is', isAuth);
     this.setState({ isAuth: isAuth });
     window.localStorage.setItem('isAuth', isAuth);
   }
 
   logOut = () => {
     window.localStorage.removeItem('userName');
-      window.localStorage.removeItem('userEmail');
-      window.localStorage.removeItem('token');
-      window.localStorage.removeItem('refreshToken');
+    window.localStorage.removeItem('userEmail');
+    window.localStorage.removeItem('token');
+    window.localStorage.removeItem('refreshToken');
+    
+    window.localStorage.setItem('isAuth', false);
+
     this.setState({ isAuth: false });
   }
 
@@ -51,16 +52,17 @@ class App extends Component {
               >
                 Refresh Access Token
               </Button>
-              { this.state.isAuth ? <Button color='inherit' onClick={ this.logOut }>Log out</Button> : false }
+              { this.state.isAuth === 'true' || this.state.isAuth === true ? <Button color='inherit' onClick={ this.logOut }>Log out</Button> : false }
             </Toolbar>
           </AppBar>
           <BrowserRouter>
-          { this.state.isAuth ? <Redirect to='/chat' /> : <Redirect to='/signup' /> }
+          { this.state.isAuth === 'true' || this.state.isAuth === true ? <Redirect to='/chat' /> : <Redirect to='/signup' /> }
             <Switch>
               <Route exact path='/signup' component={() => <AuthPage updateState = {this.setAppState} />} />
               <Route exact path='/chat' component={() => {
-                // return this.state.isAuth ?  <ChatPage /> : <AuthPage updateState = {this.setAppState} />;
-                return <ChatPage />;
+                console.log(this.state.isAuth);
+                return this.state.isAuth === 'true' || this.state.isAuth === true ?  <ChatPage /> : <AuthPage updateState = {this.setAppState} />;
+                // return <ChatPage />;
               }} />
             </Switch>
           </BrowserRouter>

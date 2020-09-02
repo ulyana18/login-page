@@ -22,6 +22,7 @@ class AuthPage extends Component {
     }
 
     setAppState = async (state) => {
+        console.log(state);
         const { isAuth } = state;
         this.setState({ isAuthenticated: isAuth });
         this.props.updateState({ isAuth: isAuth });
