@@ -51,6 +51,7 @@ class ChatPage extends Component {
                 <div className= { email === window.localStorage.getItem('userEmail') ? 'myMessage message' : 'otherMessage message' }>
                     <span className='userName'>{name}</span>
                     <span className='userEmail'>{message}</span>
+                    {/* <span className='sendTime'>11:32, 12.03.2020</span> */}
                 </div>
                 <div className='messageAvatar'>
                     <Person />

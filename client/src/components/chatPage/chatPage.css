@@ -80,6 +80,16 @@
     margin-bottom: 3px;
 }
 
+.sendTime {
+    align-self: flex-end;
+    margin-top: 4px;
+    font-size: 0.5rem;
+}
+
+.myMessage .sendTime {
+    align-self: flex-start;
+}
+
 .messageAvatar {
     display: flex;
     justify-content: center;

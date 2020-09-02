@@ -19,9 +19,11 @@ class App extends Component {
   checkToken = () => callApiCheckToken();
 
   setAppState = async (state) => {
+    console.log('here');
     const { isAuth } = state;
     console.log('in func it is', isAuth);
     this.setState({ isAuth: isAuth });
+    window.localStorage.setItem('isAuth', isAuth);
   }
 
   logOut = () => {
@@ -30,6 +32,10 @@ class App extends Component {
       window.localStorage.removeItem('token');
       window.localStorage.removeItem('refreshToken');
     this.setState({ isAuth: false });
+  }
+
+  componentDidMount = () => {
+    this.setState({ isAuth: window.localStorage.getItem('isAuth') || false });
   }
 
   render() {
@@ -49,11 +55,12 @@ class App extends Component {
             </Toolbar>
           </AppBar>
           <BrowserRouter>
-          { this.state.isAuth ? <Redirect to='/signup/chat' /> : <Redirect to='/signup' /> }
+          { this.state.isAuth ? <Redirect to='/chat' /> : <Redirect to='/signup' /> }
             <Switch>
               <Route exact path='/signup' component={() => <AuthPage updateState = {this.setAppState} />} />
-              <Route exact path='/signup/chat' component={() => {
-                return this.state.isAuth ?  <ChatPage /> : <AuthPage updateState = {this.setAppState} />;
+              <Route exact path='/chat' component={() => {
+                // return this.state.isAuth ?  <ChatPage /> : <AuthPage updateState = {this.setAppState} />;
+                return <ChatPage />;
               }} />
             </Switch>
           </BrowserRouter>
