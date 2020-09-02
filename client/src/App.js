@@ -64,6 +64,10 @@ class App extends Component {
                 return this.state.isAuth === 'true' || this.state.isAuth === true ?  <ChatPage /> : <AuthPage updateState = {this.setAppState} />;
                 // return <ChatPage />;
               }} />
+              <Route component={() => {
+                return this.state.isAuth === 'true' || this.state.isAuth === true ?  <ChatPage /> : <AuthPage updateState = {this.setAppState} />;
+              }} />
+
             </Switch>
           </BrowserRouter>
         </div>
