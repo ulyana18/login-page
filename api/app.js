@@ -12,9 +12,9 @@ if (process.env.NODE_ENV === 'test') {
   process.chdir(process.env.NODE_PATH);
 }
 
-const routes = require('routes/index');
-const paths = require('routes/paths');
-const pool = require('db/queries');
+const routes = require('./routes/index');
+const paths = require('./routes/paths');
+const pool = require('./db/queries');
 
 
 app.use(cors());
@@ -33,18 +33,31 @@ io.on('connection', async socket => {
   const { id } = socket.client;
 
   socket.on('chat message', async (message, name, email) => {
-
+    let messageid;
     await pool.query('INSERT INTO chat (message, name, email) VALUES ($1, $2, $3)',
-      [message, name, email]
+      [message, name, email],
+      (err, res) => {
+        messageid = { res };
+      }
     );
 
-    io.emit('chat message', { message, name, email });
+    io.emit('chat message', { message, name, email, messageid });
+  });
+
+  socket.on('edit message', async (message, messageid) => {
+    await pool.query('UPDATE chat SET message=($1) WHERE messageid=($2)',
+      [message, messageid]
+    );
+    
+    io.emit('edit message', { message, messageid });
   });
   
   socket.on('get database', async () => {
     const result = await pool.query('SELECT * FROM chat');
+    
     io.emit('get database', result.rows);
   });
+
 });
 
 server.listen(port);

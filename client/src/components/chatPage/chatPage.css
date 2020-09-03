@@ -57,13 +57,20 @@
 .message {
     display: flex;
     flex-direction: column;
+    align-items: flex-start;
     margin: 0 10px;
     margin-bottom: 20px;
     padding: 10px;
+    z-index: 1000;
 
     border-radius: 10px;
     background-color: bisque;
     font-size: 1.1rem;
+}
+
+.selectedMessage {
+    background-color: rgb(233, 209, 179);
+
 }
 
 .myMessage {
@@ -78,6 +85,12 @@
     font-size: 0.8rem;
     color: rgba(58, 56, 56, 0.815);
     margin-bottom: 3px;
+
+    cursor: default;
+}
+
+.userEmail {
+    cursor: default;
 }
 
 .sendTime {
@@ -131,4 +144,12 @@
 } */
 .MuiOutlinedInput-root.Mui-focused {
     color: #fff !important;
+}
+
+.MuiDialog-paperWidthSm {
+    width: 25vw !important;
+}
+
+.MuiDialog-paperWidthSm .MuiTypography-h6 {
+    font-size: 1rem;
 }

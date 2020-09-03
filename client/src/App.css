@@ -128,3 +128,10 @@ form {
 .MuiBox-root {
   margin-top: 30px !important;
 }
+
+.MuiOutlinedInput.Mui-focused {
+  /* border: none !important; */
+  border-color: #FB9039;
+  outline: chartreuse !important;
+  color: #be9e62 !important;
+}
