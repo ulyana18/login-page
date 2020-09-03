@@ -5,7 +5,7 @@ import Box from '@material-ui/core/Box';
 import { Alert } from '@material-ui/lab';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
-import { callApi } from '../../services/apiService';
+import { callApi } from 'services/apiService';
 
 
 class LogInPage extends Component {
@@ -28,14 +28,13 @@ class LogInPage extends Component {
     async logIn() {
       this.setState({ isSpinning: true});
       const isSuccessful = await callApi('login', this.emailInput, this.passwordInput);
-
+      console.log(isSuccessful);
       setTimeout(() => {
         this.setState({ isLoggedIn: isSuccessful, isSpinning: false });
       }, 500);
       setTimeout(() => {
         this.props.updateState({ isAuth: isSuccessful });
       }, 1200)
-
     }
 
     passwordCheck = (event) => {

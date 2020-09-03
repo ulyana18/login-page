@@ -5,6 +5,14 @@ const request = require('supertest');
 
 const expect = chai.expect;
 
+const io = require('socket.io-client');
+const socketURL = 'http://localhost:9000';
+const options ={
+  transports: ['websocket'],
+  'force new connection': true
+};
+
+const chatUser1 = {'message':'wxdxwdqw', 'name':'Tom', 'email':'tom@gmail.com'};
 
 describe('post /api/user/signup', () => {
     it('should sign up Nastya', (done) => {
@@ -120,5 +128,31 @@ describe('post /api/user/check', () => {
       done();
     })
   });
+});
+
+describe('Server', function(){
+  it('Should add new message to the database', function(done){
+    const client1 = io.connect(socketURL, options);
+  
+    client1.on('connect', function(data){
+      client1.emit('chat message', chatUser1);
+      expect(data).to.equal({ 'message':'wxdxwdqw', 'name':'Tom', 'email':'tom@gmail.com' });
+    });
+
+    client1.disconnect();
+    done();
+  });
+  it('Should return all previous messages from the database', function(done){
+    const client1 = io.connect(socketURL, options);
+  
+    client1.on('get database', function(database){
+      client1.emit('get database');
+      expect(database.rows[0].email).to.equal('micha@gmail.com');
+    });
+
+    client1.disconnect();
+    done();
+  });
+
 });
 

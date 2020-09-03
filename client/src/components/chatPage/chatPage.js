@@ -14,6 +14,7 @@ class ChatPage extends Component {
         this.state = {
             message: '',
             chat: [],
+            isSend: null,
         }
         this.chatInput = React.createRef();
     }
@@ -23,21 +24,19 @@ class ChatPage extends Component {
         socket.on('chat message', ({ message, name, email }) => {
           this.setState({
             chat: [...this.state.chat, { message, name, email }]
-          }, function() {
-              console.log(this.state);
           });
         });
         socket.on('get database', (database) => {
             this.setState({
                 chat: database
-            }, function() {
-                console.log(this.state);
             });
         });
         socket.emit('get database');
     }
 
     onMessageSubmit = () => {
+        this.setState({ isSend: true });
+
         socket.emit('chat message', this.chatInput.current.value, window.localStorage.getItem('userName'), window.localStorage.getItem('userEmail'));
         this.setState({ message: '' });
         this.chatInput.current.value = '';
@@ -51,7 +50,7 @@ class ChatPage extends Component {
                 <div className= { email === window.localStorage.getItem('userEmail') ? 'myMessage message' : 'otherMessage message' }>
                     <span className='userName'>{name}</span>
                     <span className='userEmail'>{message}</span>
-                    {/* <span className='sendTime'>11:32, 12.03.2020</span> */}
+                    {/* <span className='sendTime'>{sendDate}</span> */}
                 </div>
                 <div className='messageAvatar'>
                     <Person />
@@ -85,17 +84,17 @@ class ChatPage extends Component {
                     </div>
                     <div className='inputArea'>
                         <TextField
-                            id="standard-full-width"
-                            placeholder="Placeholder"
-                            margin="normal"
-                            variant="outlined"
+                            id='standard-full-width'
+                            placeholder='Placeholder'
+                            margin='normal'
+                            variant='outlined'
                             InputLabelProps={{
                                 shrink: true,
                             }}
                             inputRef={this.chatInput}
                             onKeyDown={ this.handleKeyDown }
                         />
-                        <IconButton aria-label="send" 
+                        <IconButton aria-label='send' 
                             onClick={this.onMessageSubmit}
                         >
                             <Send />

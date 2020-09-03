@@ -6,7 +6,7 @@ import { Alert } from '@material-ui/lab';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
 
-import { callApi } from '../../services/apiService';
+import { callApi } from 'services/apiService';
 
 
 class SignUpPage extends Component {
@@ -33,12 +33,12 @@ class SignUpPage extends Component {
     }
   
     async signUp() {
-      await this.nameValidate();
-      await this.emailValidate();
+      this.nameValidate();
+      this.emailValidate();
 
-      await this.passwordValidate();
-      await this.confirmPasswordValidate();
-      const isCorrect = await this.checkSubmitDisable();
+      this.passwordValidate();
+      this.confirmPasswordValidate();
+      const isCorrect = this.checkSubmitDisable();
 
       if(isCorrect) {
         this.setState({ isSpinning: true, isFirstTime: true, });

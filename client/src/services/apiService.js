@@ -1,7 +1,6 @@
-import AuthPage from '../components/authPage/authPage';
-
 export async function callApi (route, email, password, name = '') {
   let isLogin = (route === 'login');
+
   try {
     const response = await fetch(`/api/user/${route}`, {
       method: 'POST',

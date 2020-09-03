@@ -1,10 +1,10 @@
 const path = require('path');
 const jwt = require('jsonwebtoken');
 
-const config = require('../config');
-const { TOKEN_ERROR } = require('../messages/userMessages');
-const AuthService = require('../services/authService');
-const { SUCCESSFULL, ERROR } = require('../messages/consts');
+const config = require('config');
+const { TOKEN_ERROR } = require('messages/userMessages');
+const AuthService = require('services/authService');
+const { SUCCESSFULL, ERROR } = require('messages/consts');
 
 
 function tokenChecker(req,res,next) {
