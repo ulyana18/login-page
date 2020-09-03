@@ -4,8 +4,8 @@ import { TextField, Button, IconButton, Menu, MenuItem, Dialog, DialogTitle, Dia
 import { Send, Person, ContactSupportOutlined } from '@material-ui/icons';
 import io from 'socket.io-client';
 
-// const socket = io.connect('https://login-page-ulyana18.herokuapp.com/');
-const socket = io.connect('http://localhost:3000');
+const socket = io.connect('https://login-page-ulyana18.herokuapp.com/');
+// const socket = io.connect('http://localhost:3000');
 
 
 
