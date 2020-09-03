@@ -40,7 +40,6 @@ io.on('connection', async socket => {
         messageid = { res };
       }
     );
-
     io.emit('chat message', { message, name, email, messageid });
   });
 
@@ -48,8 +47,16 @@ io.on('connection', async socket => {
     await pool.query('UPDATE chat SET message=($1) WHERE messageid=($2)',
       [message, messageid]
     );
-    
+
     io.emit('edit message', { message, messageid });
+  });
+
+  socket.on('delete message', async (messageid) => {
+    await pool.query('DELETE FROM chat WHERE messageid=($1)',
+      [messageid]
+    );
+
+    io.emit('delete message', messageid);
   });
   
   socket.on('get database', async () => {

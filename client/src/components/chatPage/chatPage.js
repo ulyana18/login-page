@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './chatPage.css';
 import { TextField, Button, IconButton, Menu, MenuItem, Dialog, DialogTitle, DialogActions } from '@material-ui/core';
-import { Send, Person } from '@material-ui/icons';
+import { Send, Person, ContactSupportOutlined } from '@material-ui/icons';
 import io from 'socket.io-client';
 
 // const socket = io.connect('https://login-page-ulyana18.herokuapp.com/');
@@ -19,17 +19,20 @@ class ChatPage extends Component {
             anchorEl: null,
             editElement: null,
             isDialogOpen: false,
+            isSelectionState: false,
         }
         this.coordX = 0;
         this.coordY = 0;
         this.chatInput = React.createRef();
         this.messagesArea = React.createRef();
         this.isMyMessage = null;
+        this.selectedElements = [];
     }
 
     componentDidMount() {
         
-        socket.on('chat message', ({ message, name, email, messageid }) => {
+        socket.on('chat message', ({ message, name, email }) => {
+            const messageid = +this.state.chat[this.state.chat.length - 1].messageid + 1;
           this.setState({
             chat: [...this.state.chat, { message, name, email, messageid }]
           });
@@ -47,11 +50,18 @@ class ChatPage extends Component {
             });
         });
         socket.on('edit message', ({ message, messageid }) => {
-            // this.setState({
-            //     chat: database
-            // });
             this.messagesArea.current.childNodes[messageid - 1].childNodes[0].childNodes[1].innerText = message;
         });
+        socket.on('delete message', (messageid) => {
+            let deleteIndex;
+            const filteredArray = this.state.chat.filter(function(item, index, arr) {
+                if(item.messageid !== messageid) return true;
+                deleteIndex = index;
+                return false;
+            });
+            this.setState({ chat: filteredArray });
+        });
+
         socket.emit('get database');
     }
 
@@ -59,10 +69,9 @@ class ChatPage extends Component {
         this.setState({ isSend: true });
         if(this.chatInput.current.value !== '') {
             if(this.state.editElement !== null) {
-                if(this.chatInput.current.value !== this.state.message) {
+                if(this.chatInput.current.value !== this.state.editElement.childNodes[1].innerText) {
                     const id = this.state.editElement.parentElement.dataset.id;
                     const editedMessage = this.chatInput.current.value;
-
                     socket.emit('edit message', editedMessage, id);
                 }
 
@@ -113,10 +122,11 @@ class ChatPage extends Component {
     renderChat() {
         const { chat } = this.state;
         return chat.map(({ message, name, email, messageid }, idx) => (
+        
             <div data-id={messageid} className={ email === window.localStorage.getItem('userEmail') ? 'messageWrapper messageWrapper-myMessage' : 'messageWrapper messageWrapper-otherMessage' }>
                 <div className= { email === window.localStorage.getItem('userEmail') ? 'myMessage message' : 'otherMessage message' }>
-                    <span className='userName' >{name}</span>
-                    <span className='userEmail' onContextMenu={ this.preventShowContextMenu } >{message}</span>
+                    <span className='userName noselect' >{name}</span>
+                    <span className='userEmail noselect' onContextMenu={ this.preventShowContextMenu } >{message}</span>
                     {/* <span className='sendTime'>{sendDate}</span> */}
                 </div>
                 <div className='messageAvatar'>
@@ -151,14 +161,46 @@ class ChatPage extends Component {
 
     }
 
-    deleteMessage = () => {
-        const elem = this.state.anchorEl;
+    showDeleteMessage = () => {
+        const elem = this.state.anchorEl.parentElement;
         this.handleContextMenuClose();
-        const previousData = elem.innerText;
 
-        this.setState({ isDialogOpen: true });
+        this.setState({ isDialogOpen: true, editElement: elem });
     }
 
+    deleteMessage = () => {
+        this.handleDialogClose();
+        // console.log(this.state.editElement.dataset.id);
+        socket.emit('delete message', this.state.editElement.dataset.id);
+    }
+
+    copyText = () => {
+        const text = this.state.anchorEl.childNodes[1].innerText;
+        navigator.clipboard.writeText(text);
+        this.handleContextMenuClose();
+    }
+
+    selectMessage = (event) => {
+        if(!this.state.isSelectionState) {
+            this.setState({ isSelectionState: true });
+            this.state.anchorEl.className = this.state.anchorEl.className + ' selectedMessage';
+            this.selectedElements.push(this.state.anchorEl.parentElement);
+            this.handleContextMenuClose();
+
+        } else {
+            if(event.target.className.split(' ').includes('message')) {
+                const elem = event.target;
+                elem.className = elem.className + ' selectedMessage';
+                this.selectedElements.push(elem.parentElement);
+            }
+            if(event.target.parentElement.className.split(' ').includes('message')) {
+                const elem = event.target.parentElement;
+                elem.className = elem.className + ' selectedMessage';
+                this.selectedElements.push(elem.parentElement);
+            }
+        }
+        console.log(this.selectedElements);
+    }
     // checkMessageOwner = () => {
     //     console.log(this.state.anchorEl);
     //     if(this.state.anchorEl !== null) return this.state.anchorEl.className.split(' ').includes('myMessage');
@@ -172,7 +214,10 @@ class ChatPage extends Component {
                         <span>Group Chat</span>
                     </div>
                     <div className='messagesAreaWrapper'>
-                        <div className='messagesArea' ref={ this.messagesArea } onContextMenu={ this.showContextMenu } >
+                        <div className='messagesArea' ref={ this.messagesArea } 
+                            onContextMenu={ this.showContextMenu }
+                            onClick={ this.state.isSelectionState ? this.selectMessage : false }
+                        >
                             {this.renderChat()}
                         </div>
 
@@ -183,12 +228,12 @@ class ChatPage extends Component {
                             open={ this.state.anchorEl }
                             onClose={ this.handleContextMenuClose }
                             anchorOrigin={ { vertical: 'bottom', horizontal: 'right' } }
-                            // anchorPosition={ {top: 200, left: 200} }
                         >
-                            <MenuItem >Copy Text</MenuItem>
+                            <MenuItem onClick={ this.copyText } >Copy Text</MenuItem>
                             { this.state.isMyMessage ? <MenuItem onClick={ this.editMessage } >Edit Message</MenuItem> : false }
-                            { this.state.isMyMessage ? <MenuItem onClick={ this.deleteMessage } >Delete Message</MenuItem> : false }
+                            { this.state.isMyMessage ? <MenuItem onClick={ this.showDeleteMessage } >Delete Message</MenuItem> : false }
                             <MenuItem >Select Message</MenuItem>
+                            {/* <MenuItem onClick={ this.selectMessage } >Select Message</MenuItem> */}
                         </Menu>
 
                         <Dialog
@@ -199,7 +244,7 @@ class ChatPage extends Component {
                         >
                             <DialogTitle id="alert-dialog-title">Are you sure you want to delete message?</DialogTitle>
                             <DialogActions>
-                            <Button onClick={ this.handleDialogClose } color="primary">
+                            <Button onClick={ this.deleteMessage } color="primary">
                                 Yes, delete
                             </Button>
                             <Button onClick={ this.handleDialogClose } color="primary" autoFocus>
