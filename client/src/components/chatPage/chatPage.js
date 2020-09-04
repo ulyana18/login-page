@@ -4,8 +4,8 @@ import { TextField, Button, IconButton, Menu, MenuItem, Dialog, DialogTitle, Dia
 import { Send, Person, ContactSupportOutlined } from '@material-ui/icons';
 import io from 'socket.io-client';
 
-const socket = io.connect('https://login-page-ulyana18.herokuapp.com/');
-// const socket = io.connect('http://localhost:3000');
+// const socket = io.connect('https://login-page-ulyana18.herokuapp.com/');
+const socket = io.connect('http://localhost:3000');
 
 
 
@@ -190,21 +190,34 @@ class ChatPage extends Component {
         } else {
             if(event.target.className.split(' ').includes('message')) {
                 const elem = event.target;
-                elem.className = elem.className + ' selectedMessage';
-                this.selectedElements.push(elem.parentElement);
+
+                this.isSelectedMessage(elem);
             }
             if(event.target.parentElement.className.split(' ').includes('message')) {
                 const elem = event.target.parentElement;
-                elem.className = elem.className + ' selectedMessage';
-                this.selectedElements.push(elem.parentElement);
+
+                this.isSelectedMessage(elem);
             }
         }
         console.log(this.selectedElements);
     }
-    // checkMessageOwner = () => {
-    //     console.log(this.state.anchorEl);
-    //     if(this.state.anchorEl !== null) return this.state.anchorEl.className.split(' ').includes('myMessage');
-    // }
+
+    isSelectedMessage = (elem) => {
+        if(elem.className.split(' ').includes('selectedMessage')) {
+            elem.className = elem.className.split(' ').filter(function(item, index, arr) {
+                return item !== 'selectedMessage';
+            }).join(' ');
+
+            this.selectedElements = this.selectedElements.filter(function(item, index, arr) {
+                return item.dataset.id !== elem.parentElement.dataset.id;
+            });
+
+        } else {
+            elem.className = elem.className + ' selectedMessage';
+            this.selectedElements.push(elem.parentElement);
+        }
+
+    }
 
     render() {
         return (
@@ -232,8 +245,8 @@ class ChatPage extends Component {
                             <MenuItem onClick={ this.copyText } >Copy Text</MenuItem>
                             { this.state.isMyMessage ? <MenuItem onClick={ this.editMessage } >Edit Message</MenuItem> : false }
                             { this.state.isMyMessage ? <MenuItem onClick={ this.showDeleteMessage } >Delete Message</MenuItem> : false }
-                            <MenuItem >Select Message</MenuItem>
-                            {/* <MenuItem onClick={ this.selectMessage } >Select Message</MenuItem> */}
+                            {/* <MenuItem >Select Message</MenuItem> */}
+                            <MenuItem onClick={ this.selectMessage } >Select Message</MenuItem>
                         </Menu>
 
                         <Dialog
