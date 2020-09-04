@@ -31,20 +31,36 @@ const port = process.env.PORT || 9000;
 
 io.on('connection', async socket => {
   const { id } = socket.client;
-  console.log(`User connected: ${id}`);
 
   socket.on('chat message', async (message, name, email) => {
-    console.log(`${email}: ${message}`);
-
+    let messageid;
     await pool.query('INSERT INTO chat (message, name, email) VALUES ($1, $2, $3)',
-      [message, name, email]
+      [message, name, email],
+      (err, res) => {
+        messageid = { res };
+      }
+    );
+    io.emit('chat message', { message, name, email, messageid });
+  });
+
+  socket.on('edit message', async (message, messageid) => {
+    await pool.query('UPDATE chat SET message=($1) WHERE messageid=($2)',
+      [message, messageid]
+    );
+    io.emit('edit message', { message, messageid });
+  });
+
+  socket.on('delete message', async (messageid) => {
+    await pool.query('DELETE FROM chat WHERE messageid=($1)',
+      [messageid]
     );
 
-    io.emit('chat message', { message, name, email });
+    io.emit('delete message', messageid);
   });
   
   socket.on('get database', async () => {
     const result = await pool.query('SELECT * FROM chat');
+    
     io.emit('get database', result.rows);
   });
 });
