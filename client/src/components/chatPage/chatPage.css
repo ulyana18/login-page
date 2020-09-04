@@ -179,17 +179,24 @@
     margin: 15px 0 !important;
     margin-right: 3% !important;
 }
-/* .MuiFilledInput-underline.Mui-focused {
-    border: none !important;
-    color: #fff !important;
-    background-color: #fff !important;
-} */
 .MuiOutlinedInput-root.Mui-focused {
     color: #fff !important;
 }
 
 .MuiDialog-paperWidthSm {
     width: 25vw !important;
+}
+
+@media(max-width: 620px) {
+    .MuiDialog-paperWidthSm {
+        width: 70vw !important;
+    }
+    .MuiDialog-paperWidthSm .MuiTypography-h6 {
+        font-size: 0.6rem;
+    }
+    .MuiDialog-paperWidthSm .MuiButton-label {
+        font-size: 0.7rem;
+    }
 }
 
 .MuiDialog-paperWidthSm .MuiTypography-h6 {

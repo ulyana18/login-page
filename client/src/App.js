@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import 'App.css';
+import './App.css';
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 import { AppBar, Button, Toolbar } from '@material-ui/core';
-import AuthPage from 'components/authPage/authPage';
-import ChatPage from 'components/chatPage/chatPage';
-import { callApiCheckToken } from 'services/apiService';
+import AuthPage from './components/authPage/authPage';
+import ChatPage from './components/chatPage/chatPage';
+import { callApiCheckToken } from './services/apiService';
 
 
 

@@ -120,6 +120,7 @@ describe('Chat page', () => {
     await wrapper.update();
     expect(wrapper.state('isSend')).to.equal(true);
   });
+
   it('should send message after keyDown = Enter', async function() {
     const wrapper = mount(<ChatPage/>);
     wrapper.find(TextField).props().onKeyDown({ key: 'Enter' });
