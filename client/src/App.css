@@ -22,6 +22,11 @@
   background-color: #f3984d8f !important;
 }
 
+.checkTokenBtn .MuiButton-label,
+.logOutBtn .MuiButton-label {
+  font-size: 0.7rem !important;
+}
+
 form {
   display: flex;
   flex-direction: column;
@@ -42,6 +47,7 @@ form {
   background-color: #E1E2E2 !important;
 
 }
+
 
 .MuiTabs-flexContainer {
   justify-content: center;
@@ -134,4 +140,39 @@ form {
   border-color: #FB9039;
   outline: chartreuse !important;
   color: #be9e62 !important;
+}
+
+
+
+/* MEDIA */
+
+@media(max-width: 1090px) {
+  .tabWrapper {
+    width: 50%;
+  }
+  .checkTokenBtn .MuiButton-label,
+  .logOutBtn .MuiButton-label {
+    font-size: 0.2rem !important;
+  }
+}
+@media(max-width: 870px) {
+  .tabWrapper {
+    width: 80%;
+  }
+  .logOutBtn .MuiButton-label {
+    font-size: 0.2rem !important;
+  }
+
+}
+@media(max-width: 470px) {
+  .tabWrapper {
+    width: 90%;
+  }
+  .tabWrapper .MuiFormControl-root {
+    width: 90% !important;
+  }
+  .logOutBtn .MuiButton-label {
+    font-size: 0.2rem !important;
+  }
+
 }

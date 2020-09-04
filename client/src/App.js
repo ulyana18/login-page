@@ -52,7 +52,7 @@ class App extends Component {
               >
                 Refresh Access Token
               </Button>
-              { this.state.isAuth === 'true' || this.state.isAuth === true ? <Button color='inherit' onClick={ this.logOut }>Log out</Button> : false }
+              { this.state.isAuth === 'true' || this.state.isAuth === true ? <Button className='logOutBtn' color='inherit' onClick={ this.logOut }>Log out</Button> : false }
             </Toolbar>
           </AppBar>
           <BrowserRouter>

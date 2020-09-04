@@ -140,7 +140,6 @@ class ChatPage extends Component {
     renderChat() {
         const { chat } = this.state;
         return chat.map(({ message, name, email, messageid, is_edited }, idx) => (
-        
             <div data-id={messageid} className={ email === window.localStorage.getItem('userEmail') ? 'messageWrapper messageWrapper-myMessage' : 'messageWrapper messageWrapper-otherMessage' }>
                 <div className= { email === window.localStorage.getItem('userEmail') ? 'myMessage message' : 'otherMessage message' }>
                     <span className='userName noselect' >{name}</span>
