@@ -12,6 +12,19 @@
     border: 1px solid rgb(165, 186, 201);
     /* overflow-y: scroll; */
 }
+@media(max-width: 780px) {
+    .chat {
+        width: 80%;
+    }
+}
+@media(max-width: 470px) {
+    .chatWrapper {
+        height: calc(100vh - 56px);
+    }
+    .chat {
+        width: 95%;
+    }
+}
 
 .chatHeader {
     display: flex;
@@ -109,6 +122,17 @@
 
 .userEmail {
     cursor: default;
+}
+
+.userEdited {
+    align-self: flex-end;
+    margin-top: 3px;
+    font-size: 0.5rem;
+    color: rgba(58, 56, 56, 0.815);
+}
+
+.userNotEdited {
+    display: none;
 }
 
 .sendTime {

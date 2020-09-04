@@ -50,7 +50,7 @@ class ChatPage extends Component {
                 chat: sortedResult
             });
         });
-        socket.on('edit message', ({ message, messageid }) => {
+        socket.on('edit message', ({ message, messageid, is_edited }) => {
             const arr = this.messagesArea.current.childNodes;
             let i = 0;
             while(arr[i].dataset.id !== messageid) {
@@ -58,6 +58,7 @@ class ChatPage extends Component {
             }
             if(arr[i].dataset.id === messageid) {
                 arr[i].childNodes[0].childNodes[1].innerText = message;
+                arr[i].childNodes[0].childNodes[2].className = 'userEdited noselect';
             }
         });
         socket.on('delete message', (messageid) => {
@@ -124,15 +125,27 @@ class ChatPage extends Component {
         this.setState({ isDialogOpen: false, editElement: null });
     }
 
+    handleKeyDown = (event) => {
+        if (event.key === 'Enter') {
+            this.onMessageSubmit();
+        }
+    }
+
+    changeInput = (event) => {
+        this.setState({ message: event.target.value });
+    }
+
+
 
     renderChat() {
         const { chat } = this.state;
-        return chat.map(({ message, name, email, messageid }, idx) => (
+        return chat.map(({ message, name, email, messageid, is_edited }, idx) => (
         
             <div data-id={messageid} className={ email === window.localStorage.getItem('userEmail') ? 'messageWrapper messageWrapper-myMessage' : 'messageWrapper messageWrapper-otherMessage' }>
                 <div className= { email === window.localStorage.getItem('userEmail') ? 'myMessage message' : 'otherMessage message' }>
                     <span className='userName noselect' >{name}</span>
                     <span className='userEmail noselect' onContextMenu={ this.preventShowContextMenu } >{message}</span>
+                    <span className= { is_edited ? 'userEdited noselect' : 'userNotEdited noselect' }>Edited</span>
                     {/* <span className='sendTime'>{sendDate}</span> */}
                 </div>
                 <div className='messageAvatar'>
@@ -143,16 +156,6 @@ class ChatPage extends Component {
         ));
     };
 
-
-    handleKeyDown = (event) => {
-        if (event.key === 'Enter') {
-            this.onMessageSubmit();
-        }
-    }
-
-    changeInput = (event) => {
-        this.setState({ message: event.target.value });
-    }
 
     editMessage = () => {
         const elem = this.state.anchorEl;
@@ -167,7 +170,7 @@ class ChatPage extends Component {
 
     }
 
-    showDeleteMessage = () => {
+    showDeleteMessageDialog = () => {
         const elem = this.state.anchorEl.parentElement;
         this.handleContextMenuClose();
 
@@ -277,7 +280,7 @@ class ChatPage extends Component {
                         >
                             <MenuItem onClick={ this.copyText } >Copy Text</MenuItem>
                             { this.state.isMyMessage ? <MenuItem onClick={ this.editMessage } >Edit Message</MenuItem> : false }
-                            { this.state.isMyMessage ? <MenuItem onClick={ this.showDeleteMessage } >Delete Message</MenuItem> : false }
+                            { this.state.isMyMessage ? <MenuItem onClick={ this.showDeleteMessageDialog } >Delete Message</MenuItem> : false }
                             {/* <MenuItem >Select Message</MenuItem> */}
                             <MenuItem onClick={ this.selectMessage } >Select Message</MenuItem>
                         </Menu>

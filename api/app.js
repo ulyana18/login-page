@@ -34,8 +34,8 @@ io.on('connection', async socket => {
 
   socket.on('chat message', async (message, name, email) => {
     let messageid;
-    await pool.query('INSERT INTO chat (message, name, email) VALUES ($1, $2, $3)',
-      [message, name, email],
+    await pool.query('INSERT INTO chat (message, name, email, is_edited) VALUES ($1, $2, $3, $4)',
+      [message, name, email, false],
       (err, res) => {
         messageid = { res };
       }
@@ -44,11 +44,11 @@ io.on('connection', async socket => {
   });
 
   socket.on('edit message', async (message, messageid) => {
-    await pool.query('UPDATE chat SET message=($1) WHERE messageid=($2)',
-      [message, messageid]
+    await pool.query('UPDATE chat SET message=($1), is_edited=($2) WHERE messageid=($3)',
+      [message, true, messageid]
     );
 
-    io.emit('edit message', { message, messageid });
+    io.emit('edit message', { message, messageid, isEdited: true });
   });
 
   socket.on('delete message', async (messageid) => {
@@ -61,7 +61,6 @@ io.on('connection', async socket => {
   
   socket.on('get database', async () => {
     const result = await pool.query('SELECT * FROM chat');
-    
     io.emit('get database', result.rows);
   });
 
