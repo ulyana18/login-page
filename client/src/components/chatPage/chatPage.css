@@ -15,14 +15,31 @@
 
 .chatHeader {
     display: flex;
+    flex-direction: column;
     justify-content: space-around;
     align-items: center;
+    position: relative;
     padding: 15px;
 
     font-size: 1.3rem;
     background-color: #81a4c7;
     color: #fff;
 }
+
+.selectionArea {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin: 0 
+}
+
+.selectionArea .MuiIconButton-root {
+    width: 15px !important;
+    height: 15px !important;
+
+}
+
 
 .messagesAreaWrapper {
     height: calc(100% - 139px);

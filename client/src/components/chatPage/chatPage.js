@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './chatPage.css';
 import { TextField, Button, IconButton, Menu, MenuItem, Dialog, DialogTitle, DialogActions } from '@material-ui/core';
-import { Send, Person, ContactSupportOutlined } from '@material-ui/icons';
+import { Send, Close, Person } from '@material-ui/icons';
 import io from 'socket.io-client';
 
 // const socket = io.connect('https://login-page-ulyana18.herokuapp.com/');
@@ -20,6 +20,7 @@ class ChatPage extends Component {
             editElement: null,
             isDialogOpen: false,
             isSelectionState: false,
+            // selectedElements: [],
         }
         this.coordX = 0;
         this.coordY = 0;
@@ -93,7 +94,7 @@ class ChatPage extends Component {
                 } else this.setState({ isMyMessage: false });
     
             });
-            // event.target.className = event.target.className + ' selectedMessage';
+
         }
         if(event.target.parentElement.className.split(' ').includes('message')) {
             this.setState({ anchorEl: event.target.parentElement }, function() {
@@ -180,26 +181,32 @@ class ChatPage extends Component {
         this.handleContextMenuClose();
     }
 
-    selectMessage = (event) => {
+    selectMessage = async (event) => {
+
         if(!this.state.isSelectionState) {
             this.setState({ isSelectionState: true });
             this.state.anchorEl.className = this.state.anchorEl.className + ' selectedMessage';
+
             this.selectedElements.push(this.state.anchorEl.parentElement);
             this.handleContextMenuClose();
 
         } else {
             if(event.target.className.split(' ').includes('message')) {
+
                 const elem = event.target;
 
                 this.isSelectedMessage(elem);
             }
             if(event.target.parentElement.className.split(' ').includes('message')) {
+
                 const elem = event.target.parentElement;
 
                 this.isSelectedMessage(elem);
             }
+            if(this.selectedElements.length === 0) this.setState({ isSelectionState: false });
+            else this.setState({ isSelectionState: true });
+
         }
-        console.log(this.selectedElements);
     }
 
     isSelectedMessage = (elem) => {
@@ -208,15 +215,28 @@ class ChatPage extends Component {
                 return item !== 'selectedMessage';
             }).join(' ');
 
-            this.selectedElements = this.selectedElements.filter(function(item, index, arr) {
+            const filteredArray = this.selectedElements.filter(function(item, index, arr) {
                 return item.dataset.id !== elem.parentElement.dataset.id;
             });
 
+            this.selectedElements = filteredArray;
+
         } else {
             elem.className = elem.className + ' selectedMessage';
+
             this.selectedElements.push(elem.parentElement);
         }
+    }
 
+    deleteSelectedMessages = () => {
+        const newArray = this.selectedElements.map(function(item, index, arr) {
+            item.childNodes[0].className = item.childNodes[0].className.split(' ').filter(function(name, i, array) {
+                return name !== 'selectedMessage';
+            }).join(' ');
+        });
+        this.selectedElements = [];
+        this.setState({ isSelectionState: false });
+        console.log(newArray);
     }
 
     render() {
@@ -224,7 +244,15 @@ class ChatPage extends Component {
             <div className='chatWrapper'>
                 <div className='chat'>
                     <div className='chatHeader'>
-                        <span>Group Chat</span>
+                        { !this.state.isSelectionState && <span>Group Chat</span> }
+                        { this.state.isSelectionState && <div className='selectionArea'>
+                            <span className='selectedElemsCount'>Selected items: { this.selectedElements.length } </span>
+                            <IconButton aria-label='delete' 
+                                onClick={this.deleteSelectedMessages}
+                            >
+                                <Close />
+                            </IconButton>
+                        </div> }
                     </div>
                     <div className='messagesAreaWrapper'>
                         <div className='messagesArea' ref={ this.messagesArea } 
@@ -238,7 +266,7 @@ class ChatPage extends Component {
                             id="simple-menu"
                             anchorEl={ this.state.anchorEl }
                             keepMounted
-                            open={ this.state.anchorEl }
+                            open={ this.state.anchorEl && !this.state.isSelectionState }
                             onClose={ this.handleContextMenuClose }
                             anchorOrigin={ { vertical: 'bottom', horizontal: 'right' } }
                         >
@@ -279,7 +307,7 @@ class ChatPage extends Component {
                             onKeyDown={ this.handleKeyDown }
                             onChange={this.changeInput}
                         />
-                        { this.state.message !== '' ? <IconButton aria-label='send' 
+                        { this.state.message !== '' ? <IconButton aria-label='send'
                             onClick={this.onMessageSubmit}
                         >
                             <Send />
