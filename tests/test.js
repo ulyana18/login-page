@@ -1,6 +1,6 @@
 const assert = require('assert');
 const chai = require('chai');
-const app = require('../api/app');
+const app = require('api/app');
 const request = require('supertest');
 
 const expect = chai.expect;

@@ -2,10 +2,10 @@ const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 const path = require('path');
 
-const config = require('../config');
-const pool = require('../db/queries');
-const { LOGIN_ERROR, SIGNUP_ERROR, TOKEN_ERROR } = require('../messages/userMessages');
-const { TOKEN_LIFE_TIME } = require('../messages/consts');
+const config = require('config');
+const pool = require('db/queries');
+const { LOGIN_ERROR, SIGNUP_ERROR, TOKEN_ERROR } = require('messages/userMessages');
+const { TOKEN_LIFE_TIME } = require('messages/consts');
 
 
 class AuthService {

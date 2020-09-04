@@ -4,7 +4,6 @@ import { TextField, Button, IconButton, Menu, MenuItem, Dialog, DialogTitle, Dia
 import { Send, Close, Person } from '@material-ui/icons';
 import io from 'socket.io-client';
 
-// const socket = io.connect('https://login-page-ulyana18.herokuapp.com/');
 const socket = io.connect('http://localhost:3000');
 
 
@@ -20,14 +19,11 @@ class ChatPage extends Component {
             editElement: null,
             isDialogOpen: false,
             isSelectionState: false,
-            // selectedElements: [],
         }
-        this.coordX = 0;
-        this.coordY = 0;
-        this.chatInput = React.createRef();
-        this.messagesArea = React.createRef();
         this.isMyMessage = null;
         this.selectedElements = [];
+        this.chatInput = React.createRef();
+        this.messagesArea = React.createRef();
     }
 
     componentDidMount() {
@@ -53,17 +49,16 @@ class ChatPage extends Component {
         socket.on('edit message', ({ message, messageid, is_edited }) => {
             const arr = this.messagesArea.current.childNodes;
             let i = 0;
-            while(arr[i].dataset.id !== messageid) {
-                i++;
-            }
-            if(arr[i].dataset.id === messageid) {
+            while (arr[i].dataset.id !== messageid) i++;
+
+            if (arr[i].dataset.id === messageid) {
                 arr[i].childNodes[0].childNodes[1].innerText = message;
                 arr[i].childNodes[0].childNodes[2].className = 'userEdited noselect';
             }
         });
         socket.on('delete message', (messageid) => {
             const filteredArray = this.state.chat.filter(function(item, index, arr) {
-                if(item.messageid !== messageid) return true;
+                if (item.messageid !== messageid) return true;
                 return false;
             });
             this.setState({ chat: filteredArray, editElement: null });
@@ -74,9 +69,9 @@ class ChatPage extends Component {
 
     onMessageSubmit = () => {
         this.setState({ isSend: true });
-        if(this.chatInput.current.value !== '') {
-            if(this.state.editElement !== null) {
-                if(this.chatInput.current.value !== this.state.editElement.childNodes[1].innerText) {
+        if (this.chatInput.current.value !== '') {
+            if (this.state.editElement !== null) {
+                if (this.chatInput.current.value !== this.state.editElement.childNodes[1].innerText) {
                     const id = this.state.editElement.parentElement.dataset.id;
                     const editedMessage = this.chatInput.current.value;
                     socket.emit('edit message', editedMessage, id);
@@ -92,19 +87,18 @@ class ChatPage extends Component {
         event.preventDefault();
         event.stopPropagation();
 
-
-        if(event.target.className.split(' ').includes('message')) {
+        if (event.target.className.split(' ').includes('message')) {
             this.setState({ anchorEl: event.target }, function() {
-                if(this.state.anchorEl.className.split(' ').includes('myMessage')) {
+                if (this.state.anchorEl.className.split(' ').includes('myMessage')) {
                     this.setState({ isMyMessage: true });
                 } else this.setState({ isMyMessage: false });
     
             });
 
         }
-        if(event.target.parentElement.className.split(' ').includes('message')) {
+        if (event.target.parentElement.className.split(' ').includes('message')) {
             this.setState({ anchorEl: event.target.parentElement }, function() {
-                if(this.state.anchorEl.className.split(' ').includes('myMessage')) {
+                if (this.state.anchorEl.className.split(' ').includes('myMessage')) {
                     this.setState({ isMyMessage: true });
                 } else this.setState({ isMyMessage: false });
     
@@ -126,9 +120,7 @@ class ChatPage extends Component {
     }
 
     handleKeyDown = (event) => {
-        if (event.key === 'Enter') {
-            this.onMessageSubmit();
-        }
+        if (event.key === 'Enter') this.onMessageSubmit();
     }
 
     changeInput = (event) => {
@@ -140,8 +132,14 @@ class ChatPage extends Component {
     renderChat() {
         const { chat } = this.state;
         return chat.map(({ message, name, email, messageid, is_edited }, idx) => (
-            <div data-id={messageid} className={ email === window.localStorage.getItem('userEmail') ? 'messageWrapper messageWrapper-myMessage' : 'messageWrapper messageWrapper-otherMessage' }>
-                <div className= { email === window.localStorage.getItem('userEmail') ? 'myMessage message' : 'otherMessage message' }>
+            <div data-id={messageid} className={ email === window.localStorage.getItem('userEmail') ?
+                'messageWrapper messageWrapper-myMessage' 
+                : 'messageWrapper messageWrapper-otherMessage' }
+            >
+                <div className= { email === window.localStorage.getItem('userEmail') ?
+                    'myMessage message' 
+                    : 'otherMessage message' }
+                >
                     <span className='userName noselect' >{name}</span>
                     <span className='userEmail noselect' onContextMenu={ this.preventShowContextMenu } >{message}</span>
                     <span className= { is_edited ? 'userEdited noselect' : 'userNotEdited noselect' }>Edited</span>
@@ -178,7 +176,6 @@ class ChatPage extends Component {
 
     deleteMessage = () => {
         this.handleDialogClose();
-        // console.log(this.state.editElement.dataset.id);
         socket.emit('delete message', this.state.editElement.dataset.id);
     }
 
@@ -190,7 +187,7 @@ class ChatPage extends Component {
 
     selectMessage = async (event) => {
 
-        if(!this.state.isSelectionState) {
+        if (!this.state.isSelectionState) {
             this.setState({ isSelectionState: true });
             this.state.anchorEl.className = this.state.anchorEl.className + ' selectedMessage';
 
@@ -198,26 +195,26 @@ class ChatPage extends Component {
             this.handleContextMenuClose();
 
         } else {
-            if(event.target.className.split(' ').includes('message')) {
+            if (event.target.className.split(' ').includes('message')) {
 
                 const elem = event.target;
 
                 this.isSelectedMessage(elem);
             }
-            if(event.target.parentElement.className.split(' ').includes('message')) {
+            if (event.target.parentElement.className.split(' ').includes('message')) {
 
                 const elem = event.target.parentElement;
 
                 this.isSelectedMessage(elem);
             }
-            if(this.selectedElements.length === 0) this.setState({ isSelectionState: false });
+            if (this.selectedElements.length === 0) this.setState({ isSelectionState: false });
             else this.setState({ isSelectionState: true });
 
         }
     }
 
     isSelectedMessage = (elem) => {
-        if(elem.className.split(' ').includes('selectedMessage')) {
+        if (elem.className.split(' ').includes('selectedMessage')) {
             elem.className = elem.className.split(' ').filter(function(item, index, arr) {
                 return item !== 'selectedMessage';
             }).join(' ');
@@ -243,7 +240,6 @@ class ChatPage extends Component {
         });
         this.selectedElements = [];
         this.setState({ isSelectionState: false });
-        console.log(newArray);
     }
 
     render() {
@@ -280,7 +276,6 @@ class ChatPage extends Component {
                             <MenuItem onClick={ this.copyText } >Copy Text</MenuItem>
                             { this.state.isMyMessage ? <MenuItem onClick={ this.editMessage } >Edit Message</MenuItem> : false }
                             { this.state.isMyMessage ? <MenuItem onClick={ this.showDeleteMessageDialog } >Delete Message</MenuItem> : false }
-                            {/* <MenuItem >Select Message</MenuItem> */}
                             <MenuItem onClick={ this.selectMessage } >Select Message</MenuItem>
                         </Menu>
 

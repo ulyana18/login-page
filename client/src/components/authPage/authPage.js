@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { TabContext, TabList, TabPanel } from '@material-ui/lab';
 import { Tab, AppBar } from '@material-ui/core';
 
-import LogInPage from '../../components/loginPage/loginPage';
-import SignUpPage from '../../components/signupPage/signupPage';
+import LogInPage from 'components/loginPage/loginPage';
+import SignUpPage from 'components/signupPage/signupPage';
 
 
 
