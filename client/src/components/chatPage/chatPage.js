@@ -33,7 +33,7 @@ class ChatPage extends Component {
     componentDidMount() {
         
         socket.on('chat message', ({ message, name, email }) => {
-            const messageid = +this.state.chat[this.state.chat.length - 1].messageid + 1;
+            const messageid = (+this.state.chat[this.state.chat.length - 1].messageid + 1) + '';
           this.setState({
             chat: [...this.state.chat, { message, name, email, messageid }]
           });
@@ -51,16 +51,21 @@ class ChatPage extends Component {
             });
         });
         socket.on('edit message', ({ message, messageid }) => {
-            this.messagesArea.current.childNodes[messageid - 1].childNodes[0].childNodes[1].innerText = message;
+            const arr = this.messagesArea.current.childNodes;
+            let i = 0;
+            while(arr[i].dataset.id !== messageid) {
+                i++;
+            }
+            if(arr[i].dataset.id === messageid) {
+                arr[i].childNodes[0].childNodes[1].innerText = message;
+            }
         });
         socket.on('delete message', (messageid) => {
-            let deleteIndex;
             const filteredArray = this.state.chat.filter(function(item, index, arr) {
                 if(item.messageid !== messageid) return true;
-                deleteIndex = index;
                 return false;
             });
-            this.setState({ chat: filteredArray });
+            this.setState({ chat: filteredArray, editElement: null });
         });
 
         socket.emit('get database');
