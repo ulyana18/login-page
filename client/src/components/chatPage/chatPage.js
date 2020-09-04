@@ -121,7 +121,7 @@ class ChatPage extends Component {
     }
 
     handleDialogClose = () => {
-        this.setState({ isDialogOpen: false });
+        this.setState({ isDialogOpen: false, editElement: null });
     }
 
 
