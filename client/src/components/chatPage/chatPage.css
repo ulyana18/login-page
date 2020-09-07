@@ -58,6 +58,7 @@
     height: calc(100% - 139px);
     overflow-y: auto;
     padding: 0 15px;
+    position: relative;
 }
 
 .messagesArea {
@@ -75,6 +76,8 @@
 .messageWrapper {
     display: flex;
     align-items: flex-start;
+    justify-content: inherit;
+    width: 100%;
 }
 
 .messageWrapper-otherMessage {
@@ -92,6 +95,7 @@
     margin: 0 10px;
     margin-bottom: 20px;
     padding: 10px;
+    max-width: calc(95% - 80px);
     z-index: 1000;
 
     border-radius: 10px;
@@ -122,6 +126,7 @@
 
 .userEmail {
     cursor: default;
+    word-break: break-word;
 }
 
 .userEdited {
@@ -162,11 +167,35 @@
     background-color: rgb(101, 189, 201);
 }
 
+.scrollButton {
+    position: fixed !important;
+    right: 24vw;
+    bottom: 23vh;
+    z-index: 1000;
+
+    background-color: #fff !important;
+    transition: all 150ms !important;
+}
+
+.scrollBtn-hidden {
+    visibility: hidden !important;
+}
+
+.scrollButton.MuiIconButton-root:hover {
+    background-color: rgb(230, 230, 230) !important;
+}
+
 .inputArea {
     display: flex;
     justify-content: center;
     align-items: center;
+    position: relative;
     background-color: #cbd8e6;
+}
+
+.inputArea .sendBtn {
+    position: absolute;
+    right: 2% !important;
 }
 
 .MuiInputBase-input {

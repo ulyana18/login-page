@@ -52,8 +52,6 @@ io.on('connection', async socket => {
   });
 
   socket.on('delete message', async (messageid) => {
-    io.emit('delete message', messageid);
-    return;
     await pool.query('DELETE FROM chat WHERE messageid=($1)',
       [messageid]
     );

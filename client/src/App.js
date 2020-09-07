@@ -20,8 +20,11 @@ class App extends Component {
 
   setAppState = async (state) => {
     const { isAuth } = state;
-    this.setState({ isAuth: isAuth });
-    window.localStorage.setItem('isAuth', isAuth);
+    if (!isAuth) this.logOut();
+    else {
+      this.setState({ isAuth: isAuth });
+      window.localStorage.setItem('isAuth', isAuth);
+    }
   }
 
   logOut = () => {
@@ -45,13 +48,13 @@ class App extends Component {
         <div className='App'>
           <AppBar position="static">
             <Toolbar>
-              <Button
+            { this.state.isAuth === 'true' || this.state.isAuth === true ? <Button
                 className='checkTokenBtn' 
                 variant='contained'
                 onClick={this.checkToken}
               >
                 Refresh Access Token
-              </Button>
+              </Button> : false }
               { this.state.isAuth === 'true' || this.state.isAuth === true ? <Button className='logOutBtn' color='inherit' onClick={ this.logOut }>Log out</Button> : false }
             </Toolbar>
           </AppBar>
@@ -60,10 +63,14 @@ class App extends Component {
             <Switch>
               <Route path='/signup' component={() => <AuthPage updateState = {this.setAppState} />} />
               <Route path='/chat' component={() => {
-                return this.state.isAuth === 'true' || this.state.isAuth === true ?  <ChatPage /> : <AuthPage updateState = {this.setAppState} />;
+                return this.state.isAuth === 'true' || this.state.isAuth === true ?
+                  <ChatPage updateState={ this.setAppState } /> 
+                  : <AuthPage updateState={ this.setAppState } />;
                 }} />
               <Route component={() => {
-                return this.state.isAuth === 'true' || this.state.isAuth === true ?  <ChatPage /> : <AuthPage updateState = {this.setAppState} />;
+                return this.state.isAuth === 'true' || this.state.isAuth === true ?
+                  <ChatPage updateState={ this.setAppState } /> 
+                  : <AuthPage updateState={this.setAppState} />;
               }} />
 
             </Switch>

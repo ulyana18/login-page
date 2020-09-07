@@ -23,18 +23,37 @@ class LogInPage extends Component {
         isSpinning: false,
       }
       this.logIn = this.logIn.bind(this);
+      this.emailRef = React.createRef();
+      this.passwordRef = React.createRef();
     }
   
     async logIn() {
       this.setState({ isSpinning: true});
       const isSuccessful = await callApi('login', this.emailInput, this.passwordInput);
-      console.log(isSuccessful);
       setTimeout(() => {
         this.setState({ isLoggedIn: isSuccessful, isSpinning: false });
       }, 500);
       setTimeout(() => {
         this.props.updateState({ isAuth: isSuccessful });
-      }, 1200)
+      }, 2500)
+    }
+
+    componentDidMount() {
+      if (this.emailRef.current.value && this.passwordRef.current.value) {
+        this.setState({ isEmailEmpty: false, isPasswordEmpty: false });
+        this.checkSubmitDisable();
+      }
+      window.addEventListener('load', this.detectAutofill);
+    }
+
+    detectAutofill = () => {
+      try {
+        const isEmailAutofilled = JSON.parse(this.emailRef.current.labels[0].dataset.shrink);
+        const isPasswordAutofilled = JSON.parse(this.passwordRef.current.labels[0].dataset.shrink);
+        if (isEmailAutofilled && isPasswordAutofilled) {
+          this.setState({ isDisabled: false, isEmailEmpty: false, isPasswordEmpty: false });
+        }
+      } catch(err) { }
     }
 
     passwordCheck = (event) => {
@@ -89,6 +108,7 @@ class LogInPage extends Component {
             id='email' 
             label='Email'
             type='email'
+            inputRef={this.emailRef}
             onChange={this.emailCheck}
           />
           <TextField required
@@ -96,6 +116,7 @@ class LogInPage extends Component {
             label='Password'
             type='password'
             autoComplete='current-password'
+            inputRef={this.passwordRef}
             onChange={this.passwordCheck}
           />
           <Box m={2}>
@@ -106,7 +127,7 @@ class LogInPage extends Component {
               variant='outlined'
 
             >
-              { this.state.isSpinning && <CircularProgress size={20} /> }
+              { this.state.isSpinning && <CircularProgress size={17} /> }
               { !this.state.isSpinning && <span>Log In</span> }
             </Button>
           </Box>

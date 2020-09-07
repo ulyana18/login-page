@@ -51,7 +51,7 @@ class SignUpPage extends Component {
         setTimeout(() => {
           this.props.updateState({ isAuth: isSuccessful });
   
-        }, 1200)
+        }, 2500)
   
       } else {
         this.setState({ isFirstTime: false, });
@@ -211,7 +211,7 @@ class SignUpPage extends Component {
               variant='outlined'
               id='signUpButton'
             >
-              { this.state.isSpinning && <CircularProgress size={20} /> }
+              { this.state.isSpinning && <CircularProgress size={17} /> }
               { !this.state.isSpinning && <span>Sign Up</span> }
             </Button>
           </Box>

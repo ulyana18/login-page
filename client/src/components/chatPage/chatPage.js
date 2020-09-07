@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './chatPage.css';
 import { TextField, Button, IconButton, Menu, MenuItem, Dialog, DialogTitle, DialogActions } from '@material-ui/core';
-import { Send, Close, Person } from '@material-ui/icons';
+import { Send, Close, Person, ArrowDownward } from '@material-ui/icons';
 import io from 'socket.io-client';
 
 const socket = io.connect('http://localhost:3000');
@@ -18,16 +18,19 @@ class ChatPage extends Component {
             anchorEl: null,
             editElement: null,
             isDialogOpen: false,
+            isScrolledToTop: false,
             isSelectionState: false,
         }
         this.isMyMessage = null;
         this.selectedElements = [];
         this.chatInput = React.createRef();
         this.messagesArea = React.createRef();
+        this.scrollBtn = React.createRef();
+        this.userEmail = '';
+        this.chatHeight = 0;
     }
 
     componentDidMount() {
-        
         socket.on('chat message', ({ message, name, email }) => {
             const messageid = (+this.state.chat[this.state.chat.length - 1].messageid + 1) + '';
           this.setState({
@@ -65,6 +68,34 @@ class ChatPage extends Component {
         });
 
         socket.emit('get database');
+
+        this.userEmail = localStorage.getItem('userEmail');
+        window.addEventListener('storage', this.checkUser);
+    }
+
+    componentDidUpdate() {
+        this.scrollToRef();
+    }
+
+    scrollToRef = () => {
+        const height = this.messagesArea.current.getBoundingClientRect().height;
+        this.messagesArea.current.parentElement.scrollTo(0, height);
+        this.chatHeight = height;
+    }
+
+    scrollWithButton = () => {
+        const scrollHeight = this.messagesArea.current.parentElement.scrollTop;
+        const clientHeight = this.messagesArea.current.parentElement.clientHeight;
+
+        if (this.chatHeight - scrollHeight >= 1000) {
+            const newClassNames = this.scrollBtn.current.className.split(' ').filter((item, index, arr) => item !== 'scrollBtn-hidden').join(' ');
+            this.scrollBtn.current.className = newClassNames;
+        } else {
+
+            if(!this.scrollBtn.current.className.split(' ').includes('scrollBtn-hidden')) {
+                this.scrollBtn.current.className = this.scrollBtn.current.className + ' scrollBtn-hidden';
+            }
+        }
     }
 
     onMessageSubmit = () => {
@@ -82,6 +113,10 @@ class ChatPage extends Component {
         this.setState({ message: '', editElement: null });
         this.chatInput.current.value = '';
     };
+
+    checkUser = () => {
+        this.props.updateState({ isAuth: false });
+    }
 
     showContextMenu = (event) => {
         event.preventDefault();
@@ -127,12 +162,10 @@ class ChatPage extends Component {
         this.setState({ message: event.target.value });
     }
 
-
-
     renderChat() {
         const { chat } = this.state;
         return chat.map(({ message, name, email, messageid, is_edited }, idx) => (
-            <div data-id={messageid} className={ email === window.localStorage.getItem('userEmail') ?
+            <div data-id={ messageid } className={ email === window.localStorage.getItem('userEmail') ?
                 'messageWrapper messageWrapper-myMessage' 
                 : 'messageWrapper messageWrapper-otherMessage' }
             >
@@ -140,8 +173,9 @@ class ChatPage extends Component {
                     'myMessage message' 
                     : 'otherMessage message' }
                 >
-                    <span className='userName noselect' >{name}</span>
-                    <span className='userEmail noselect' onContextMenu={ this.preventShowContextMenu } >{message}</span>
+                    <span className='userName noselect' >{ name }</span>
+                    <span className='userEmail' onContextMenu={ this.preventShowContextMenu } >{ message }</span>
+
                     <span className= { is_edited ? 'userEdited noselect' : 'userNotEdited noselect' }>Edited</span>
                     {/* <span className='sendTime'>{sendDate}</span> */}
                 </div>
@@ -149,7 +183,6 @@ class ChatPage extends Component {
                     <Person />
                 </div>
             </div>
-      
         ));
     };
 
@@ -180,7 +213,9 @@ class ChatPage extends Component {
     }
 
     copyText = () => {
-        const text = this.state.anchorEl.childNodes[1].innerText;
+        let text;
+        if (window.getSelection().toString() === '') text = this.state.anchorEl.childNodes[1].innerText;
+        else text = window.getSelection().toString();
         navigator.clipboard.writeText(text);
         this.handleContextMenuClose();
     }
@@ -257,13 +292,20 @@ class ChatPage extends Component {
                             </IconButton>
                         </div> }
                     </div>
-                    <div className='messagesAreaWrapper'>
+                    <div className='messagesAreaWrapper' onScroll={ this.scrollWithButton } >
                         <div className='messagesArea' ref={ this.messagesArea } 
                             onContextMenu={ this.showContextMenu }
                             onClick={ this.state.isSelectionState ? this.selectMessage : false }
+                            onLoad={ this.scrollToRef }
                         >
                             {this.renderChat()}
                         </div>
+                        <IconButton buttonRef={ this.scrollBtn }
+                            className='scrollButton scrollBtn-hidden'
+                            onClick={ this.scrollToRef }
+                        >
+                            <ArrowDownward />
+                        </IconButton>
 
                         <Menu
                             id="simple-menu"
@@ -310,10 +352,12 @@ class ChatPage extends Component {
                             onChange={this.changeInput}
                         />
                         { this.state.message !== '' ? <IconButton aria-label='send'
+                            className='sendBtn'
                             onClick={this.onMessageSubmit}
                         >
                             <Send />
                         </IconButton> : false }
+
                     </div>
                 </div>
             </div>

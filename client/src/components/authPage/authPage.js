@@ -10,7 +10,7 @@ class AuthPage extends Component {
     constructor(props) {
         super(props);
         this.state = {
-          value: localStorage.getItem('page') ? localStorage.getItem('page') : '1',
+          value: localStorage.getItem('page') === '2' ? localStorage.getItem('page') : '1',
           isAuthenticated: false,
         }
     }
@@ -21,7 +21,6 @@ class AuthPage extends Component {
     }
 
     setAppState = async (state) => {
-        console.log(state);
         const { isAuth } = state;
         this.setState({ isAuthenticated: isAuth });
         this.props.updateState({ isAuth: isAuth });
