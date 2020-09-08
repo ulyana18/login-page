@@ -33,9 +33,10 @@ class ChatPage extends Component {
     componentDidMount() {
         socket.on('chat message', ({ message, name, email }) => {
             const messageid = (+this.state.chat[this.state.chat.length - 1].messageid + 1) + '';
-          this.setState({
-            chat: [...this.state.chat, { message, name, email, messageid }]
-          });
+            this.setState({
+                chat: [...this.state.chat, { message, name, email, messageid }]
+            }, () => { this.scrollToRef(); });
+
         });
         socket.on('get database', (database) => {
             let sortedResult = database.sort(function(a, b) { 
@@ -47,7 +48,8 @@ class ChatPage extends Component {
             });
             this.setState({
                 chat: sortedResult
-            });
+            }, () => { this.scrollToRef(); });
+
         });
         socket.on('edit message', ({ message, messageid, is_edited }) => {
             const arr = this.messagesArea.current.childNodes;
@@ -73,9 +75,6 @@ class ChatPage extends Component {
         window.addEventListener('storage', this.checkUser);
     }
 
-    componentDidUpdate() {
-        this.scrollToRef();
-    }
 
     scrollToRef = () => {
         const height = this.messagesArea.current.getBoundingClientRect().height;
