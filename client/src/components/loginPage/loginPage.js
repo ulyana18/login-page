@@ -5,15 +5,12 @@ import Box from '@material-ui/core/Box';
 import { Alert } from '@material-ui/lab';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
-import { callApi } from '../../services/apiService';
+import { callApi } from 'services/apiService';
 
 
 class LogInPage extends Component {
     constructor(props) {
       super(props);
-
-      this.passwordInput = '';
-      this.emailInput = '';
       
       this.state = {
         isPasswordEmpty: null,
@@ -22,6 +19,9 @@ class LogInPage extends Component {
         isLoggedIn: null,
         isSpinning: false,
       }
+
+      this.passwordInput = '';
+      this.emailInput = '';
       this.logIn = this.logIn.bind(this);
       this.emailRef = React.createRef();
       this.passwordRef = React.createRef();
@@ -77,27 +77,27 @@ class LogInPage extends Component {
     checkSubmitDisable = () => {
       const isCorrect = ( this.state.isPasswordEmpty === false &&
         this.state.isEmailEmpty === false ) ? true : false;
-      this.setState({ isDisabled: !isCorrect});
+      this.setState({ isDisabled: !isCorrect });
     }
   
     render() {
   
       return (
         <form className='login-form' noValidate autoComplete='on'>
-          <Snackbar open={this.state.isLoggedIn}
-            autoHideDuration={3000}
-            onClose={() => this.setState({ isLoggedIn: null })}
-            anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+          <Snackbar open={ this.state.isLoggedIn }
+            autoHideDuration={ 3000 }
+            onClose={ () => this.setState({ isLoggedIn: null }) }
+            anchorOrigin={ { vertical: 'top', horizontal: 'center' } }
           >
             <Alert severity="success">
               You are logged in!
             </Alert>
           </Snackbar>
 
-          <Snackbar open={this.state.isLoggedIn === false} 
-            autoHideDuration={3000}
-            onClose={() => this.setState({ isLoggedIn: null })}
-            anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+          <Snackbar open={ this.state.isLoggedIn === false } 
+            autoHideDuration={ 3000 }
+            onClose={ () => this.setState({ isLoggedIn: null }) }
+            anchorOrigin={ { vertical: 'top', horizontal: 'center' } }
           >
             <Alert severity="error">
               Incorrect login or password!
@@ -108,26 +108,26 @@ class LogInPage extends Component {
             id='email' 
             label='Email'
             type='email'
-            inputRef={this.emailRef}
-            onChange={this.emailCheck}
+            inputRef={ this.emailRef }
+            onChange={ this.emailCheck }
           />
           <TextField required
             id='password'
             label='Password'
             type='password'
             autoComplete='current-password'
-            inputRef={this.passwordRef}
-            onChange={this.passwordCheck}
+            inputRef={ this.passwordRef }
+            onChange={ this.passwordCheck }
           />
-          <Box m={2}>
+          <Box m={ 2 }>
             <Button
-              disabled={this.state.isDisabled}
-              onClick={this.logIn}
+              disabled={ this.state.isDisabled }
+              onClick={ this.logIn }
               className='logInBtn' 
               variant='outlined'
 
             >
-              { this.state.isSpinning && <CircularProgress size={17} /> }
+              { this.state.isSpinning && <CircularProgress size={ 17 } /> }
               { !this.state.isSpinning && <span>Log In</span> }
             </Button>
           </Box>

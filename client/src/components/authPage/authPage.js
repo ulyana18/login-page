@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { TabContext, TabList, TabPanel } from '@material-ui/lab';
 import { Tab, AppBar } from '@material-ui/core';
 
-import LogInPage from '../../components/loginPage/loginPage';
-import SignUpPage from '../../components/signupPage/signupPage';
+import LogInPage from 'components/loginPage/loginPage';
+import SignUpPage from 'components/signupPage/signupPage';
 
 
 class AuthPage extends Component {
@@ -17,7 +17,7 @@ class AuthPage extends Component {
 
     handleChange(event, newValue) {
         this.setState({value: newValue});
-        window.localStorage.setItem('page', newValue);
+        localStorage.setItem('page', newValue);
     }
 
     setAppState = async (state) => {
@@ -30,18 +30,18 @@ class AuthPage extends Component {
   
         return (
             <div className='tabWrapper'>
-                <TabContext style='backgroundColor: #cbecec' value={this.state.value}>
+                <TabContext style='backgroundColor: #cbecec' value={ this.state.value }>
                 <AppBar position='static'>
-                    <TabList onChange={this.handleChange.bind(this)} aria-label='simple tabs example'>
+                    <TabList onChange={ this.handleChange.bind(this) } aria-label='simple tabs example'>
                     <Tab label='Sign Up' value='1' />
                     <Tab label='Log In' value='2' />
                     </TabList>
                 </AppBar>
                 <TabPanel value='1'>
-                    <SignUpPage updateState = {this.setAppState} />
+                    <SignUpPage updateState = { this.setAppState } />
                 </TabPanel>
                 <TabPanel value='2'>
-                    <LogInPage updateState = {this.setAppState} />
+                    <LogInPage updateState = { this.setAppState } />
                 </TabPanel>
                 </TabContext>
           </div>

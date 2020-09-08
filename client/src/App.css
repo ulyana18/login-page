@@ -1,6 +1,10 @@
+:root {
+  --TAB_WRAPPER_BG_COLOR: #E1E2E2;
+  --HIGHLIGHT_COLOR: #e0c8aae3;
+}
+
 .App {
   height: 100vh;
-  /* background-color: #929D9E; */
 }
 
 .MuiToolbar-root {
@@ -44,19 +48,17 @@ form {
   margin: 0 auto;
 
   border-radius: 10px;
-  background-color: #E1E2E2 !important;
+  background-color: var(--TAB_WRAPPER_BG_COLOR) !important;
 
 }
 
 
 .MuiTabs-flexContainer {
   justify-content: center;
-  /* background-color: rgb(39, 122, 177); */
   background-color: #1F3044;
   border-radius: 10px 10px 0 0;
 }
 .PrivateTabIndicator-colorSecondary-3 {
-  /* background-color: #fff !important; */
   background-color: #FB9039 !important;
 }
 
@@ -113,7 +115,6 @@ form {
 
 
 .MuiButton-outlined {
-  /* background-color: rgb(70, 122, 156) !important; */
   background-color: #FB9039 !important;
   transition: background-color 0.5s !important;
 }
@@ -136,7 +137,6 @@ form {
 }
 
 .MuiOutlinedInput.Mui-focused {
-  /* border: none !important; */
   border-color: #FB9039;
   outline: chartreuse !important;
   color: #be9e62 !important;
@@ -196,9 +196,9 @@ form {
 
 
 ::selection {
-  background: #e0c8aae3;
+  background: var(--HIGHLIGHT_COLOR);
 
 }
 ::-moz-selection {
-  background: #e0c8aae3;
+  background: var(--HIGHLIGHT_COLOR);
 }

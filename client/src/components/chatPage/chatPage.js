@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
-import './chatPage.css';
+import 'components/chatPage/chatPage.css';
 import { TextField, Button, IconButton, Menu, MenuItem, Dialog, DialogTitle, DialogActions } from '@material-ui/core';
 import { Send, Close, Person, ArrowDownward } from '@material-ui/icons';
 import io from 'socket.io-client';
-
-const socket = io.connect('http://localhost:3000');
-
+const socket = io.connect(process.env.IO_CONNECT_LINK_FRONT);
 
 
 class ChatPage extends Component {
@@ -84,7 +82,6 @@ class ChatPage extends Component {
 
     scrollWithButton = () => {
         const scrollHeight = this.messagesArea.current.parentElement.scrollTop;
-        const clientHeight = this.messagesArea.current.parentElement.clientHeight;
 
         if (this.chatHeight - scrollHeight >= 1000) {
             const newClassNames = this.scrollBtn.current.className.split(' ').filter((item, index, arr) => item !== 'scrollBtn-hidden').join(' ');
@@ -107,7 +104,7 @@ class ChatPage extends Component {
                     socket.emit('edit message', editedMessage, id);
                 }
 
-            } else socket.emit('chat message', this.chatInput.current.value, window.localStorage.getItem('userName'), window.localStorage.getItem('userEmail'));
+            } else socket.emit('chat message', this.chatInput.current.value, localStorage.getItem('userName'), localStorage.getItem('userEmail'));
         }
         this.setState({ message: '', editElement: null });
         this.chatInput.current.value = '';
@@ -164,11 +161,11 @@ class ChatPage extends Component {
     renderChat() {
         const { chat } = this.state;
         return chat.map(({ message, name, email, messageid, is_edited }, idx) => (
-            <div data-id={ messageid } className={ email === window.localStorage.getItem('userEmail') ?
+            <div data-id={ messageid } className={ email === localStorage.getItem('userEmail') ?
                 'messageWrapper messageWrapper-myMessage' 
                 : 'messageWrapper messageWrapper-otherMessage' }
             >
-                <div className= { email === window.localStorage.getItem('userEmail') ?
+                <div className= { email === localStorage.getItem('userEmail') ?
                     'myMessage message' 
                     : 'otherMessage message' }
                 >
@@ -267,7 +264,7 @@ class ChatPage extends Component {
     }
 
     deleteSelectedMessages = () => {
-        const newArray = this.selectedElements.map(function(item, index, arr) {
+        this.selectedElements.map(function(item, index, arr) {
             item.childNodes[0].className = item.childNodes[0].className.split(' ').filter(function(name, i, array) {
                 return name !== 'selectedMessage';
             }).join(' ');
@@ -346,13 +343,13 @@ class ChatPage extends Component {
                             InputLabelProps={{
                                 shrink: true,
                             }}
-                            inputRef={this.chatInput}
+                            inputRef={ this.chatInput }
                             onKeyDown={ this.handleKeyDown }
-                            onChange={this.changeInput}
+                            onChange={ this.changeInput }
                         />
                         { this.state.message !== '' ? <IconButton aria-label='send'
                             className='sendBtn'
-                            onClick={this.onMessageSubmit}
+                            onClick={ this.onMessageSubmit }
                         >
                             <Send />
                         </IconButton> : false }

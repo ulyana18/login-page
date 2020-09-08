@@ -1,6 +1,16 @@
+:root {
+    --CHAT_BG_COLOR: #e9f0f7;
+    --CHAT_BORDER_COLOR: rgb(165, 186, 201);
+    --HEADER_BG_COLOR: #81a4c7;
+    --SELECTED_MESSAGE_BG_COLOR: rgb(233, 209, 179);
+    --MESSAGE_BG_COLOR: rgb(255, 228, 196);
+    --ADDITIONAL_MESSAGE_DATA_COLOR: rgba(58, 56, 56, 0.815);
+    --MY_AVATAR_BG_COLOR: rgb(224, 231, 119);
+    --OTHER_AVATAR_BG_COLOR: rgb(101, 189, 201);
+}
+
 .chatWrapper {
     height: calc(100vh - 84px);
-    /* background-color: rgb(241, 235, 235); */
 }
 
 .chat {
@@ -8,9 +18,8 @@
     min-width: 320px;
     height: 95%;
     margin: 20px auto;
-    background-color: #e9f0f7;
-    border: 1px solid rgb(165, 186, 201);
-    /* overflow-y: scroll; */
+    background-color: var(--CHAT_BG_COLOR);
+    border: 1px solid var(--CHAT_BORDER_COLOR);
 }
 @media(max-width: 780px) {
     .chat {
@@ -35,7 +44,7 @@
     padding: 15px;
 
     font-size: 1.3rem;
-    background-color: #81a4c7;
+    background-color: var(--HEADER_BG_COLOR);
     color: #fff;
 }
 
@@ -99,13 +108,12 @@
     z-index: 1000;
 
     border-radius: 10px;
-    background-color: bisque;
+    background-color: var(--MESSAGE_BG_COLOR);
     font-size: 1.1rem;
 }
 
 .selectedMessage {
-    background-color: rgb(233, 209, 179);
-
+    background-color: var(--SELECTED_MESSAGE_BG_COLOR);
 }
 
 .myMessage {
@@ -118,7 +126,7 @@
 
 .userName {
     font-size: 0.8rem;
-    color: rgba(58, 56, 56, 0.815);
+    color: var(--ADDITIONAL_MESSAGE_DATA_COLOR);
     margin-bottom: 3px;
 
     cursor: default;
@@ -133,7 +141,7 @@
     align-self: flex-end;
     margin-top: 3px;
     font-size: 0.5rem;
-    color: rgba(58, 56, 56, 0.815);
+    color: var(--ADDITIONAL_MESSAGE_DATA_COLOR);
 }
 
 .userNotEdited {
@@ -160,11 +168,11 @@
 }
 
 .messageWrapper-myMessage .messageAvatar {
-    background-color: rgb(224, 231, 119);
+    background-color: var(--MY_AVATAR_BG_COLOR);
 }
 
 .messageWrapper-otherMessage .messageAvatar {
-    background-color: rgb(101, 189, 201);
+    background-color: var(--OTHER_AVATAR_BG_COLOR);
 }
 
 .scrollButton {

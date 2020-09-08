@@ -1,13 +1,13 @@
 const assert = require('assert');
 const chai = require('chai');
-const app = require('../api/app');
+const app = require('api/app');
 const request = require('supertest');
 
 const expect = chai.expect;
 
 const io = require('socket.io-client');
-const socketURL = 'http://localhost:9000';
-const options ={
+const socketURL = process.env.SOCKET_LINK_TEST;
+const options = {
   transports: ['websocket'],
   'force new connection': true
 };

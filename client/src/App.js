@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import './App.css';
+import 'App.css';
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 import { AppBar, Button, Toolbar } from '@material-ui/core';
-import AuthPage from './components/authPage/authPage';
-import ChatPage from './components/chatPage/chatPage';
-import { callApiCheckToken } from './services/apiService';
+import AuthPage from 'components/authPage/authPage';
+import ChatPage from 'components/chatPage/chatPage';
+import { callApiCheckToken } from 'services/apiService';
 
 
 
@@ -22,24 +22,24 @@ class App extends Component {
     const { isAuth } = state;
     if (!isAuth) this.logOut();
     else {
-      this.setState({ isAuth: isAuth });
-      window.localStorage.setItem('isAuth', isAuth);
+      this.setState({ isAuth: JSON.parse(isAuth) });
+      localStorage.setItem('isAuth', isAuth);
     }
   }
 
   logOut = () => {
-    window.localStorage.removeItem('userName');
-    window.localStorage.removeItem('userEmail');
-    window.localStorage.removeItem('token');
-    window.localStorage.removeItem('refreshToken');
+    localStorage.removeItem('userName');
+    localStorage.removeItem('userEmail');
+    localStorage.removeItem('token');
+    localStorage.removeItem('refreshToken');
     
-    window.localStorage.setItem('isAuth', false);
+    localStorage.setItem('isAuth', false);
 
     this.setState({ isAuth: false });
   }
 
   componentDidMount = () => {
-    this.setState({ isAuth: window.localStorage.getItem('isAuth') || false });
+    this.setState({ isAuth: JSON.parse(localStorage.getItem('isAuth')) || false });
   }
 
   render() {
@@ -48,29 +48,38 @@ class App extends Component {
         <div className='App'>
           <AppBar position="static">
             <Toolbar>
-            { this.state.isAuth === 'true' || this.state.isAuth === true ? <Button
+            { this.state.isAuth ? 
+              <Button
                 className='checkTokenBtn' 
                 variant='contained'
-                onClick={this.checkToken}
+                onClick={ this.checkToken }
               >
                 Refresh Access Token
               </Button> : false }
-              { this.state.isAuth === 'true' || this.state.isAuth === true ? <Button className='logOutBtn' color='inherit' onClick={ this.logOut }>Log out</Button> : false }
+
+            { this.state.isAuth ? 
+              <Button
+                className='logOutBtn' 
+                color='inherit' 
+                onClick={ this.logOut }
+              >
+                Log out
+              </Button> : false }
             </Toolbar>
           </AppBar>
           <BrowserRouter>
-          { this.state.isAuth === 'true' || this.state.isAuth === true ? <Redirect to='/chat' /> : <Redirect to='/signup' /> }
+          { this.state.isAuth ? <Redirect to='/chat' /> : <Redirect to='/signup' /> }
             <Switch>
-              <Route path='/signup' component={() => <AuthPage updateState = {this.setAppState} />} />
+              <Route path='/signup' component={() => <AuthPage updateState = { this.setAppState } />} />
               <Route path='/chat' component={() => {
-                return this.state.isAuth === 'true' || this.state.isAuth === true ?
+                return this.state.isAuth ?
                   <ChatPage updateState={ this.setAppState } /> 
                   : <AuthPage updateState={ this.setAppState } />;
                 }} />
               <Route component={() => {
-                return this.state.isAuth === 'true' || this.state.isAuth === true ?
+                return this.state.isAuth ?
                   <ChatPage updateState={ this.setAppState } /> 
-                  : <AuthPage updateState={this.setAppState} />;
+                  : <AuthPage updateState={ this.setAppState } />;
               }} />
 
             </Switch>

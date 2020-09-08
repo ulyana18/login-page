@@ -6,29 +6,29 @@ import { Alert } from '@material-ui/lab';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
 
-import { callApi } from '../../services/apiService';
+import { callApi } from 'services/apiService';
 
 
 class SignUpPage extends Component {
     constructor(props) {
       super(props);
 
+      this.state = {
+        isDisabled: true,
+        isSignedUp: null,
+        isSpinning: false,
+        isFirstTime: true,
+        isNotCorrectName: null,
+        isNotCorrectEmail: null,
+        isNotCorrectPassword: null,
+        isNotCorrectConfirmPassword: null,
+      }
+
       this.regexpFirst = /^(?!\s*$).+/;
       this.nameInput = '';
       this.passwordInput = '';
       this.emailInput = '';
       this.confirmPasswordInput = '';
-
-      this.state = {
-        isNotCorrectName: null,
-        isNotCorrectEmail: null,
-        isNotCorrectPassword: null,
-        isNotCorrectConfirmPassword: null,
-        isDisabled: true,
-        isSignedUp: null,
-        isSpinning: false,
-        isFirstTime: true,
-      }
       this.signUp = this.signUp.bind(this);
     }
   
@@ -54,7 +54,7 @@ class SignUpPage extends Component {
         }, 2500)
   
       } else {
-        this.setState({ isFirstTime: false, });
+        this.setState({ isFirstTime: false });
       }
     }
 
@@ -125,6 +125,7 @@ class SignUpPage extends Component {
 
     confirmPasswordValidate = (event) => {
       const isCorrect = this.confirmPasswordInput === this.passwordInput;
+
       this.setState({ isNotCorrectConfirmPassword: !isCorrect }, function() {
         this.checkSubmitDisable();
       });
@@ -135,6 +136,7 @@ class SignUpPage extends Component {
         this.state.isNotCorrectEmail === false &&
         this.state.isNotCorrectPassword === false &&
         this.state.isNotCorrectConfirmPassword === false) ? true : false;
+
       this.setState({ isDisabled: !isCorrect});
       return isCorrect;
     }
@@ -144,74 +146,74 @@ class SignUpPage extends Component {
       return (
         <form className='signup-form' noValidate autoComplete='on'>
 
-          <Snackbar open={this.state.isSignedUp}
-            autoHideDuration={3000}
-            onClose={() => this.setState({ isSignedUp: null })}
-            anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
+          <Snackbar open={ this.state.isSignedUp }
+            autoHideDuration={ 3000 }
+            onClose={ () => this.setState({ isSignedUp: null }) }
+            anchorOrigin={ { vertical: 'top', horizontal: 'center' } }>
             <Alert severity="success">
               You are signed up!
             </Alert>
           </Snackbar>
 
-          <Snackbar open={this.state.isSignedUp === false}
-            autoHideDuration={3000}
-            onClose={() => this.setState({ isSignedUp: null })}
-            anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
+          <Snackbar open={ this.state.isSignedUp === false }
+            autoHideDuration={ 3000 }
+            onClose={ () => this.setState({ isSignedUp: null }) }
+            anchorOrigin={ { vertical: 'top', horizontal: 'center' } }>
             <Alert severity="error">
               This email is already in use!
             </Alert>
           </Snackbar>
           <TextField required
-            error={this.state.isNotCorrectName && !this.state.isFirstTime}
+            error={ this.state.isNotCorrectName && !this.state.isFirstTime }
             id='name' 
             label='Name'
-            onChange={this.nameCheck}
+            onChange={ this.nameCheck }
             helperText={ this.state.isNotCorrectName && !this.state.isFirstTime ? 'Use only alphabet characters' : false }
           />
           <TextField required
-            error={this.state.isNotCorrectEmail && !this.state.isFirstTime }
+            error={ this.state.isNotCorrectEmail && !this.state.isFirstTime }
             id='email' 
             label='Email'
             type='email'
-            onChange={this.emailCheck}
+            onChange={ this.emailCheck }
             helperText={ this.state.isNotCorrectEmail && !this.state.isFirstTime ? 'Incorrect email' : false }
           />
           <TextField required
-            error={this.state.isNotCorrectPassword && !this.state.isFirstTime}
+            error={ this.state.isNotCorrectPassword && !this.state.isFirstTime }
             id='password'
             label='Password'
             type='password'
             autoComplete='current-password'
-            InputProps={{ 
+            InputProps={ { 
               endAdornment: <InputAdornment position="end">
                               <Tooltip title='Password must contain minimum 8 characters, at least 1 letter and 1 number'><HelpOutlineIcon/></Tooltip>
                             </InputAdornment>
-                        }}
-            onChange={this.passwordCheck}
+                        } }
+            onChange={ this.passwordCheck }
             helperText={ this.state.isNotCorrectPassword && !this.state.isFirstTime ? 'Password must contain minimum 8 characters, at least 1 letter and 1 number' : false }
           />
           <TextField required
-            error={this.state.isNotCorrectConfirmPassword && !this.state.isFirstTime}
+            error={ this.state.isNotCorrectConfirmPassword && !this.state.isFirstTime }
             id='standard-password'
             label='Confirm password'
             type='password'
-            InputProps={{ 
+            InputProps={ { 
               endAdornment: <InputAdornment position="end">
                               <Tooltip title='Password and confirm password must match'><HelpOutlineIcon/></Tooltip>
                             </InputAdornment>
-                        }}
-            onChange={this.confirmPasswordCheck}
+                        } }
+            onChange={ this.confirmPasswordCheck }
             helperText={ this.state.isNotCorrectConfirmPassword && !this.state.isFirstTime ? `Password and confirm password don't match!` : false }
           />
-          <Box m={2}>
+          <Box m={ 2 }>
             <Button
-              disabled={this.state.isDisabled}
-              onClick={this.signUp}
+              disabled={ this.state.isDisabled }
+              onClick={ this.signUp }
               className='signUpBtn'
               variant='outlined'
               id='signUpButton'
             >
-              { this.state.isSpinning && <CircularProgress size={17} /> }
+              { this.state.isSpinning && <CircularProgress size={ 17 } /> }
               { !this.state.isSpinning && <span>Sign Up</span> }
             </Button>
           </Box>
