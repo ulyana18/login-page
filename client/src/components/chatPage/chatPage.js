@@ -1,10 +1,15 @@
 import React, { Component } from 'react';
-import 'components/chatPage/chatPage.css';
-import { TextField, Button, IconButton, Menu, MenuItem, Dialog, DialogTitle, DialogActions } from '@material-ui/core';
+import '../../components/chatPage/chatPage.css';
+import { TextField, Button, IconButton, Menu, MenuItem, Dialog, DialogTitle, DialogActions, makeStyles } from '@material-ui/core';
 import { Send, Close, Person, ArrowDownward } from '@material-ui/icons';
 import io from 'socket.io-client';
 const socket = io.connect(process.env.IO_CONNECT_LINK_FRONT);
 
+const useStyles = makeStyles({
+    root: {
+        width: '25vw',
+    }
+});
 
 class ChatPage extends Component {
     constructor(props) {
@@ -26,6 +31,8 @@ class ChatPage extends Component {
         this.scrollBtn = React.createRef();
         this.userEmail = '';
         this.chatHeight = 0;
+        // this.classes = useStyles();
+
     }
 
     componentDidMount() {
@@ -117,7 +124,7 @@ class ChatPage extends Component {
     showContextMenu = (event) => {
         event.preventDefault();
         event.stopPropagation();
-
+        if (this.state.isSelectionState) return;
         if (event.target.className.split(' ').includes('message')) {
             this.setState({ anchorEl: event.target }, function() {
                 if (this.state.anchorEl.className.split(' ').includes('myMessage')) {
@@ -318,6 +325,7 @@ class ChatPage extends Component {
                         </Menu>
 
                         <Dialog
+                            // className={ this.classes.root }
                             open={ this.state.isDialogOpen }
                             onClose={ this.handleDialogClose }
                             aria-labelledby="alert-dialog-title"

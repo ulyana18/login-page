@@ -1,4 +1,4 @@
-const pool = require('db/queries');
+const pool = require('../db/queries');
 let sockets = {};
 
 sockets.init = function (server) {
