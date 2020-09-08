@@ -3,7 +3,7 @@ import '../../components/chatPage/chatPage.css';
 import { TextField, Button, IconButton, Menu, MenuItem, Dialog, DialogTitle, DialogActions, makeStyles } from '@material-ui/core';
 import { Send, Close, Person, ArrowDownward } from '@material-ui/icons';
 import io from 'socket.io-client';
-const socket = io.connect(process.env.IO_CONNECT_LINK_FRONT);
+const socket = io.connect('http://localhost:3000');
 
 const useStyles = makeStyles({
     root: {
