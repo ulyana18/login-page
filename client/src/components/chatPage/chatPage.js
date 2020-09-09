@@ -1,22 +1,62 @@
 import React, { Component } from 'react';
-import '../../components/chatPage/chatPage.css';
-import { TextField, Button, IconButton, Menu, MenuItem, Dialog, DialogTitle, DialogActions, makeStyles } from '@material-ui/core';
+import 'components/chatPage/chatPage.css';
+import { TextField, Button, IconButton, Menu, MenuItem, Dialog, DialogTitle, DialogActions } from '@material-ui/core';
+import PropTypes from 'prop-types';
+import { withStyles } from '@material-ui/styles';
 import { Send, Close, Person, ArrowDownward } from '@material-ui/icons';
 import io from 'socket.io-client';
-const socket = io.connect('http://localhost:3000');
+const socket = io.connect(process.env.IO_CONNECT_LINK_FRONT);
 
-const useStyles = makeStyles({
-    root: {
+
+const styles = theme => ({
+    dialog: {
         width: '25vw',
+        margin: '0 auto',
+        fontSize: '1rem',
+
+        ['@media (max-width:1100px)']: {
+            width: '70vw',
+            fontSize: '0.6rem',
+        }
+    },
+    scrollButton: {
+        position: 'fixed',
+        right: '24vw',
+        bottom: '23vh',
+        zIndex: '1000',
+    
+        backgroundColor: '#fff',
+        transition: 'all 150ms',
+    
+        '&.scrollBtn-hidden': {
+            visibility: 'hidden',
+        },
+        '&:hover': {
+            backgroundColor: 'rgb(230, 230, 230)',
+        }
+    },
+    messageInput: {
+        backgroundColor: '#d9e3eb',
+        color: '#000',
+        width: '75%',
+        margin: '15px 0',
+        marginRight: '3%',
+
+    },
+    sendButton: {
+        position: 'absolute',
+        right: '2%',
     }
 });
+  
 
 class ChatPage extends Component {
     constructor(props) {
         super(props);
+
         this.state = {
-            message: '',
             chat: [],
+            message: '',
             isSend: null,
             anchorEl: null,
             editElement: null,
@@ -24,52 +64,60 @@ class ChatPage extends Component {
             isScrolledToTop: false,
             isSelectionState: false,
         }
+
+        this.userEmail = '';
+        this.chatHeight = 0;
         this.isMyMessage = null;
         this.selectedElements = [];
         this.chatInput = React.createRef();
-        this.messagesArea = React.createRef();
         this.scrollBtn = React.createRef();
-        this.userEmail = '';
-        this.chatHeight = 0;
-        // this.classes = useStyles();
-
+        this.messagesArea = React.createRef();
     }
 
-    componentDidMount() {
+    componentDidMount = () => {
+
         socket.on('chat message', ({ message, name, email }) => {
-            const messageid = (+this.state.chat[this.state.chat.length - 1].messageid + 1) + '';
+            const messageChat = this.state.chat;
+            const messageid = (+messageChat[messageChat.length - 1].messageid + 1) + '';
             this.setState({
-                chat: [...this.state.chat, { message, name, email, messageid }]
-            }, () => { this.scrollToRef(); });
+                chat: [...messageChat, { message, name, email, messageid }]
+            }, this.scrollToRef);
 
         });
+
         socket.on('get database', (database) => {
-            let sortedResult = database.sort(function(a, b) { 
+            let sortedResult = database.sort((a, b) => { 
                 if (+a.messageid > +b.messageid) { 
-                  return 1; } 
+                  return 1;
+                } 
                 if (+a.messageid < +b.messageid) { 
-                  return -1; } 
+                  return -1;
+                } 
                 return 0; 
             });
             this.setState({
                 chat: sortedResult
-            }, () => { this.scrollToRef(); });
+            }, this.scrollToRef);
 
         });
-        socket.on('edit message', ({ message, messageid, is_edited }) => {
-            const arr = this.messagesArea.current.childNodes;
-            let i = 0;
-            while (arr[i].dataset.id !== messageid) i++;
 
-            if (arr[i].dataset.id === messageid) {
-                arr[i].childNodes[0].childNodes[1].innerText = message;
-                arr[i].childNodes[0].childNodes[2].className = 'userEdited noselect';
+        socket.on('edit message', ({ message, messageid }) => {
+            const arr = this.messagesArea.current.childNodes;
+
+            const elem = arr.find((item) => {
+                return item.dataset.id === messageid;
+            });
+
+            if (elem !== undefined) {
+                const messageData = elem.childNodes[0].childNodes;
+                messageData[1].innerText = message;
+                messageData[2].className = 'userEdited noselect';
             }
         });
+
         socket.on('delete message', (messageid) => {
-            const filteredArray = this.state.chat.filter(function(item, index, arr) {
-                if (item.messageid !== messageid) return true;
-                return false;
+            const filteredArray = this.state.chat.filter((item) => {
+                return item.messageid !== messageid;
             });
             this.setState({ chat: filteredArray, editElement: null });
         });
@@ -77,7 +125,6 @@ class ChatPage extends Component {
         socket.emit('get database');
 
         this.userEmail = localStorage.getItem('userEmail');
-        window.addEventListener('storage', this.checkUser);
     }
 
 
@@ -89,53 +136,61 @@ class ChatPage extends Component {
 
     scrollWithButton = () => {
         const scrollHeight = this.messagesArea.current.parentElement.scrollTop;
+        let buttonClassName = this.scrollBtn.current.className;
 
         if (this.chatHeight - scrollHeight >= 1000) {
-            const newClassNames = this.scrollBtn.current.className.split(' ').filter((item, index, arr) => item !== 'scrollBtn-hidden').join(' ');
-            this.scrollBtn.current.className = newClassNames;
-        } else {
+            const newClassNames = buttonClassName
+                .split(' ')
+                .filter((item) => item !== 'scrollBtn-hidden')
+                .join(' ');
 
-            if(!this.scrollBtn.current.className.split(' ').includes('scrollBtn-hidden')) {
-                this.scrollBtn.current.className = this.scrollBtn.current.className + ' scrollBtn-hidden';
+            buttonClassName = newClassNames;
+
+        } else {
+            const isButtonHidden = buttonClassName.split(' ').includes('scrollBtn-hidden');
+            if (!isButtonHidden) {
+                buttonClassName = buttonClassName + ' scrollBtn-hidden';
             }
         }
     }
 
     onMessageSubmit = () => {
         this.setState({ isSend: true });
-        if (this.chatInput.current.value !== '') {
-            if (this.state.editElement !== null) {
-                if (this.chatInput.current.value !== this.state.editElement.childNodes[1].innerText) {
-                    const id = this.state.editElement.parentElement.dataset.id;
-                    const editedMessage = this.chatInput.current.value;
-                    socket.emit('edit message', editedMessage, id);
-                }
+        const inputValue = this.chatInput.current.value;
+        const { editElement } = this.state;
 
-            } else socket.emit('chat message', this.chatInput.current.value, localStorage.getItem('userName'), localStorage.getItem('userEmail'));
-        }
+        if (this.state.editElement !== null) {
+            if (inputValue !== editElement.childNodes[1].innerText) {
+                const id = editElement.parentElement.dataset.id;
+                const editedMessage = inputValue;
+                socket.emit('edit message', editedMessage, id);
+            }
+
+        } else socket.emit('chat message', inputValue, localStorage.getItem('userName'), localStorage.getItem('userEmail'));
+
         this.setState({ message: '', editElement: null });
         this.chatInput.current.value = '';
     };
 
-    checkUser = () => {
-        this.props.updateState({ isAuth: false });
-    }
-
     showContextMenu = (event) => {
         event.preventDefault();
         event.stopPropagation();
-        if (this.state.isSelectionState) return;
+
+        if (this.state.isSelectionState) {
+            return;
+        }
+
         if (event.target.className.split(' ').includes('message')) {
-            this.setState({ anchorEl: event.target }, function() {
+            this.setState({ anchorEl: event.target }, () => {
                 if (this.state.anchorEl.className.split(' ').includes('myMessage')) {
                     this.setState({ isMyMessage: true });
                 } else this.setState({ isMyMessage: false });
     
             });
-
         }
+
         if (event.target.parentElement.className.split(' ').includes('message')) {
-            this.setState({ anchorEl: event.target.parentElement }, function() {
+            this.setState({ anchorEl: event.target.parentElement }, () => {
                 if (this.state.anchorEl.className.split(' ').includes('myMessage')) {
                     this.setState({ isMyMessage: true });
                 } else this.setState({ isMyMessage: false });
@@ -144,6 +199,7 @@ class ChatPage extends Component {
         }
         
     }
+
     preventShowContextMenu = (event) => {
         event.preventDefault();
         return false;
@@ -158,7 +214,9 @@ class ChatPage extends Component {
     }
 
     handleKeyDown = (event) => {
-        if (event.key === 'Enter') this.onMessageSubmit();
+        if (event.key === 'Enter' && this.state.message !== '') {
+            this.onMessageSubmit();
+        }
     }
 
     changeInput = (event) => {
@@ -167,6 +225,7 @@ class ChatPage extends Component {
 
     renderChat() {
         const { chat } = this.state;
+
         return chat.map(({ message, name, email, messageid, is_edited }, idx) => (
             <div data-id={ messageid } className={ email === localStorage.getItem('userEmail') ?
                 'messageWrapper messageWrapper-myMessage' 
@@ -189,7 +248,6 @@ class ChatPage extends Component {
         ));
     };
 
-
     editMessage = () => {
         const elem = this.state.anchorEl;
         this.handleContextMenuClose();
@@ -198,6 +256,7 @@ class ChatPage extends Component {
         setTimeout(() => {
             this.chatInput.current.focus();
         }, 0);
+
         this.chatInput.current.value = previousData;
         this.setState({ editElement: elem, message: previousData });
 
@@ -217,13 +276,17 @@ class ChatPage extends Component {
 
     copyText = () => {
         let text;
-        if (window.getSelection().toString() === '') text = this.state.anchorEl.childNodes[1].innerText;
-        else text = window.getSelection().toString();
+        if (window.getSelection().toString() === '') {
+            text = this.state.anchorEl.childNodes[1].innerText;
+        }
+        else {
+            text = window.getSelection().toString();
+        }
         navigator.clipboard.writeText(text);
         this.handleContextMenuClose();
     }
 
-    selectMessage = async (event) => {
+    selectMessage = (event) => {
 
         if (!this.state.isSelectionState) {
             this.setState({ isSelectionState: true });
@@ -238,26 +301,32 @@ class ChatPage extends Component {
                 const elem = event.target;
 
                 this.isSelectedMessage(elem);
+                return;
             }
             if (event.target.parentElement.className.split(' ').includes('message')) {
 
                 const elem = event.target.parentElement;
 
                 this.isSelectedMessage(elem);
+                return;
             }
-            if (this.selectedElements.length === 0) this.setState({ isSelectionState: false });
-            else this.setState({ isSelectionState: true });
 
+            const noSelectedElems = this.selectedElements.length === 0;
+            this.setState({ isSelectionState: !noSelectedElems });
         }
     }
 
     isSelectedMessage = (elem) => {
-        if (elem.className.split(' ').includes('selectedMessage')) {
-            elem.className = elem.className.split(' ').filter(function(item, index, arr) {
-                return item !== 'selectedMessage';
-            }).join(' ');
 
-            const filteredArray = this.selectedElements.filter(function(item, index, arr) {
+        if (elem.className.split(' ').includes('selectedMessage')) {
+            elem.className = elem.className
+                .split(' ')
+                .filter(function(item) {
+                    return item !== 'selectedMessage';
+                })
+                .join(' ');
+
+            const filteredArray = this.selectedElements.filter((item) => {
                 return item.dataset.id !== elem.parentElement.dataset.id;
             });
 
@@ -271,16 +340,23 @@ class ChatPage extends Component {
     }
 
     deleteSelectedMessages = () => {
-        this.selectedElements.map(function(item, index, arr) {
-            item.childNodes[0].className = item.childNodes[0].className.split(' ').filter(function(name, i, array) {
-                return name !== 'selectedMessage';
-            }).join(' ');
+        this.selectedElements.map((item) => {
+            const childNode = item.childNodes[0];
+
+            childNode.className = childNode.className
+                .split(' ')
+                .filter((name) => {
+                    return name !== 'selectedMessage';
+                })
+                .join(' ');
         });
         this.selectedElements = [];
         this.setState({ isSelectionState: false });
     }
 
     render() {
+        const { classes } = this.props;
+
         return (
             <div className='chatWrapper'>
                 <div className='chat'>
@@ -296,22 +372,25 @@ class ChatPage extends Component {
                         </div> }
                     </div>
                     <div className='messagesAreaWrapper' onScroll={ this.scrollWithButton } >
-                        <div className='messagesArea' ref={ this.messagesArea } 
+                        <div 
+                            className='messagesArea'
+                            ref={ this.messagesArea } 
                             onContextMenu={ this.showContextMenu }
                             onClick={ this.state.isSelectionState ? this.selectMessage : false }
                             onLoad={ this.scrollToRef }
                         >
-                            {this.renderChat()}
+                            { this.renderChat() }
                         </div>
-                        <IconButton buttonRef={ this.scrollBtn }
-                            className='scrollButton scrollBtn-hidden'
+                        <IconButton 
+                            buttonRef={ this.scrollBtn }
+                            className={ classes.scrollButton }
                             onClick={ this.scrollToRef }
                         >
                             <ArrowDownward />
                         </IconButton>
 
                         <Menu
-                            id="simple-menu"
+                            id='simple-menu'
                             anchorEl={ this.state.anchorEl }
                             keepMounted
                             open={ this.state.anchorEl && !this.state.isSelectionState }
@@ -319,24 +398,24 @@ class ChatPage extends Component {
                             anchorOrigin={ { vertical: 'bottom', horizontal: 'right' } }
                         >
                             <MenuItem onClick={ this.copyText } >Copy Text</MenuItem>
-                            { this.state.isMyMessage ? <MenuItem onClick={ this.editMessage } >Edit Message</MenuItem> : false }
-                            { this.state.isMyMessage ? <MenuItem onClick={ this.showDeleteMessageDialog } >Delete Message</MenuItem> : false }
+                            { this.state.isMyMessage && <MenuItem onClick={ this.editMessage } >Edit Message</MenuItem> }
+                            { this.state.isMyMessage && <MenuItem onClick={ this.showDeleteMessageDialog } >Delete Message</MenuItem> }
                             <MenuItem onClick={ this.selectMessage } >Select Message</MenuItem>
                         </Menu>
 
                         <Dialog
-                            // className={ this.classes.root }
+                            className={ classes.dialog }
                             open={ this.state.isDialogOpen }
                             onClose={ this.handleDialogClose }
-                            aria-labelledby="alert-dialog-title"
-                            aria-describedby="alert-dialog-description"
+                            aria-labelledby='alert-dialog-title'
+                            aria-describedby='alert-dialog-description'
                         >
-                            <DialogTitle id="alert-dialog-title">Are you sure you want to delete message?</DialogTitle>
+                            <DialogTitle id='alert-dialog-title'>Are you sure you want to delete message?</DialogTitle>
                             <DialogActions>
-                            <Button onClick={ this.deleteMessage } color="primary">
+                            <Button onClick={ this.deleteMessage } color='primary'>
                                 Yes, delete
                             </Button>
-                            <Button onClick={ this.handleDialogClose } color="primary" autoFocus>
+                            <Button onClick={ this.handleDialogClose } color='primary' autoFocus>
                                 No
                             </Button>
                             </DialogActions>
@@ -345,6 +424,7 @@ class ChatPage extends Component {
                     <div className='inputArea'>
                         <TextField
                             id='standard-full-width'
+                            className={ classes.messageInput }
                             placeholder='Write a message...'
                             margin='normal'
                             variant='outlined'
@@ -355,12 +435,12 @@ class ChatPage extends Component {
                             onKeyDown={ this.handleKeyDown }
                             onChange={ this.changeInput }
                         />
-                        { this.state.message !== '' ? <IconButton aria-label='send'
-                            className='sendBtn'
+                        { this.state.message !== '' && <IconButton aria-label='send'
+                            className={ classes.sendButton }
                             onClick={ this.onMessageSubmit }
                         >
                             <Send />
-                        </IconButton> : false }
+                        </IconButton> }
 
                     </div>
                 </div>
@@ -369,4 +449,8 @@ class ChatPage extends Component {
     }
 }
 
-export default ChatPage;
+ChatPage.propTypes = {
+    classes: PropTypes.object.isRequired,
+};
+
+export default withStyles(styles)(ChatPage);

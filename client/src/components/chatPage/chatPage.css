@@ -7,6 +7,7 @@
     --ADDITIONAL_MESSAGE_DATA_COLOR: rgba(58, 56, 56, 0.815);
     --MY_AVATAR_BG_COLOR: rgb(224, 231, 119);
     --OTHER_AVATAR_BG_COLOR: rgb(101, 189, 201);
+    --INPUT_BG_COLOR: #cbd8e6;
 }
 
 .chatWrapper {
@@ -175,69 +176,12 @@
     background-color: var(--OTHER_AVATAR_BG_COLOR);
 }
 
-.scrollButton {
-    position: fixed !important;
-    right: 24vw;
-    bottom: 23vh;
-    z-index: 1000;
-
-    background-color: #fff !important;
-    transition: all 150ms !important;
-}
-
-.scrollBtn-hidden {
-    visibility: hidden !important;
-}
-
-.scrollButton.MuiIconButton-root:hover {
-    background-color: rgb(230, 230, 230) !important;
-}
-
 .inputArea {
     display: flex;
     justify-content: center;
     align-items: center;
     position: relative;
-    background-color: #cbd8e6;
-}
-
-.inputArea .sendBtn {
-    position: absolute;
-    right: 2% !important;
-}
-
-.MuiInputBase-input {
-    background-color: #d9e3eb !important;
-    color: #000 !important;
-}
-
-.MuiFormControl-root {
-    width: 75% !important;
-    margin: 15px 0 !important;
-    margin-right: 3% !important;
-}
-.MuiOutlinedInput-root.Mui-focused {
-    color: #fff !important;
-}
-
-.MuiDialog-paperWidthSm {
-    width: 25vw !important;
-}
-
-@media(max-width: 620px) {
-    .MuiDialog-paperWidthSm {
-        width: 70vw !important;
-    }
-    .MuiDialog-paperWidthSm .MuiTypography-h6 {
-        font-size: 0.6rem;
-    }
-    .MuiDialog-paperWidthSm .MuiButton-label {
-        font-size: 0.7rem;
-    }
-}
-
-.MuiDialog-paperWidthSm .MuiTypography-h6 {
-    font-size: 1rem;
+    background-color: var(--INPUT_BG_COLOR);
 }
 
 .noselect {
@@ -248,4 +192,4 @@
           -ms-user-select: none; /* Internet Explorer/Edge */
               user-select: none; /* Non-prefixed version, currently
                                     supported by Chrome, Edge, Opera and Firefox */
-  }
+}

@@ -1,38 +1,52 @@
 import React, { Component } from 'react';
 import { TabContext, TabList, TabPanel } from '@material-ui/lab';
 import { Tab, AppBar } from '@material-ui/core';
+import PropTypes from 'prop-types';
+import { withStyles } from '@material-ui/styles';
 
-import LogInPage from '../../components/loginPage/loginPage';
-import SignUpPage from '../../components/signupPage/signupPage';
+import LogInPage from 'components/loginPage/loginPage';
+import SignUpPage from 'components/signupPage/signupPage';
+
+
+const styles = theme => ({
+    tabContext: {
+        borderRadius: '0',
+        backgroundColor: '#1F3044',      
+    }
+});
 
 
 class AuthPage extends Component {
     constructor(props) {
         super(props);
         this.state = {
-          value: localStorage.getItem('page') === '2' ? localStorage.getItem('page') : '1',
-          isAuthenticated: false,
+          tabPage: '2',
         }
     }
 
-    handleChange(event, newValue) {
-        this.setState({value: newValue});
-        localStorage.setItem('page', newValue);
+    componentDidMount = () => {
+        const tabPage = localStorage.getItem('tabPage');
+        this.setState({ 'tabPage': tabPage === '1' ? tabPage : '2' });
     }
 
-    setAppState = async (state) => {
+    handleChange = (event, newValue) => {
+        this.setState({ tabPage: newValue });
+        localStorage.setItem('tabPage', newValue);
+    }
+
+    setAppState = (state) => {
         const { isAuth } = state;
-        this.setState({ isAuthenticated: isAuth });
-        this.props.updateState({ isAuth: isAuth });
+        this.props.updateState({ isAuth });
     }
     
     render() {
-  
+        const { classes } = this.props;
+
         return (
-            <div className='tabWrapper'>
-                <TabContext style='backgroundColor: #cbecec' value={ this.state.value }>
+            <div className='tabWrapper'> 
+                <TabContext className={ classes.tabContext } value={ this.state.tabPage }>
                 <AppBar position='static'>
-                    <TabList onChange={ this.handleChange.bind(this) } aria-label='simple tabs example'>
+                    <TabList onChange={ this.handleChange } aria-label='simple tabs example'>
                     <Tab label='Sign Up' value='1' />
                     <Tab label='Log In' value='2' />
                     </TabList>
@@ -45,9 +59,13 @@ class AuthPage extends Component {
                 </TabPanel>
                 </TabContext>
           </div>
-
         );
     }
 }
 
-export default AuthPage;
+
+AuthPage.propTypes = {
+    classes: PropTypes.object.isRequired,
+};
+
+export default withStyles(styles)(AuthPage);
