@@ -144,12 +144,12 @@ class ChatPage extends Component {
                 .filter((item) => item !== 'scrollBtn-hidden')
                 .join(' ');
 
-            buttonClassName = newClassNames;
+            this.scrollBtn.current.className = newClassNames;
 
         } else {
             const isButtonHidden = buttonClassName.split(' ').includes('scrollBtn-hidden');
             if (!isButtonHidden) {
-                buttonClassName = buttonClassName + ' scrollBtn-hidden';
+                this.scrollBtn.current.className = buttonClassName + ' scrollBtn-hidden';
             }
         }
     }
@@ -182,19 +182,17 @@ class ChatPage extends Component {
 
         if (event.target.className.split(' ').includes('message')) {
             this.setState({ anchorEl: event.target }, () => {
-                if (this.state.anchorEl.className.split(' ').includes('myMessage')) {
-                    this.setState({ isMyMessage: true });
-                } else this.setState({ isMyMessage: false });
-    
+
+                const isMyMessage = this.state.anchorEl.className.split(' ').includes('myMessage');
+                this.setState({ isMyMessage: isMyMessage });    
             });
         }
 
         if (event.target.parentElement.className.split(' ').includes('message')) {
             this.setState({ anchorEl: event.target.parentElement }, () => {
-                if (this.state.anchorEl.className.split(' ').includes('myMessage')) {
-                    this.setState({ isMyMessage: true });
-                } else this.setState({ isMyMessage: false });
-    
+
+                const isMyMessage = this.state.anchorEl.className.split(' ').includes('myMessage');
+                this.setState({ isMyMessage: isMyMessage });    
             });
         }
         
@@ -259,7 +257,6 @@ class ChatPage extends Component {
 
         this.chatInput.current.value = previousData;
         this.setState({ editElement: elem, message: previousData });
-
     }
 
     showDeleteMessageDialog = () => {
