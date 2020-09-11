@@ -9,13 +9,6 @@ const socket = io.connect('http://localhost:3000');
 
 
 const styles = theme => ({
-    arrowSearchButton: {
-        padding: '3px',
-    },
-    arrowSearchIcon: {
-        height: '0.9em',
-        width: '0.9em',
-    },
     dialog: {
         width: '25vw',
         margin: '0 auto',
@@ -77,15 +70,11 @@ class ChatPage extends Component {
             isDialogOpen: false,
             isSearchState: false,
             isScrolledToTop: false,
-            isSelectionState: false,
-            currentFoundMessage: null,
-            currentFoundMessageIndex: 0,
         }
 
         this.userEmail = '';
         this.chatHeight = 0;
         this.isMyMessage = null;
-        this.foundMessages = [];
         this.selectedElements = [];
         this.chatInput = React.createRef();
         this.scrollBtn = React.createRef();
@@ -172,88 +161,6 @@ class ChatPage extends Component {
                 this.scrollBtn.current.className = buttonClassName + ' scrollBtn-hidden';
             }
         }
-    }
-
-    onSearchButton = () => {
-        this.setState({ isSearchState: true });
-    }
-
-    searchMessage = (event) => {
-        const searchValue = event.target.value;
-
-        this.clearFoundMessages();
-
-        if (!searchValue) {
-            return;
-        }
-
-        const messagesArray = Object.entries(this.messagesArea.current.childNodes);
-
-        messagesArray.map((item) => {
-            const message = item[1].childNodes[0].childNodes[1].innerText;
-
-            if (message.includes(searchValue)) {
-                this.foundMessages.push(item[1]);
-
-                item[1].className += ' foundMessage';
-            }
-
-        });
-
-        if (this.foundMessages.length) {
-            const messageYCoord = this.foundMessages[0].offsetTop;
-            this.messagesArea.current.parentElement.scrollTo(0, messageYCoord);
-            this.setState({ currentFoundMessage: this.foundMessages[0], currentFoundMessageIndex: 0 });
-            this.foundMessages[0].className += ' currentFoundMessage';
-        }
-
-    }
-
-    changeCurrentFoundMessage = (direction) => {
-        
-        if (!this.state.currentFoundMessage) {
-            return;
-        }
-
-        let currentMessage = this.state.currentFoundMessage;
-        currentMessage.className = currentMessage.className.replace('currentFoundMessage', '');
-        let i = this.state.currentFoundMessageIndex;
-
-        switch (direction) {
-            case 'top': i--; break;
-            case 'bottom': i++; break;
-        }
-
-        if (i < 0 || i >= this.foundMessages.length) {
-            i = (i < 0) ? this.foundMessages.length - 1 : 0;
-        }
-
-        currentMessage = this.foundMessages[i];
-        this.setState({ currentFoundMessage: currentMessage, currentFoundMessageIndex: i });
-        currentMessage.className += ' currentFoundMessage';
-
-        const messageYCoord = currentMessage.offsetTop;
-        this.messagesArea.current.parentElement.scrollTo(0, messageYCoord);
-    }
-
-    onCloseSearchButton = () => {
-        this.setState({ isSearchState: false });
-        this.clearFoundMessages();
-    }
-
-    clearFoundMessages = () => {
-
-        if (this.state.currentFoundMessage) {
-            const currentMessage = this.state.currentFoundMessage;
-            currentMessage.className = currentMessage.className.replace('currentFoundMessage', '');
-        }
-
-        this.foundMessages.map((item) => {
-            item.className = item.className.replace(' foundMessage', '');
-        });
-
-        this.foundMessages = [];
-        this.setState({ currentFoundMessage: null, currentFoundMessageIndex: 0 });
     }
 
     onMessageSubmit = () => {
@@ -450,49 +357,6 @@ class ChatPage extends Component {
                 <div className='chat'>
                     <div className='chatHeader'>
                         { !this.state.isSelectionState && <span>Group Chat</span> }
-                        { !this.state.isSelectionState && !this.state.isSearchState &&
-                            <IconButton
-                                className='searchButton'
-                                aria-label='search'
-                                onClick={ this.onSearchButton }
-                            >
-                                <Search />
-                            </IconButton> 
-                        }
-                        { this.state.isSearchState && 
-                            <div className='searchArea'>
-                                <span className='resultsCount'>
-                                    { !this.foundMessages.length ? 
-                                        'No results' 
-                                        : this.state.currentFoundMessageIndex + 1 + ' / ' + this.foundMessages.length
-                                    }
-                                </span>
-                                <IconButton className={ classes.arrowSearchButton } 
-                                    onClick={ () => this.changeCurrentFoundMessage('top') }
-                                >
-                                    <ArrowUpward className={ classes.arrowSearchIcon } /> 
-                                </IconButton>
-                                <IconButton className={ classes.arrowSearchButton }
-                                    onClick={ () => this.changeCurrentFoundMessage('bottom') }
-                                >
-                                    <ArrowDownward className={ classes.arrowSearchIcon } />
-                                </IconButton>
-
-                                <TextField
-                                    id='outlined-basic'
-                                    label='Search...'
-                                    onChange={ this.searchMessage }
-                                    autoFocus
-                                />
-                                <IconButton
-                                    className='closeSearchButton'
-                                    aria-label='close'
-                                    onClick={ this.onCloseSearchButton }
-                                >
-                                    <Close />
-                                </IconButton> 
-                            </div> 
-                        }
                         { this.state.isSelectionState && <div className='selectionArea'>
                             <span className='selectedElemsCount'>Selected items: { this.selectedElements.length } </span>
                             <IconButton aria-label='delete' 
