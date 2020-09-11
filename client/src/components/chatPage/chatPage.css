@@ -38,15 +38,19 @@
 
 .chatHeader {
     display: flex;
-    flex-direction: column;
-    justify-content: space-around;
+    justify-content: space-between;
     align-items: center;
     position: relative;
-    padding: 15px;
+    padding: 5px 25px;
 
     font-size: 1.3rem;
     background-color: var(--HEADER_BG_COLOR);
     color: #fff;
+}
+
+.resultsCount {
+    margin-right: 15px;
+    font-size: 1rem;
 }
 
 .selectionArea {
@@ -54,7 +58,8 @@
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    margin: 0 
+    margin: 0;
+    padding: 12px 0;
 }
 
 .selectionArea .MuiIconButton-root {
@@ -88,6 +93,8 @@
     align-items: flex-start;
     justify-content: inherit;
     width: 100%;
+    margin: 8px 0;
+    padding: 12px 0;
 }
 
 .messageWrapper-otherMessage {
@@ -98,12 +105,20 @@
     align-self: flex-end;
 }
 
+.foundMessage {
+    border-radius: 10px;
+    background-color: #cecece80;
+}
+
+.currentFoundMessage {
+    background-color: #fffdc6bf;
+}
+
 .message {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     margin: 0 10px;
-    margin-bottom: 20px;
     padding: 10px;
     max-width: calc(95% - 80px);
     z-index: 1000;

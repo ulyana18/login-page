@@ -7,7 +7,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/styles';
 
-import { callApi } from 'services/apiService';
+import { callApi } from '../../services/apiService';
 
 
 const styles = theme => ({
@@ -94,7 +94,7 @@ class LogInPage extends Component {
     const regexp = /^(?!\s*$).+/;
     this.emailInput = event.target.value;
     const isEmpty = !regexp.test(event.target.value);
-    
+
     this.setState({ isEmailEmpty: isEmpty }, () => {
       this.checkSubmitDisable();
     })

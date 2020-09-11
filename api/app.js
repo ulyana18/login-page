@@ -11,9 +11,9 @@ if (process.env.NODE_ENV === 'test') {
   process.chdir(process.env.NODE_PATH);
 }
 
-const routes = require('routes/index');
-const paths = require('routes/paths');
-const sockets = require('sockets/sockets');
+const routes = require('./routes/index');
+const paths = require('./routes/paths');
+const sockets = require('./sockets/sockets');
 
 
 app.use(cors());

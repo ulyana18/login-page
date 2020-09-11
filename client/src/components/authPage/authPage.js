@@ -4,8 +4,8 @@ import { Tab, AppBar } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/styles';
 
-import LogInPage from 'components/loginPage/loginPage';
-import SignUpPage from 'components/signupPage/signupPage';
+import LogInPage from '../../components/loginPage/loginPage';
+import SignUpPage from '../../components/signupPage/signupPage';
 
 
 const styles = theme => ({
