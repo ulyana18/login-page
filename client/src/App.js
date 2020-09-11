@@ -1,72 +1,114 @@
 import React, { Component } from 'react';
 import 'App.css';
-import { TabContext, TabList, TabPanel } from '@material-ui/lab';
-import { Tab, AppBar, Button, Toolbar } from '@material-ui/core';
-import LogInPage from 'components/loginPage/loginPage';
-import SignUpPage from 'components/signupPage/signupPage';
+import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
+import { AppBar, Button, Toolbar } from '@material-ui/core';
+import PropTypes from 'prop-types';
+import { withStyles } from '@material-ui/styles';
+import AuthPage from 'components/authPage/authPage';
+import ChatPage from 'components/chatPage/chatPage';
 import { callApiCheckToken } from 'services/apiService';
+
+
+const styles = theme => ({
+  headerButton: {
+    padding: '6px 16px',
+    fontSize: '0.85rem',
+    color: 'rgba(0, 0, 0, 0.87)',
+    backgroundColor: '#fb9039af',
+
+    '&:hover': {
+      backgroundColor: '#f3984d8f',
+    }
+  }
+});
 
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      value: localStorage.getItem('page') ? localStorage.getItem('page') : '1',
+      isAuth: false,
     }
   }
 
   checkToken = () => callApiCheckToken();
 
-  handleChange(event, newValue) {
-    this.setState({value: newValue});
-    window.localStorage.setItem('page', newValue);
+  setAppState = async (state) => {
+    const { isAuth } = state;
+    if (!isAuth) this.logOut();
+    else {
+      this.setState({ isAuth: JSON.parse(isAuth) });
+      localStorage.setItem('isAuth', isAuth);
+    }
   }
+
+  logOut = () => {
+    this.clearLocalStorage();
+  }
+
+  componentDidMount = () => {
+    this.setState({ isAuth: JSON.parse(localStorage.getItem('isAuth')) || false });
+
+    window.addEventListener('storage', this.checkUser);
+  }
+
+  checkUser = () => {
+    this.clearLocalStorage();
+  }
+
+  clearLocalStorage = () => {
+    this.setState({ isAuth: false });
+
+    localStorage.removeItem('userName');
+    localStorage.removeItem('userEmail');
+    localStorage.removeItem('token');
+    localStorage.removeItem('refreshToken');
+    
+    localStorage.setItem('isAuth', false);
+  }
+
 
   render() {
 
+    const { classes } = this.props;
+    const { isAuth } = this.state;
+
     return (
-      <Router>
         <div className='App'>
-          <AppBar position="static">
+          <AppBar position='static'>
             <Toolbar>
-              <Button
-                className='checkTokenBtn' 
+            { isAuth && <Button
+                className={ classes.headerButton }
                 variant='contained'
-                onClick={this.checkToken}
+                onClick={ this.checkToken }
               >
                 Refresh Access Token
-              </Button>
-              {/* <Link to="/signup"> */}
-                <Button color="inherit">Log out</Button>
-              {/* </Link> */}
+              </Button> }
+
+            { isAuth && <Button
+                className={ classes.headerButton }
+                color='inherit' 
+                onClick={ this.logOut }
+              >
+                Log out
+              </Button> }
             </Toolbar>
           </AppBar>
-          <div className='tabWrapper'>
-            <TabContext style='backgroundColor: #cbecec' value={this.state.value}>
-              <AppBar position='static'>
-                <TabList onChange={this.handleChange.bind(this)} aria-label='simple tabs example'>
-                  <Tab label='Sign Up' value='1' />
-                  <Tab label='Log In' value='2' />
-                </TabList>
-              </AppBar>
-              <TabPanel value='1'>
-                <SignUpPage />
-              </TabPanel>
-              <TabPanel value='2'>
-                <LogInPage />
-              </TabPanel>
-            </TabContext>
-          </div>
-
-          <Switch>
-            <Route path="/signup">
-              <App />
-            </Route>
-          </Switch>
+          <BrowserRouter>
+          { this.state.isAuth ? <Redirect to='/chat' /> : <Redirect to='/signup' /> }
+            <Switch>
+              <Route path='/signup' component={() => <AuthPage updateState = { this.setAppState } />} />
+              <Route path='/chat' component={() => <ChatPage updateState={ this.setAppState } /> } />
+            </Switch>
+          </BrowserRouter>
         </div>
-      </Router>
     );
   }
 }
 
-export default App;
+
+App.propTypes = {
+  classes: PropTypes.object.isRequired,
+};
+
+export default withStyles(styles)(App);

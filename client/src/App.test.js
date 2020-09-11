@@ -1,12 +1,15 @@
 import React from 'react';
-import Enzyme, { mount, shallow } from 'enzyme';
+import Enzyme, { mount } from 'enzyme';
 import { expect } from 'chai';
 import Adapter from "enzyme-adapter-react-16";
 import Button from '@material-ui/core/Button';
+import { TextField, IconButton } from '@material-ui/core';
+
 
 Enzyme.configure({ adapter: new Adapter() });
 
 import SignUpPage from './components/signupPage/signupPage';
+import ChatPage from './components/chatPage/chatPage';
 
 
 describe('<SignUp />', () => {
@@ -106,6 +109,23 @@ describe('<SignUp />', () => {
     await wrapper.update();
     expect(wrapper.state('isNotCorrectConfirmPassword')).to.equal(true);
     expect(wrapper.state('isDisabled')).to.equal(true);
+  });
+
+})
+
+describe('Chat page', () => {
+  it('should send message after send button click', async function() {
+    const wrapper = mount(<ChatPage/>);
+    wrapper.find(IconButton).simulate('click');
+    await wrapper.update();
+    expect(wrapper.state('isSend')).to.equal(true);
+  });
+
+  it('should send message after keyDown = Enter', async function() {
+    const wrapper = mount(<ChatPage/>);
+    wrapper.find(TextField).props().onKeyDown({ key: 'Enter' });
+    await wrapper.update();
+    expect(wrapper.state('isSend')).to.equal(true);
   });
 
 })

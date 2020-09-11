@@ -1,6 +1,15 @@
+:root {
+  --TAB_WRAPPER_BG_COLOR: #e1e2e2;
+  --HIGHLIGHT_COLOR: #e0c8aae3;
+  --TAB_HEADER_BG_COLOR: #1f3044;
+  --TAB_INDICATOR_BG_COLOR: #d17428;
+  --LABEL_COLOR: rgb(41, 40, 37);
+  --INPUT_COLOR: #916440;
+  --INPUT_UNDERLINE_COLOR: #be9e62;
+}
+
 .App {
   height: 100vh;
-  /* background-color: #929D9E; */
 }
 
 .MuiToolbar-root {
@@ -22,31 +31,30 @@ form {
 .tabWrapper {
   width: 38%;
   position: relative;
-  top: 20vh;
+  top: 17vh;
   margin: 0 auto;
 
   border-radius: 10px;
-  background-color: #E1E2E2 !important;
-
+  background-color: var(--TAB_WRAPPER_BG_COLOR);
 }
 
 .MuiTabs-flexContainer {
   justify-content: center;
-  /* background-color: rgb(39, 122, 177); */
-  background-color: #1F3044;
+  background-color: var(--TAB_HEADER_BG_COLOR);
   border-radius: 10px 10px 0 0;
 }
-.PrivateTabIndicator-colorSecondary-3 {
-  /* background-color: #fff !important; */
-  background-color: #FB9039 !important;
+
+.tabWrapper .MuiTabs-indicator {
+  background-color: var(--TAB_INDICATOR_BG_COLOR);
 }
 
 .MuiTabPanel-root {
   min-height: 270px;
 }
-.MuiAppBar-colorPrimary {
-  border-radius: 10px 10px 0 0;
+.App .MuiAppBar-colorPrimary {
+  background-color: var(--TAB_HEADER_BG_COLOR);
 }
+
 
 
 /*     Forms     */
@@ -60,50 +68,71 @@ form {
   top: 15%;
 }
 
-.MuiFormControl-root {
-  width: 50%;
-  margin-top: 6px !important;
-}
-
-.MuiFormLabel-root {
-  color: rgb(41, 40, 37) !important;
+.signup-form .MuiFormControl-root,
+.login-form .MuiFormControl-root {
+  width: 75%;
+  margin: 15px 3% 15px 0;
 
 }
-.MuiInputBase-input {
-  color: #916440 !important;
-}
-.MuiInput-underline:after {
-  border-bottom: 2px solid #be9e62 !important;
+
+.signup-form .MuiFormLabel-root.Mui-focused,
+.login-form .MuiFormLabel-root.Mui-focused {
+  color: var(--LABEL_COLOR);
 }
 
-.MuiInput-root {
-  margin-top: 20px !important;
+.signup-form .MuiInputBase-input,
+.login-form .MuiInputBase-input {
+  color: var(--INPUT_COLOR);
 }
 
-.MuiButton-contained {
-  color: rgb(255, 255, 255) !important;
-  background-color: #fb9039af !important;
+.signup-form .MuiInput-underline:after,
+.login-form .MuiInput-underline:after {
+  border-bottom: 2px solid var(--INPUT_UNDERLINE_COLOR);
 }
 
-.MuiButton-outlined {
-  /* background-color: rgb(70, 122, 156) !important; */
-  background-color: #FB9039 !important;
-  transition: background-color 0.5s !important;
+.login-form .MuiBox-root{
+  width: 82px;
+  height: 36px;
 }
 
-.MuiButton-outlined.Mui-disabled {
-  background-color: rgba(255, 255, 255, 0.226) !important;
-  color: rgba(0, 0, 0, 0.473) !important;
+.signup-form .MuiBox-root {
+  width: 93px;
+  height: 36px;
 }
 
-.MuiButton-outlined:hover {
-  background-color: #fb903988 !important;
+.login-form .MuiButton-outlined,
+.signup-form .MuiButton-outlined {
+  width: 100%;
+  height: 100%;
 }
 
-.MuiButton-root {
-  color: #000 !important;
+
+
+
+/* MEDIA */
+
+@media(max-width: 1090px) {
+  .tabWrapper {
+    width: 50%;
+  }
+}
+@media(max-width: 870px) {
+  .tabWrapper {
+    width: 80%;
+  }
+}
+@media(max-width: 470px) {
+  .tabWrapper,
+  .tabWrapper .MuiFormControl-root {
+    width: 90%;
+  }
 }
 
-.MuiBox-root {
-  margin-top: 30px !important;
+
+::selection {
+  background: var(--HIGHLIGHT_COLOR);
+
+}
+::-moz-selection {
+  background: var(--HIGHLIGHT_COLOR);
 }

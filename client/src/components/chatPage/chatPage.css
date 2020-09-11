@@ -1,0 +1,210 @@
+:root {
+    --CHAT_BG_COLOR: #e9f0f7;
+    --CHAT_BORDER_COLOR: rgb(165, 186, 201);
+    --HEADER_BG_COLOR: #81a4c7;
+    --SELECTED_MESSAGE_BG_COLOR: rgb(233, 209, 179);
+    --MESSAGE_BG_COLOR: rgb(255, 228, 196);
+    --ADDITIONAL_MESSAGE_DATA_COLOR: rgba(58, 56, 56, 0.815);
+    --MY_AVATAR_BG_COLOR: rgb(224, 231, 119);
+    --OTHER_AVATAR_BG_COLOR: rgb(101, 189, 201);
+    --INPUT_BG_COLOR: #cbd8e6;
+}
+
+.chatWrapper {
+    height: calc(100vh - 84px);
+}
+
+.chat {
+    width: 55%;
+    min-width: 320px;
+    height: 95%;
+    margin: 20px auto;
+    background-color: var(--CHAT_BG_COLOR);
+    border: 1px solid var(--CHAT_BORDER_COLOR);
+}
+@media(max-width: 780px) {
+    .chat {
+        width: 80%;
+    }
+}
+@media(max-width: 470px) {
+    .chatWrapper {
+        height: calc(100vh - 56px);
+    }
+    .chat {
+        width: 95%;
+    }
+}
+
+.chatHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    padding: 5px 25px;
+
+    font-size: 1.3rem;
+    background-color: var(--HEADER_BG_COLOR);
+    color: #fff;
+}
+
+.resultsCount {
+    margin-right: 15px;
+    font-size: 1rem;
+}
+
+.selectionArea {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin: 0;
+    padding: 12px 0;
+}
+
+.selectionArea .MuiIconButton-root {
+    width: 15px !important;
+    height: 15px !important;
+
+}
+
+
+.messagesAreaWrapper {
+    height: calc(100% - 139px);
+    overflow-y: auto;
+    padding: 0 15px;
+    position: relative;
+}
+
+.messagesArea {
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-end;
+    width: calc(100% - 10px);
+    min-height: 100%;
+    padding: 5px;
+    scroll-padding-bottom: 300px;
+}
+
+.messageWrapper {
+    display: flex;
+    align-items: flex-start;
+    justify-content: inherit;
+    width: 100%;
+    margin: 8px 0;
+    padding: 12px 0;
+}
+
+.messageWrapper-otherMessage {
+    flex-direction: row-reverse;
+}
+
+.messageWrapper-myMessage {
+    align-self: flex-end;
+}
+
+.foundMessage {
+    border-radius: 10px;
+    background-color: #cecece80;
+}
+
+.currentFoundMessage {
+    background-color: #fffdc6bf;
+}
+
+.message {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin: 0 10px;
+    padding: 10px;
+    max-width: calc(95% - 80px);
+    z-index: 1000;
+
+    border-radius: 10px;
+    background-color: var(--MESSAGE_BG_COLOR);
+    font-size: 1.1rem;
+}
+
+.selectedMessage {
+    background-color: var(--SELECTED_MESSAGE_BG_COLOR);
+}
+
+.myMessage {
+    align-self: flex-end;
+}
+
+.myMessage .userName {
+    display: none;
+}
+
+.userName {
+    font-size: 0.8rem;
+    color: var(--ADDITIONAL_MESSAGE_DATA_COLOR);
+    margin-bottom: 3px;
+
+    cursor: default;
+}
+
+.userEmail {
+    cursor: default;
+    word-break: break-word;
+}
+
+.userEdited {
+    align-self: flex-end;
+    margin-top: 3px;
+    font-size: 0.5rem;
+    color: var(--ADDITIONAL_MESSAGE_DATA_COLOR);
+}
+
+.userNotEdited {
+    display: none;
+}
+
+.sendTime {
+    align-self: flex-end;
+    margin-top: 4px;
+    font-size: 0.5rem;
+}
+
+.myMessage .sendTime {
+    align-self: flex-start;
+}
+
+.messageAvatar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+}
+
+.messageWrapper-myMessage .messageAvatar {
+    background-color: var(--MY_AVATAR_BG_COLOR);
+}
+
+.messageWrapper-otherMessage .messageAvatar {
+    background-color: var(--OTHER_AVATAR_BG_COLOR);
+}
+
+.inputArea {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    background-color: var(--INPUT_BG_COLOR);
+}
+
+.noselect {
+    -webkit-touch-callout: none; /* iOS Safari */
+      -webkit-user-select: none; /* Safari */
+       -khtml-user-select: none; /* Konqueror HTML */
+         -moz-user-select: none; /* Old versions of Firefox */
+          -ms-user-select: none; /* Internet Explorer/Edge */
+              user-select: none; /* Non-prefixed version, currently
+                                    supported by Chrome, Edge, Opera and Firefox */
+}

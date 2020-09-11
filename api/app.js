@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const express = require('express');
 const app = express();
+const server = require('http').Server(app);
 
 if (process.env.NODE_ENV === 'test') {
   const process = require('process');
@@ -12,6 +13,7 @@ if (process.env.NODE_ENV === 'test') {
 
 const routes = require('routes/index');
 const paths = require('routes/paths');
+const sockets = require('sockets/sockets');
 
 
 app.use(cors());
@@ -24,7 +26,10 @@ app.get('/*', (req, res) => {
   res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
 
+sockets.init(server);
+
 const port = process.env.PORT || 9000;
-app.listen(port);
+
+server.listen(port);
 
 module.exports = app;

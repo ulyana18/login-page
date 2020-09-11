@@ -1,10 +1,18 @@
 const assert = require('assert');
 const chai = require('chai');
-const app = require('../api/app');
+const app = require('api/app');
 const request = require('supertest');
 
 const expect = chai.expect;
 
+const io = require('socket.io-client');
+const socketURL = process.env.SOCKET_LINK_TEST;
+const options = {
+  transports: ['websocket'],
+  'force new connection': true
+};
+
+const chatUser1 = {'message':'wxdxwdqw', 'name':'Tom', 'email':'tom@gmail.com'};
 
 describe('post /api/user/signup', () => {
     it('should sign up Nastya', (done) => {
@@ -12,16 +20,16 @@ describe('post /api/user/signup', () => {
       .post('/api/user/signup')
       .set('Content-Type', 'application/json')
       .send({
-            user: {
-              name: 'Nastya',
-              email: 'nastya12345@gmail.com',
-              password: '1234',
-            },
-       })
+        user: {
+          name: 'Nastya',
+          email: 'nastya12345@gmail.com',
+          password: '1234',
+        },
+      })
       .end((err, res) => {
-            expect(res.body.user).to.equal('Nastya');
-            done()
-        })
+        expect(res.body.user).to.equal('Nastya');
+        done()
+      })
     });
 });
 
@@ -32,16 +40,16 @@ describe('post /api/user/signup', () => {
       .post('/api/user/signup')
       .set('Content-Type', 'application/json')
       .send({
-            user: {
-              name: 'Alexander',
-              email: 'alex@gmail.com',
-              password: '1234',
-            },
-       })
+        user: {
+          name: 'Alexander',
+          email: 'alex@gmail.com',
+          password: '1234',
+        },
+      })
       .end((err, res) => {
-            expect(res.status).to.equal(401);
-            done()
-        })
+        expect(res.status).to.equal(401);
+        done()
+      })
     });
 });
 
@@ -52,15 +60,15 @@ describe('post /api/user/login', () => {
       .post('/api/user/login')
       .set('Content-Type', 'application/json')
       .send({
-            user: {
-              email: 'julia@gmail.com',
-              password: '1234',
-            },
-       })
+        user: {
+          email: 'julia@gmail.com',
+          password: '1234',
+        },
+      })
       .end((err, res) => {
-            expect(res.body.user).to.equal('Julia');
-            done()
-        })
+        expect(res.body.user).to.equal('Julia');
+        done()
+      })
     });
 });
 
@@ -70,15 +78,15 @@ describe('post /api/user/login', () => {
       .post('/api/user/login')
       .set('Content-Type', 'application/json')
       .send({
-            user: {
-              email: 'maryf@gmail.com',
-              password: '1234',
-            },
-       })
+        user: {
+          email: 'maryf@gmail.com',
+          password: '1234',
+        },
+      })
       .end((err, res) => {
-            expect(res.status).to.equal(401);
-            done();
-        })
+        expect(res.status).to.equal(401);
+        done();
+      })
     });
 });
 
@@ -120,5 +128,44 @@ describe('post /api/user/check', () => {
       done();
     })
   });
+});
+
+describe('Server', function(){
+  it('Should add new message to the database', function(done){
+    const client1 = io.connect(socketURL, options);
+  
+    client1.on('connect', function(data){
+      client1.emit('chat message', chatUser1);
+      expect(data).to.equal({ 'message':'wxdxwdqw', 'name':'Tom', 'email':'tom@gmail.com' });
+    });
+
+    client1.disconnect();
+    done();
+  });
+
+  it('Should return all previous messages from the database', function(done){
+    const client1 = io.connect(socketURL, options);
+  
+    client1.on('get database', function(database){
+      client1.emit('get database');
+      expect(database.rows[0].email).to.equal('micha@gmail.com');
+    });
+
+    client1.disconnect();
+    done();
+  });
+
+  it('Should delete chosen message from the database', function(done){
+    const client1 = io.connect(socketURL, options);
+  
+    client1.on('delete message', function(messageId){
+      client1.emit('delete message', 17);
+      expect(+messageId).to.equal(17);
+    });
+
+    client1.disconnect();
+    done();
+  });
+
 });
 
