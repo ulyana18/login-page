@@ -3,12 +3,19 @@ import 'components/chatPage/chatPage.css';
 import { TextField, Button, IconButton, Menu, MenuItem, Dialog, DialogTitle, DialogActions } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/styles';
-import { Send, Close, Person, ArrowDownward } from '@material-ui/icons';
+import { Send, Close, Person, ArrowDownward, ArrowUpward, Search } from '@material-ui/icons';
 import io from 'socket.io-client';
 const socket = io.connect(process.env.IO_CONECT_LINK_FRONT);
 
 
 const styles = theme => ({
+    arrowSearchButton: {
+        padding: '3px',
+    },
+    arrowSearchIcon: {
+        height: '0.9em',
+        width: '0.9em',
+    },
     dialog: {
         width: '25vw',
         margin: '0 auto',
@@ -69,11 +76,15 @@ class ChatPage extends Component {
             editElement: null,
             isDialogOpen: false,
             isScrolledToTop: false,
+            isSelectionState: false,
+            currentFoundMessage: null,
+            currentFoundMessageIndex: 0,
         }
 
         this.userEmail = '';
         this.chatHeight = 0;
         this.isMyMessage = null;
+        this.foundMessages = [];
         this.selectedElements = [];
         this.chatInput = React.createRef();
         this.scrollBtn = React.createRef();
@@ -137,6 +148,7 @@ class ChatPage extends Component {
         this.userEmail = localStorage.getItem('userEmail');
     }
 
+    // SCROLLING 
 
     scrollToRef = () => {
         const height = this.messagesArea.current.getBoundingClientRect().height;
@@ -162,6 +174,93 @@ class ChatPage extends Component {
         }
     }
 
+    // SEARCH CHAT MESSAGES 
+
+    onSearchButton = () => {
+        this.setState({ isSearchState: true });
+    }
+
+    searchMessage = (event) => {
+        const searchValue = event.target.value;
+
+        this.clearFoundMessages();
+
+        if (!searchValue) {
+            return;
+        }
+
+        const messagesArray = Object.entries(this.messagesArea.current.childNodes);
+
+        messagesArray.map((item) => {
+            const message = item[1].childNodes[0].childNodes[1].innerText;
+
+            if (message.includes(searchValue)) {
+                this.foundMessages.push(item[1]);
+
+                item[1].className += ' foundMessage';
+            }
+
+        });
+
+        if (this.foundMessages.length) {
+            const messageYCoord = this.foundMessages[0].offsetTop;
+            this.messagesArea.current.parentElement.scrollTo(0, messageYCoord);
+            this.setState({ currentFoundMessage: this.foundMessages[0], currentFoundMessageIndex: 0 });
+            this.foundMessages[0].className += ' currentFoundMessage';
+        }
+
+    }
+
+    changeCurrentFoundMessage = (direction) => {
+        
+        if (!this.state.currentFoundMessage) {
+            return;
+        }
+
+        let currentMessage = this.state.currentFoundMessage;
+        currentMessage.className = currentMessage.className.replace('currentFoundMessage', '');
+        let i = this.state.currentFoundMessageIndex;
+
+        switch (direction) {
+            case 'top': i--; break;
+            case 'bottom': i++; break;
+        }
+
+        if (i < 0 || i >= this.foundMessages.length) {
+            i = (i < 0) ? this.foundMessages.length - 1 : 0;
+        }
+
+        currentMessage = this.foundMessages[i];
+        this.setState({ currentFoundMessage: currentMessage, currentFoundMessageIndex: i });
+        currentMessage.className += ' currentFoundMessage';
+
+        const messageYCoord = currentMessage.offsetTop;
+        this.messagesArea.current.parentElement.scrollTo(0, messageYCoord);
+    }
+
+    onCloseSearchButton = () => {
+        this.setState({ isSearchState: false });
+        this.clearFoundMessages();
+    }
+
+    clearFoundMessages = () => {
+
+        if (this.state.currentFoundMessage) {
+            const currentMessage = this.state.currentFoundMessage;
+            currentMessage.className = currentMessage.className.replace('currentFoundMessage', '');
+        }
+
+        this.foundMessages.map((item) => {
+            item.className = item.className.replace(' foundMessage', '');
+        });
+
+        this.foundMessages = [];
+        this.setState({ currentFoundMessage: null, currentFoundMessageIndex: 0 });
+    }
+
+
+    // SEND MESSAGES
+
     onMessageSubmit = () => {
         this.setState({ isSend: true });
         const inputValue = this.chatInput.current.value;
@@ -179,6 +278,14 @@ class ChatPage extends Component {
         this.setState({ message: '', editElement: null });
         this.chatInput.current.value = '';
     };
+
+    changeInput = (event) => {
+        this.setState({ message: event.target.value });
+    }
+
+
+
+    // CONTEXT MENU
 
     showContextMenu = (event) => {
         event.preventDefault();
@@ -225,9 +332,6 @@ class ChatPage extends Component {
         }
     }
 
-    changeInput = (event) => {
-        this.setState({ message: event.target.value });
-    }
 
     renderChat() {
         const { chat } = this.state;
@@ -356,6 +460,49 @@ class ChatPage extends Component {
                 <div className='chat'>
                     <div className='chatHeader'>
                         { !this.state.isSelectionState && <span>Group Chat</span> }
+                        { !this.state.isSelectionState && !this.state.isSearchState &&
+                            <IconButton
+                                className='searchButton'
+                                aria-label='search'
+                                onClick={ this.onSearchButton }
+                            >
+                                <Search />
+                            </IconButton> 
+                        }
+                        { this.state.isSearchState && 
+                            <div className='searchArea'>
+                                <span className='resultsCount'>
+                                    { !this.foundMessages.length ? 
+                                        'No results' 
+                                        : this.state.currentFoundMessageIndex + 1 + ' / ' + this.foundMessages.length
+                                    }
+                                </span>
+                                <IconButton className={ classes.arrowSearchButton } 
+                                    onClick={ () => this.changeCurrentFoundMessage('top') }
+                                >
+                                    <ArrowUpward className={ classes.arrowSearchIcon } /> 
+                                </IconButton>
+                                <IconButton className={ classes.arrowSearchButton }
+                                    onClick={ () => this.changeCurrentFoundMessage('bottom') }
+                                >
+                                    <ArrowDownward className={ classes.arrowSearchIcon } />
+                                </IconButton>
+
+                                <TextField
+                                    id='outlined-basic'
+                                    label='Search...'
+                                    onChange={ this.searchMessage }
+                                    autoFocus
+                                />
+                                <IconButton
+                                    className='closeSearchButton'
+                                    aria-label='close'
+                                    onClick={ this.onCloseSearchButton }
+                                >
+                                    <Close />
+                                </IconButton> 
+                            </div> 
+                        }
                         { this.state.isSelectionState && <div className='selectionArea'>
                             <span className='selectedElemsCount'>Selected items: { this.selectedElements.length } </span>
                             <IconButton aria-label='delete' 
