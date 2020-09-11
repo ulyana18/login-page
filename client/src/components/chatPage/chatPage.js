@@ -3,7 +3,7 @@ import 'components/chatPage/chatPage.css';
 import { TextField, Button, IconButton, Menu, MenuItem, Dialog, DialogTitle, DialogActions } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/styles';
-import { Send, Close, Person, ArrowDownward, ArrowUpward, Search } from '@material-ui/icons';
+import { Send, Close, Person, ArrowDownward } from '@material-ui/icons';
 import io from 'socket.io-client';
 const socket = io.connect(process.env.IO_CONECT_LINK_FRONT);
 
@@ -68,7 +68,6 @@ class ChatPage extends Component {
             anchorEl: null,
             editElement: null,
             isDialogOpen: false,
-            isSearchState: false,
             isScrolledToTop: false,
         }
 
